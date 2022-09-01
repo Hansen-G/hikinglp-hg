@@ -4,6 +4,8 @@ from flask import Blueprint, jsonify, session, request, redirect, url_for
 from app.models import User, db, Location, Comment, Post, Image, Album
 from flask_login import current_user, login_user, logout_user, login_required
 from app.forms import LocationForm, FormValidation
+from app.aws import (
+    upload_file_to_s3, allowed_file, get_unique_filename)
 
 location_routes = Blueprint('locations', __name__)
 
@@ -100,10 +102,24 @@ def update_location(id):
 def create_location():
     form = LocationForm()
     form['csrf_token'].data = request.cookies['csrf_token']
+    if "image" not in request.files:
+        form.preview_img.data = 'https://res.cloudinary.com/hansenguo/image/upload/v1654572769/cld-sample-2.jpg'
+    else:
+        image = request.files['image']
+        if not allowed_file(image.filename):
+            return {"errors": "file type not permitted"}, 400
+        image.filename = get_unique_filename(image.filename)
+        upload = upload_file_to_s3(image)
+        if "url" not in upload:
+        # if the dictionary doesn't have a url key
+        # it means that there was an error when we tried to upload
+        # so we send back that error message
+            return upload, 400
+        url = upload["url"]
+        # flask_login allows us to get the current user from the request
+        form.preview_img.data = url
     
     if form.validate_on_submit():
-        if not form.preview_img.data:
-            form.preview_img.data = 'https://res.cloudinary.com/hansenguo/image/upload/v1654572769/cld-sample-2.jpg'
         new_location = Location(
             name=form.name.data,
             address=form.address.data,
