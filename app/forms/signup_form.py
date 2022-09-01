@@ -58,20 +58,19 @@ def check_password_data(form, field):
     if not has_special_characters(password):
         raise ValidationError('Password must contain at least one special character.')
     
-    
-    
-
-
-def password_matches(password):
-    return password == form.password.data
 
 def check_password_matches(form, field):
-    password = field.data
-    if not password_matches(password):
+
+    password = form.password.data
+    re_password = form.retype_password.data
+    if password != re_password:
         raise ValidationError('Passwords do not match.')
 
 
-
+def check_preview(form, field):
+    if not form.preiview_image.data:
+        form.preiview_image.data = "https://res.cloudinary.com/hansenguo/image/upload/v1660950302/TheGramme/user_yiqxol.png"
+        return 
 
 class SignUpForm(FlaskForm):
     username = StringField(
@@ -106,6 +105,7 @@ class SignUpForm(FlaskForm):
             ])
     preiview_image = StringField(
         'preview_image', validators=[
+            check_preview,
             url(message="Please enter a valid URL"),
             ])
     
