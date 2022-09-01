@@ -3,11 +3,95 @@ from sqlalchemy import delete
 from flask import Blueprint, jsonify, session, request, redirect, url_for
 from app.models import User, db, Location, Comment, Post, Image, Album
 from flask_login import current_user, login_user, logout_user, login_required
-from app.forms import LocationForm
+from app.forms import LocationForm, FormValidation
 
 location_routes = Blueprint('locations', __name__)
 
+# delete location
+@location_routes.route('/<int:id>', methods=['DELETE'])
+@login_required
+def delete_location(id):
+    form = FormValidation()
+    form['csrf_token'].data = request.cookies['csrf_token']
 
+    location_to_be_deleted = Location.query.get(id)
+    userId = current_user.id
+
+    if not location_to_be_deleted:
+        result = {
+            "message": "location couldn't be found",
+            "statusCode": 404
+        }
+        return jsonify(result), 404
+
+    if userId != location_to_be_deleted.user_id :
+        result = {
+            "message": "Could not delete other's location",
+            "statusCode": 403
+        }
+        return jsonify(result), 403
+
+    if location_to_be_deleted and form.validate_on_submit():
+        db.session.delete(location_to_be_deleted)
+        db.session.commit()
+
+        result = {
+            "message": "location deleted",
+            "statusCode": 200
+        }
+        return jsonify(result), 200
+
+    else:
+        result = {
+            "message": "location couldn't be deleted",
+            "statusCode": 400
+        }
+        return jsonify(result), 400
+
+# update location
+@location_routes.route('/<int:id>', methods=['PUT'])
+@login_required
+def update_location(id):
+    form = LocationForm()
+    form['csrf_token'].data = request.cookies['csrf_token']
+
+    location_to_be_updated = Location.query.get(id)
+    userId = current_user.id
+
+    if not location_to_be_updated:
+        result = {
+            "message": "location couldn't be found",
+            "statusCode": 404
+        }
+        return jsonify(result), 404
+
+    if userId != location_to_be_updated.user_id :
+        result = {
+            "message": "Could not update other's location",
+            "statusCode": 403
+        }
+        return jsonify(result), 403
+
+    if location_to_be_updated and form.validate_on_submit():
+        if len(form.data['name']) >0 and len(form.data['name']) <100 :
+            location_to_be_updated.name = form.data['name']
+        if len(form.data['details']) >0 and len(form.data['details']) <2000 :
+            location_to_be_updated.details = form.data['details']
+        if len(form.data['address']) >0 and len(form.data['address']) <1000 :
+            location_to_be_updated.address = form.data['address']
+        if len(form.data['preview_img']) >0 and len(form.data['preview_img']) <1000 :
+            location_to_be_updated.preview_img = form.data['preview_img']
+        if form.data['lat'] and form.data['lat'] <=90 and form.data['lat'] >= -90:
+            location_to_be_updated.lat = form.data['lat']
+        if form.data['lng'] and form.data['lng'] <=180 and form.data['lng'] >= -180:
+            location_to_be_updated.lng = form.data['lng']
+
+        db.session.commit()
+        location_to_be_updated = location_to_be_updated.to_dict()
+        location_to_be_updated['location_user'] = User.query.get(location_to_be_updated['user_id']).to_dict()
+        return jsonify(location_to_be_updated), 200
+    else:
+        return jsonify(form.errors), 400
 
 
 # Create new location
@@ -41,7 +125,10 @@ def get_location_by_id(id):
     location = Location.query.get(id)
     if location:
         return jsonify(location.to_dict())
-    return jsonify({"message": "Location not found"}), 404
+    return jsonify({
+        "message": "Location not found",
+        "statusCode": 404
+        }), 404
     
 
 
