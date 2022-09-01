@@ -78,7 +78,7 @@ def update_post(id):
         db.session.commit()
         
         post_to_be_updated = post_to_be_updated.to_dict()
-        post_to_be_updated['post_user'] = User.query.get(post_to_be_updated['user_id']).to_dict()
+        # post_to_be_updated['post_user'] = User.query.get(post_to_be_updated['user_id']).to_dict()
 
         return jsonify(post_to_be_updated), 200
 
@@ -127,10 +127,10 @@ def get_post(id):
         }
         return jsonify(result), 404
    
-    return jsonify(post.to_dic()), 200
+    return jsonify(post.to_dict()), 200
 
 # Get all posts
-@post_routes.route('/', methods=['GET'])
+@post_routes.route('', methods=['GET'])
 def get_all_posts():
     posts = Post.query.all()
     return jsonify([post.to_dict() for post in posts])

@@ -7,7 +7,7 @@ class Location(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, unique=True, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
-    name = db.Column(db.String(100), nullable=False)
+    name = db.Column(db.String(100), nullable=False, unique=True)
     details = db.Column(db.String(2000), nullable=False)
     address = db.Column(db.String(1000), nullable=False)
     preview_img = db.Column(db.String(1000), nullable=True)
@@ -25,6 +25,7 @@ class Location(db.Model):
     def to_dict(self):
         return {
             'id': self.id,
+            'user_id': self.user_id,
             'name': self.name,
             'address': self.address,
             'details': self.details,

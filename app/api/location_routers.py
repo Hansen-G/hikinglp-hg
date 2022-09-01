@@ -88,7 +88,7 @@ def update_location(id):
 
         db.session.commit()
         location_to_be_updated = location_to_be_updated.to_dict()
-        location_to_be_updated['location_user'] = User.query.get(location_to_be_updated['user_id']).to_dict()
+        location_to_be_updated['location_user'] = User.query.get(userId).to_dict()
         return jsonify(location_to_be_updated), 200
     else:
         return jsonify(form.errors), 400
