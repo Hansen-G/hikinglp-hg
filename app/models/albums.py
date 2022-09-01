@@ -7,14 +7,19 @@ class Album(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, unique=True, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    name = db.Column(db.String(64), nullable=False)
-    tag = db.Column(db.String(64), nullable=False) 
+    location_id = db.Column(db.Integer, db.ForeignKey('locations.id'), nullable=True)
+    name = db.Column(db.String(100), nullable=False)
+    tag1 = db.Column(db.String(64), nullable=True)
+    tag2 = db.Column(db.String(64), nullable=True)
+    tag3 = db.Column(db.String(64), nullable=True)   
     description = db.Column(db.String(1000), nullable=False)
     preview_img = db.Column(db.String(1000), nullable=True)
     createdAt = db.Column(db.DateTime(timezone=True),
                           nullable=True, server_default=func.now())
     updatedAt = db.Column(db.DateTime(timezone=True),
                           nullable=True, onupdate=func.now())
+
+
     user = db.relationship('User', back_populates='albums')
     images = db.relationship('Image', back_populates='album', cascade="all, delete-orphan")
 

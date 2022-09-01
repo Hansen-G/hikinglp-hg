@@ -7,9 +7,9 @@ class Location(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, unique=True, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
-    name = db.Column(db.String(64), nullable=False)
-    details = db.Column(db.String(1000), nullable=False)
-    address = db.Column(db.String(255), nullable=False)
+    name = db.Column(db.String(100), nullable=False)
+    details = db.Column(db.String(2000), nullable=False)
+    address = db.Column(db.String(1000), nullable=False)
     preview_img = db.Column(db.String(1000), nullable=True)
     lat = db.Column(db.Float, nullable=False)
     lng = db.Column(db.Float, nullable=False)
@@ -31,6 +31,7 @@ class Location(db.Model):
             'preview_img': self.preview_img,
             'lat': self.lat,
             'lng': self.lng,
-            "user": self.user.to_dict(),
-            "posts": [post.to_dict() for post in self.posts]
+            "posts": [post.to_dict() for post in self.posts],
+            "createdAt": self.createdAt,
+            "updatedAt": self.updatedAt,
         }

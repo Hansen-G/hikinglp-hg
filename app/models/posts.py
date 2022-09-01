@@ -8,7 +8,7 @@ class Post(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, unique=True, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    location_id = db.Column(db.Integer, db.ForeignKey('locations.id'), nullable=False)
+    location_id = db.Column(db.Integer, db.ForeignKey('locations.id'), nullable=True)
     post = db.Column(db.String(5000), nullable=False)
     preview_img = db.Column(db.String(1000), nullable=True)
     createdAt = db.Column(db.DateTime(timezone=True),
@@ -28,8 +28,9 @@ class Post(db.Model):
             'post': self.post,
             'preview_img': self.preview_img,
             "user": self.user.to_dict(),
-            "location": self.locations.to_dict(),
-            "comments": [comment.to_dict() for comment in self.comments]
+            "comments": [comment.to_dict() for comment in self.comments],
+            "createdAt": self.createdAt,
+            "updatedAt": self.updatedAt,
         }
 
 
