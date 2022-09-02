@@ -1,4 +1,5 @@
 const GET_LOCATIONS = "session/GET_LOCATIONS";
+const ADD_A_LOCATION = "session/ADD_A_LOCATION";
 const ADD_LOCATION = "session/ADD_LOCATION";
 const DELETE_LOCATION = "session/DELETE_LOCATION";
 const EDIT_LOCATION = "session/EDIT_LOCATION";
@@ -7,6 +8,13 @@ const getLocation = (locations) => (
     {
         type: GET_LOCATIONS,
         locations
+    }
+);
+
+const getALocation = (location) => (
+    {
+        type: ADD_A_LOCATION,
+        location
     }
 );
 
@@ -49,7 +57,7 @@ export const getALocatuinThunk = (id) => async dispatch => {
     console.log('Thunk', response)
     if (response.ok) {
         const location = await response.json();
-        dispatch(getLocation(location));
+        dispatch(getALocation(location));
         return location;
     } else {
         return ["An error occurred. Please try again."]
@@ -113,10 +121,14 @@ const locationReducer = (state = initialState, action) => {
     let newState = {};
     switch (action.type) {
         case GET_LOCATIONS:
-            newState = {
-                ...state,
-                ...action.locations
+            action.locations.forEach(location => {
+                newState[location.id] = location;
             }
+            );
+            // newState = action.locations;
+            return newState;
+        case ADD_A_LOCATION:
+            newState[action.location.id] = action.location;
             return newState;
         case ADD_LOCATION:
             newState = {
