@@ -1,1 +1,47 @@
 /* TODO Add site wide styles */
+img {
+    object-fit: cover;
+}
+
+html {
+    color: #000;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+}
+
+.flex {
+    display: flex;   
+}
+
+div,
+h1,
+h2,
+h3,
+h4,
+p,
+a {
+    word-break: break-word;
+}
+
+a {
+    color: #000;
+}
+
+a:link {
+    text-decoration: none;
+}
+
+
+a:visited {
+    text-decoration: none;
+}
+
+
+a:hover {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+
+a:active {
+    text-decoration: none;
+}

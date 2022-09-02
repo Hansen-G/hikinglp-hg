@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllLocationThunk } from "../../store/location";
 import './Homepage.css'
-
+import LocationCard from "../LocationCard";
 
 function HomePage() {
     const dispatch = useDispatch();
@@ -21,15 +21,15 @@ function HomePage() {
 
     let locationArr = Object.values(locations);
 
+    console.log(locationArr)
+
     return (
         <div className="homepage">
             
-            <div className="location-feed">
+            <div className="location-feed flex">
                 {locationArr.map((location) => {
                     return (
-                        <div>
-                            {location.name}
-                        </div>
+                        <LocationCard key={location.id} location={location} user={user} />
                     )})}
 
 

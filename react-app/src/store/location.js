@@ -46,6 +46,7 @@ export const getAllLocationThunk = () => async dispatch => {
 
 export const getALocatuinThunk = (id) => async dispatch => {
     const response = await fetch(`/api/locations/${id}`);
+    console.log('Thunk', response)
     if (response.ok) {
         const location = await response.json();
         dispatch(getLocation(location));
