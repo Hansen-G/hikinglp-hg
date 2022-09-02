@@ -12,12 +12,18 @@ function HomePage() {
     useEffect(() => {
         dispatch(getAllLocationThunk());
         window.scrollTo(0, 0)
-        setLoaded(true);
+        // setLoaded(true);
     }, [dispatch, user]);
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            setLoaded(true);
+        }, 1000);
+        return () => clearTimeout(timeout);
+    }, []);
 
     const locations = useSelector((state) => state.locations);
 
-    console.log('HomePage', locations);
 
     if (!locations || Object.keys(locations).length === 0){
         return null
@@ -28,7 +34,6 @@ function HomePage() {
         return null
     }
 
-    console.log(locationArr)
     if (!loaded){
         return (
             <img src='https://res.cloudinary.com/hansenguo/image/upload/v1662069599/Hikinglp/Screen_Recording_2022-09-01_at_17.55.12_pbosdp.gif' alt='loading' className='loading'/>
