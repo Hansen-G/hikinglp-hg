@@ -70,34 +70,43 @@ function LocationDetails () {
 
                 <div className='loc-about Poppins main-div'>
                     <h2 className='loc-about-title title'>Recommended Postes</h2>
-                    {location.posts.map((post) => {
-                        return (
-                            <div className='loc-post-card'>
-                                <div className='loc-post-card-user flex'>
-                                    <div className='user-img-div'>
-                                        <img src={post.user.profile_img} alt={post.user.name} className='user-img'/>
-                                    </div>
-                                    <div className='user-info'>
-                                        <div className='user-name'>{post.user.name}</div>
-                                    </div>
+                    {!location.posts || location.posts.length === 0 ? 
+                    ( <div className='loc-main'>No posts yet</div> ) 
+                    : 
+                    (  
+                            
+                                location.posts.map((post) => {
+                                    return (
+                                        <div key={post.id} className='loc-post-card'>
+                                            <div className='loc-post-card-user flex'>
+                                                <div className='user-img-div'>
+                                                    <img src={post.user.profile_img} alt={post.user.name} className='user-img' />
+                                                </div>
+                                                <div className='user-info'>
+                                                    <div className='user-name'>{post.user.name}</div>
+                                                </div>
 
-                                </div>
-                                <div className='loc-post-card-time'>
-                                    <div>{pastDate(post.createdAt)}</div>
-                                </div>
+                                            </div>
+                                            <div className='loc-post-card-time'>
+                                                <div>{pastDate(post.createdAt)}</div>
+                                            </div>
 
-                                <div className='loc-post-card-post'>
-                                    <div>{post.post}</div>
-                                </div>
+                                            <div className='loc-post-card-post'>
+                                                <div>{post.post}</div>
+                                            </div>
 
-                                <div className='loc-post-card-img'>
-                                    <img src={post.preview_img} alt={post.post} className='post-img'/>
-                                </div>
+                                            <div className='loc-post-card-img'>
+                                                <img src={post.preview_img} alt={post.post} className='post-img' />
+                                            </div>
 
-                            </div>
-                        )
+                                        </div>
+                                    )
 
-                    })}
+                                })
+                            
+                        
+                        ) }
+                    
 
                 </div>
             </div>
