@@ -1,0 +1,91 @@
+.loc-d-bg{
+    width: 100%;
+    height: 40vh;
+    position: absolute;
+    z-index: -1;
+}
+
+.loc-d-info {
+    background-color: #ffff;
+    width: 300px;
+    padding: 10px 30px;
+    position: relative;
+    top: 20vh;
+    left: 10%;
+
+}
+
+.loc-map {
+    
+}
+
+.loc-post-card{
+    margin-bottom: 25px;
+}
+
+.user-name{
+    font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    border-radius: 3px;
+    font-weight: bolder;
+
+}
+
+.loc-d-main {
+    margin-left: 10%;
+    margin-top: 30vh;
+}
+
+.title {
+    font-weight: bolder;
+    font-size: 20px;
+    font-weight: 700;
+}
+.loc-main {
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0px;
+    line-height: 24px;
+    color: rgba(45, 46, 47, 1);
+    text-align: left;
+}
+
+.main-div{
+    border-top: #ebebeb solid 1px;
+    margin-top: 20px;
+}
+
+.user-img {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+}
+
+.post-img{
+    max-width: 300px;
+    border-radius: 5px;
+}
+
+.loc-post-card-user {
+    margin-bottom: 16px;
+}
+
+.loc-post-card-time {
+    letter-spacing: 0px;
+    line-height: 20px;
+    color: rgba(110, 112, 114, 1);
+    text-align: left;
+    font-size: 14px;
+    font-weight: 400;
+    margin-bottom: 16px;
+}
+
+.loc-post-card-post {
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0px;
+    line-height: 20px;
+    color: rgba(45, 46, 47, 1);
+    text-align: left;
+    margin-bottom: 16px;
+
+}

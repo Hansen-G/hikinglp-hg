@@ -21,12 +21,12 @@ function LocationCard ({location, user}) {
                     <div className="location-address">
                         {location.address}
                     </div>
-                    {location.details.length <= 150 && (
+                    {location.details.length <= 100 && (
                         <div className="location-details">
                             {location.details}
                         </div>
                     )}
-                    {location.details.length > 150 && (
+                    {location.details.length > 100 && (
                         <div className="location-details">
                             {cut(location.details)}
                         </div>

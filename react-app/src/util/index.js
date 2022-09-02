@@ -1,7 +1,7 @@
 // Code from previous group project
 
 export const cut = (str) => {
-    return str.substring(0, 150) + "...";
+    return str.substring(0, 100) + "...";
 };
 
 export const pastDate = (date) => {

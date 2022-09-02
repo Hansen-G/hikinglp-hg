@@ -1,11 +1,24 @@
 /* TODO Add site wide styles */
+
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+@import url('https://fonts.googleapis.com/css?family=Poppins');
+
+
+.Helvetica {
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue",
+            Helvetica, Arial, "Lucida Grande", sans-serif;
+}
+
+.Poppins {
+    font-family: 'Poppins', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
 img {
     object-fit: cover;
 }
 
 html {
     color: #000;
-    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+    font-family: "Open Sans", sans-serif;
 }
 
 .flex {
