@@ -68,8 +68,8 @@ def check_password_matches(form, field):
 
 
 def check_preview(form, field):
-    if not form.preiview_image.data:
-        form.preiview_image.data = "https://res.cloudinary.com/hansenguo/image/upload/v1660950302/TheGramme/user_yiqxol.png"
+    if not form.preview_image.data:
+        form.preview_image.data = "https://res.cloudinary.com/hansenguo/image/upload/v1660950302/TheGramme/user_yiqxol.png"
         return 
 
 class SignUpForm(FlaskForm):
@@ -103,7 +103,7 @@ class SignUpForm(FlaskForm):
             DataRequired(),
             check_password_matches,
             ])
-    preiview_image = StringField(
+    preview_image = StringField(
         'preview_image', validators=[
             check_preview,
             url(message="Please enter a valid URL"),
