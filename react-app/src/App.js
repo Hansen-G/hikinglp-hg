@@ -10,7 +10,7 @@ import User from './components/User';
 import { authenticate } from './store/session';
 import HomePage from './components/Homepage';
 import LocationDetails from './components/LocationDetails';
-
+import CreateLocation from './components/CreateLocation';
 function App() {
   const [loaded, setLoaded] = useState(false);
   const dispatch = useDispatch();
@@ -30,6 +30,9 @@ function App() {
     <BrowserRouter>
       <NavBar />
       <Switch>
+        <ProtectedRoute path='/locations/new' exact={true}>
+          <CreateLocation />
+        </ProtectedRoute>
         <Route path='/locations/:locationId'>
           <LocationDetails />
        </Route>

@@ -36,7 +36,7 @@ function HomePage() {
 
     if (!loaded){
         return (
-            <img src='https://res.cloudinary.com/hansenguo/image/upload/v1662069599/Hikinglp/Screen_Recording_2022-09-01_at_17.55.12_pbosdp.gif' alt='loading' className='loading'/>
+            <img src='https://res.cloudinary.com/hansenguo/image/upload/v1662133140/Hikinglp/Screen_Recording_2022-09-01_at_17_55_12_MOV_AdobeExpress_y187t2.gif' alt='loading' className='loading'/>
         )
     }
     return (
