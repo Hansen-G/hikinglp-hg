@@ -19,7 +19,7 @@ function LocationDetails () {
     const history = useHistory();
     const { locationId } = useParams();
 
-    const location = useSelector((state) => state.locations);
+    const location = useSelector((state) => state.locations[locationId]);
     const user = useSelector((state) => state.session.user);
 
 
