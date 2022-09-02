@@ -13,9 +13,11 @@ seed_commands = AppGroup('seed')
 @seed_commands.command('all')
 def seed():
     seed_users()
-    seed_comments()
     seed_locations()
     seed_posts()
+    seed_comments()
+    
+    
 
 
 # Creates the `flask seed undo` command
@@ -23,7 +25,8 @@ def seed():
 def undo():
     undo_users()
     undo_seed_comments()
-    undo_seed_locations()
     undo_seed_posts()
+    undo_seed_locations()
+    
 
 

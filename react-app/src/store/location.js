@@ -73,6 +73,8 @@ export const addLocationThunk = (location) => async dispatch => {
         },
         body: JSON.stringify(location)
     });
+
+    console.log('Thunk', response)
     if (response.ok) {
         const newLocation = await response.json();
         dispatch(addLocation(newLocation));
@@ -128,13 +130,16 @@ const locationReducer = (state = initialState, action) => {
             // newState = action.locations;
             return newState;
         case ADD_A_LOCATION:
+            newState = {
+                ...state,
+            }
             newState[action.location.id] = action.location;
             return newState;
         case ADD_LOCATION:
             newState = {
                 ...state,
-                locations: [...state.locations, action.location]
             }
+            newState[action.location.id] = action.location;
             return newState;
         case DELETE_LOCATION:
             newState = {
