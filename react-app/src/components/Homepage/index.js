@@ -40,15 +40,11 @@ function HomePage() {
 
 
     if (!locations || Object.keys(locations).length === 0){
-        return (
-            <img src='https://res.cloudinary.com/hansenguo/image/upload/v1662133140/Hikinglp/Screen_Recording_2022-09-01_at_17_55_12_MOV_AdobeExpress_y187t2.gif' alt='loading' className='loading' />
-        )
+        return null
     }
 
     if (!posts || Object.keys(posts).length === 0) {
-        return (
-            <img src='https://res.cloudinary.com/hansenguo/image/upload/v1662133140/Hikinglp/Screen_Recording_2022-09-01_at_17_55_12_MOV_AdobeExpress_y187t2.gif' alt='loading' className='loading' />
-        )
+        return null
     }
 
     let locationArr = Object.values(locations);
