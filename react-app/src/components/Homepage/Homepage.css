@@ -1,5 +1,15 @@
 .location-feed{
     flex-wrap: wrap;
+    margin-top: 30px;
+    justify-content: center;
+
+}
+
+.post-feed {
+    flex-wrap: wrap;
+    margin-top: 30px;
+    justify-content: center;
+
 }
 
 .loading {
@@ -10,4 +20,27 @@
     margin-right: auto;
     
 
+}
+
+.homepage {
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    margin-top: 200px;
+}
+.h1-span{
+    text-align: center;
+    font-family: 'Poppins', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.4px;
+        line-height: 36px;
+            word-break: break-word !important;
+                overflow-wrap: break-word !important;
+                color: rgba(45, 46, 47, 1);
+}
+
+.home-title{
+    justify-content: center;
+    text-align: center;
 }

@@ -11,6 +11,7 @@ import { authenticate } from './store/session';
 import HomePage from './components/Homepage';
 import LocationDetails from './components/LocationDetails';
 import CreateLocation from './components/CreateLocation';
+import Navigation from './components/Navigation';
 function App() {
   const [loaded, setLoaded] = useState(false);
   const dispatch = useDispatch();
@@ -28,7 +29,7 @@ function App() {
 
   return (
     <BrowserRouter>
-      <NavBar />
+      <Navigation />
       <Switch>
         <ProtectedRoute path='/locations/new' exact={true}>
           <CreateLocation />

@@ -1,16 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllLocationThunk } from "../../store/location";
+import { getAllPostThunk } from "../../store/posts";
 import './Homepage.css'
 import LocationCard from "../LocationCard";
+import PostCard from "../PostCard";
+import { getRandomFromArray } from "../../util";
+
+require('dotenv').config()
 
 function HomePage() {
     const dispatch = useDispatch();
     const user = useSelector((state) => state.session.user);
     const [loaded, setLoaded] = useState(false);
+    console.log(process.env)
 
+    const helper = async (eventId) => {
+        
+        const allLocations = await dispatch(getAllLocationThunk());
+        const allPosts = await dispatch(getAllPostThunk());
+        
+    }
     useEffect(() => {
-        dispatch(getAllLocationThunk());
+        helper();
+
         window.scrollTo(0, 0)
         // setLoaded(true);
     }, [dispatch, user]);
@@ -23,30 +36,65 @@ function HomePage() {
     }, []);
 
     const locations = useSelector((state) => state.locations);
+    const posts = useSelector((state) => state.posts);
 
 
     if (!locations || Object.keys(locations).length === 0){
-        return null
+        return (
+            <img src='https://res.cloudinary.com/hansenguo/image/upload/v1662133140/Hikinglp/Screen_Recording_2022-09-01_at_17_55_12_MOV_AdobeExpress_y187t2.gif' alt='loading' className='loading' />
+        )
+    }
+
+    if (!posts || Object.keys(posts).length === 0) {
+        return (
+            <img src='https://res.cloudinary.com/hansenguo/image/upload/v1662133140/Hikinglp/Screen_Recording_2022-09-01_at_17_55_12_MOV_AdobeExpress_y187t2.gif' alt='loading' className='loading' />
+        )
     }
 
     let locationArr = Object.values(locations);
-    if (!locationArr || locationArr.length === 0){
-        return null
-    }
+    let postArr = Object.values(posts);
+
 
     if (!loaded){
         return (
             <img src='https://res.cloudinary.com/hansenguo/image/upload/v1662133140/Hikinglp/Screen_Recording_2022-09-01_at_17_55_12_MOV_AdobeExpress_y187t2.gif' alt='loading' className='loading'/>
         )
     }
+    let selectedLocations = getRandomFromArray(locationArr, 8);
+
     return (
         <div className="homepage">
+            <div className="home-title flex">
+                <h1>
+                    <span className='h1-span'>Suggested Hiking Place for you</span>
+                </h1>
+            </div>
+
+            
             
             <div className="location-feed flex">
-                {locationArr.map((location) => {
+                {selectedLocations.map((location) => {
                     return (
                         <LocationCard key={location.id} location={location} />
                     )})}
+
+
+            </div>
+
+            <div className="home-title flex">
+                <h1>
+                    <span className='h1-span'>Recent Activity</span>
+                </h1>
+            </div>
+
+
+
+            <div className="post-feed flex">
+                {postArr.map((post) => {
+                    return (
+                        <PostCard key={postArr.id} post={post} />
+                    )
+                })}
 
 
             </div>

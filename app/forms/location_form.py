@@ -14,6 +14,15 @@ class LocationForm(FlaskForm):
     address = StringField("Location Address", validators=[
         DataRequired(message="Address is required"),
         Length(max=1000, message="Address must be less than 1000 characters")])
+    directionsInfo = StringField("Directions Info", validators=[
+        DataRequired(message="Directions Info is required"),
+        Length(max=2000, message="Directions Info must be less than 2000 characters")])
+    city = StringField("City", validators=[
+        DataRequired(message="City is required"),
+        Length(max=100, message="City must be less than 100 characters")])
+    state = StringField("State", validators=[
+        DataRequired(message="State is required"),
+        Length(max=100, message="State must be less than 100 characters")])
     preview_img = StringField("Preview image", validators=[
         Length(max=1000, message="Preview image must be less than 1000 characters")])
     lat = FloatField("Latitude", validators=[
