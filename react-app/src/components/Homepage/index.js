@@ -13,7 +13,8 @@ function HomePage() {
     const dispatch = useDispatch();
     const user = useSelector((state) => state.session.user);
     const [loaded, setLoaded] = useState(false);
-    console.log(process.env)
+    const locations = useSelector((state) => state.locations);
+    const posts = useSelector((state) => state.posts);
 
     const helper = async (eventId) => {
         
@@ -35,17 +36,16 @@ function HomePage() {
         return () => clearTimeout(timeout);
     }, []);
 
-    const locations = useSelector((state) => state.locations);
-    const posts = useSelector((state) => state.posts);
+    
 
 
-    if (!locations || Object.keys(locations).length === 0){
-        return null
-    }
+    // if (!locations || Object.keys(locations).length === 0){
+    //     return null
+    // }
 
-    if (!posts || Object.keys(posts).length === 0) {
-        return null
-    }
+    // if (!posts || Object.keys(posts).length === 0) {
+    //     return null
+    // }
 
     let locationArr = Object.values(locations);
     let postArr = Object.values(posts);
