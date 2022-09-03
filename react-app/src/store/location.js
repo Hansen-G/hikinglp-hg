@@ -54,7 +54,6 @@ export const getAllLocationThunk = () => async dispatch => {
 
 export const getALocatuinThunk = (id) => async dispatch => {
     const response = await fetch(`/api/locations/${id}`);
-    console.log('Thunk', response)
     if (response.ok) {
         const location = await response.json();
         dispatch(getALocation(location));
@@ -119,7 +118,7 @@ export const deleteLocationThunk = (id) => async dispatch => {
 const initialState = {
 }
 
-const locationReducer = (state = initialState, action) => {
+const postReducer = (state = initialState, action) => {
     let newState = {};
     switch (action.type) {
         case GET_LOCATIONS:
@@ -164,6 +163,6 @@ const locationReducer = (state = initialState, action) => {
     }
 }
 
-export default locationReducer;
+export default postReducer;
 
 

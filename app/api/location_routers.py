@@ -127,6 +127,9 @@ def create_location():
             preview_img=form.preview_img.data,
             lat=form.lat.data,
             lng=form.lng.data,
+            city=form.city.data,
+            state=form.state.data,
+            directionsInfo=form.directionsInfo.data,
             user_id=current_user.id
         )
         db.session.add(new_location)

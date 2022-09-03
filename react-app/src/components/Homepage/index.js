@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllLocationThunk, addLocationThunk } from "../../store/location";
+import { getAllLocationThunk } from "../../store/location";
+import { getAllPostThunk } from "../../store/posts";
 import './Homepage.css'
 import LocationCard from "../LocationCard";
+import PostCard from "../PostCard";
 import { getRandomFromArray } from "../../util";
 
 require('dotenv').config()
@@ -15,32 +17,8 @@ function HomePage() {
 
     const helper = async (eventId) => {
         
-        // const response = await fetch(`https://developer.nps.gov/api/v1/parks?parkCode=&api_key=   &limit=4`,{
-        //     headers: {
-        //         "Authorization": '',
-        //     },
-        // });
-        // if (response.ok) {
-        //     const data = await response.json();
-        //     for (let i = 0; i < data.data.length; i++) {
-        //         let location = {
-        //             name: data.data[i].fullName,
-        //             details: data.data[i].description,
-        //             address: data.data[i].states,
-        //             lat: data.data[i].latitude,
-        //             lng: data.data[i].longitude,
-        //             preview_img: data.data[i].images[0].url,
-
-                    
-        //         }
-        //         const newLocation = await dispatch(addLocationThunk(location))
-        //         console.log(newLocation)
-        //     }
-   
-        //     return data;
-        // }
-
-        const allLocation = await dispatch(getAllLocationThunk());
+        const allLocations = await dispatch(getAllLocationThunk());
+        const allPosts = await dispatch(getAllPostThunk());
         
     }
     useEffect(() => {
@@ -58,16 +36,24 @@ function HomePage() {
     }, []);
 
     const locations = useSelector((state) => state.locations);
+    const posts = useSelector((state) => state.posts);
 
 
     if (!locations || Object.keys(locations).length === 0){
-        return null
+        return (
+            <img src='https://res.cloudinary.com/hansenguo/image/upload/v1662133140/Hikinglp/Screen_Recording_2022-09-01_at_17_55_12_MOV_AdobeExpress_y187t2.gif' alt='loading' className='loading' />
+        )
+    }
+
+    if (!posts || Object.keys(posts).length === 0) {
+        return (
+            <img src='https://res.cloudinary.com/hansenguo/image/upload/v1662133140/Hikinglp/Screen_Recording_2022-09-01_at_17_55_12_MOV_AdobeExpress_y187t2.gif' alt='loading' className='loading' />
+        )
     }
 
     let locationArr = Object.values(locations);
-    if (!locationArr || locationArr.length === 0){
-        return null
-    }
+    let postArr = Object.values(posts);
+
 
     if (!loaded){
         return (
@@ -77,13 +63,38 @@ function HomePage() {
     let selectedLocations = getRandomFromArray(locationArr, 8);
 
     return (
-        <div className="homepage flex">
+        <div className="homepage">
+            <div className="home-title flex">
+                <h1>
+                    <span className='h1-span'>Suggested Hiking Place for you</span>
+                </h1>
+            </div>
+
+            
             
             <div className="location-feed flex">
                 {selectedLocations.map((location) => {
                     return (
                         <LocationCard key={location.id} location={location} />
                     )})}
+
+
+            </div>
+
+            <div className="home-title flex">
+                <h1>
+                    <span className='h1-span'>Recent Activity</span>
+                </h1>
+            </div>
+
+
+
+            <div className="post-feed flex">
+                {postArr.map((post) => {
+                    return (
+                        <PostCard key={postArr.id} post={post} />
+                    )
+                })}
 
 
             </div>

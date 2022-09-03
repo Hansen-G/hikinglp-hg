@@ -34,9 +34,13 @@ class Location(db.Model):
             'address': self.address,
             'details': self.details,
             'preview_img': self.preview_img,
+            "directionsInfo": self.directionsInfo,
+            "city": self.city,
+            "state": self.state,
             'lat': self.lat,
             'lng': self.lng,
             "posts": [post.to_dict() for post in self.posts],
+            "nsf_id": self.nsf_id,
             "createdAt": self.createdAt,
             "updatedAt": self.updatedAt,
         }
