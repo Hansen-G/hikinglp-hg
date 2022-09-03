@@ -72,3 +72,16 @@ select {
     box-sizing: border-box;
     font-size: 17px;
 }
+
+.error-title {
+    font-style: italic;
+    font-size: 15px;
+    font-weight: 700;
+
+}
+
+.error-item{
+    font-style: italic;
+    font-size: 13px;
+    color: rgb(200, 99, 99);
+}

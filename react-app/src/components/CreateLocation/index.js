@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { NavLink, useParams, Route, Switch, Link, useHistory } from 'react-router-dom';
 import { addLocationThunk } from '../../store/location';
 import "./CreateLocation.css";
-import { isValidUrl } from "../../util";
+import { isValidUrl, cut } from "../../util";
 
 function CreateLocation(){
     const dispatch = useDispatch()
@@ -211,12 +211,16 @@ function CreateLocation(){
                         "details", (details.length === 0 || details.length > 2000),
                         "URL", (preview_img.length > 1000 || !validURL))}
 
+                    <div className='error-title'>
+                        Please correct the following errors before submit:
+                    </div>
+
                     {error.length > 0 && (
-                        <div className='error'>
+                        <ol className='error'>
                             {error.map((err, i) => (
-                                <p key={i}>{err}</p>
+                                <li key={i} className='error-item'>{err}</li>
                             ))}
-                        </div>
+                        </ol>
                     )}
 
                     <button type="submit"
@@ -252,22 +256,35 @@ function CreateLocation(){
             </div>
 
             <div className='create-loc-r'>
-                <image src='https://s3-media0.fl.yelpcdn.com/assets/public/cityscape_300x233_v2.yji-deccc3d10e15b4494be1.svg'></image>
-                <image src='https://s3-media0.fl.yelpcdn.com/assets/public/searching_on_map_234x177_v2.yji-0b5da3ce1e6a636298be.svg'></image>
+                <div className='create-loc-r-img-idv'>
+                    <img src='https://res.cloudinary.com/hansenguo/image/upload/v1662151076/Hikinglp/cityscape_300x233_v2.yji-deccc3d10e15b4494be1_1_godhy1.png' className='loc-c-r-img-1'/>
+                   
+
+                </div>
+               
             
-                <div className='loc-d-header'>
+                <div className='loc-c-header flex'>
                     <div>
-                        <img src={preview_img} className='' />
+                        {validURL && (<img src={preview_img} className='loc-c-header-img' />)}
+                        {!validURL && (<img src="https://res.cloudinary.com/hansenguo/image/upload/v1661959406/Hikinglp/Logo_sytg4b.png" className='loc-c-header-img' />)}
                     </div>
-                    <div className='loc-d-info'>
-                        <h1>{name}</h1>
-                        <div>{address} </div>
-                        <div>Latitude: {lat}, Longitude: {lng}</div>
-
-
+                    <div className='loc-c-info'>
+                        {!name && (<div className='loc-c-info-name'>Your Location Name</div>)}
+                        {name && (<div className='loc-c-info-name'>{cut(name)}</div>)}
+                        {!address && (<div className='loc-c-info-add'>Your Location Address</div>)}
+                        {address && (<div className='loc-c-info-add'>{cut(address)}</div>)}
+                        <div className='loc-c-info-l'>Latitude: {lat}, Longitude: {lng}</div>
                     </div>
 
                 </div>
+
+                <div className='create-loc-r-img-idv'>
+                    <img src='https://res.cloudinary.com/hansenguo/image/upload/v1662151079/Hikinglp/searching_on_map_234x177_v2.yji-0b5da3ce1e6a636298be_rev2cr_1_hguxpf.png' className='loc-c-r-img-2' />
+
+
+                </div>
+
+                
             </div>
 
         </div>

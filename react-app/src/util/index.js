@@ -1,6 +1,9 @@
 // Code from previous group project
 
 export const cut = (str) => {
+    if (str.length <= 100) {
+        return str
+    }
     return str.substring(0, 100) + "...";
 };
 
@@ -71,3 +74,11 @@ export const isValidUrl = async (urlString, setErrors, error) => {
     }
     return true;
 };
+
+
+export const getRandomFromArray = (arr, num) => {
+    let temp = [...arr];
+    let shuffled = temp.sort(() => 0.5 - Math.random());
+    let result = shuffled.slice(0, num);
+    return result;
+}

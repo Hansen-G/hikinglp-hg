@@ -1,5 +1,8 @@
 .location-feed{
     flex-wrap: wrap;
+    margin-top: 90px;
+    justify-content: space-around;
+
 }
 
 .loading {
@@ -10,4 +13,10 @@
     margin-right: auto;
     
 
+}
+
+.homepage {
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
 }

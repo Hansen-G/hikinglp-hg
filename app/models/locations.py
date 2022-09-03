@@ -6,10 +6,14 @@ class Location(db.Model):
     # Test
 
     id = db.Column(db.Integer, primary_key=True, unique=True, nullable=False)
+    nsf_id = db.Column(db.Integer, unique=True, nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
     name = db.Column(db.String(100), nullable=False, unique=True)
     details = db.Column(db.String(2000), nullable=False)
+    directionsInfo = db.Column(db.String(2000), nullable=False)
     address = db.Column(db.String(1000), nullable=False)
+    city = db.Column(db.String(100), nullable=False)
+    state = db.Column(db.String(100), nullable=False)
     preview_img = db.Column(db.String(1000), nullable=True)
     lat = db.Column(db.Float, nullable=False)
     lng = db.Column(db.Float, nullable=False)

@@ -1,0 +1,48 @@
+.nav-logo {
+    height: 60px;
+    width: 60px;
+}
+
+.nav {
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin: 0 auto;
+    position: fixed;
+    background: rgba(255, 255, 255);
+    top: 0;
+    box-sizing: border-box;
+    padding: 5px 10%;
+    /* border-bottom: 1px solid #919191; */
+}
+
+
+.nav-logo-div, .nav-right, .nav-button {
+    align-items: center;
+}
+
+.nav-button {
+        margin: 10px;
+            padding: 10px;
+            border: 0px;
+            font: inherit;
+            vertical-align: baseline;
+    font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+
+    letter-spacing: 0px;
+        line-height: 20px;
+       
+        text-align: left;
+}
+
+.nav-button:hover{
+    background-color: #ebebeb;
+}
+
+.nav-user-img {
+    height: 36px;
+    width: 36px;
+    border-radius: 50%;
+}

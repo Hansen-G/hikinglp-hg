@@ -5,6 +5,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { NavLink, useParams, Route, Switch, Link, useHistory } from 'react-router-dom';
 import { getALocatuinThunk, editLocationThunk } from '../../store/location';
 import { pastDate } from "./../../util";
+import EditLocationModal from '../EditLocationModal';
+import LoginFormModal from '../LoginFormModal';
 
 function postNumber(arr) {
     if (!arr) {
@@ -40,22 +42,33 @@ function LocationDetails () {
 
 
     return (
-        <div>
+        <div className='loc-d'>
             <div className='loc-d-header'>
                 <div>
                     <img src={location.preview_img} alt={location.name} className='loc-d-bg'/>
                 </div>
                 <div className='loc-d-info'>
                     <h1>{location.name}</h1>
-                    <div>{postNumber(location.posts)} posts</div>
-                    <div>{location.address} </div>
+
+                    <p>{postNumber(location.posts)} posts</p>
+                    <i class="fa-solid fa-signs-post"></i>
+                    <p>{location.address} </p>
                     <div>Latitude: {location.lat}, Longitude: {location.lng}</div> 
                     
                 
                 </div>
 
             </div>
+
+           
             <div className='loc-d-main'>
+                {user && location.user_id === user.id && (
+                    <div className='loc-d-func'>
+                        <h1>Edit Location</h1>
+                        <LoginFormModal location={location} user={user} />
+
+                    </div>
+                )}
                 <div className='loc-map Poppins main-div'>
                     <h2 className='loc-map-title title'>Location & Hours</h2>
                     <div className='loc-map-add loc-main'>{location.address}</div>
