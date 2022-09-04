@@ -8,6 +8,7 @@ import { pastDate } from "./../../util";
 import EditLocationModal from '../EditLocationModal';
 import LoginFormModal from '../LoginFormModal';
 import ImageCard from "./ImageCard";
+require('dotenv').config();
 
 function postNumber(arr) {
     if (!arr) {
@@ -26,6 +27,10 @@ function LocationDetails () {
     const location = useSelector((state) => state.locations[locationId]);
     const user = useSelector((state) => state.session.user);
 
+    console.log(location.nsf_id)
+
+    console.log('ENV', process.env.REACT_APP_NPS_API_KEY)
+
 
     useEffect(() => {
         if (!location) {
@@ -34,6 +39,7 @@ function LocationDetails () {
         else if (!location.nsf_id){
             return
         }
+
         (async () => {
             const response = await fetch(`https://developer.nps.gov/api/v1/parks?id=${location.nsf_id}&api_key=${process.env.REACT_APP_NPS_API_KEY}&limit=1`, {
                 headers: {
