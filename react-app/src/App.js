@@ -13,6 +13,7 @@ import LocationDetails from './components/LocationDetails';
 import CreateLocation from './components/CreateLocation';
 import Navigation from './components/Navigation';
 import LocationTest from './components/Location';
+import AllLocation from './components/AllLocation';
 
 function App() {
   const [loaded, setLoaded] = useState(false);
@@ -39,6 +40,10 @@ function App() {
         <Route path='/locations/:locationId'>
           <LocationDetails />
        </Route>
+
+        <Route path='/alllocation'>
+          <AllLocation />
+        </Route>
 
         <Route path='/test'>
           <LocationTest />

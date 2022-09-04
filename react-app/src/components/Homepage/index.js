@@ -9,7 +9,9 @@ import { getRandomFromArray } from "../../util";
 
 require('dotenv').config()
 
-
+function distance (lat1, lng1, lat2, lng2){
+    return Math.sqrt((lat1 - lat2) ** 2 + (lng1 - lng2) ** 2)
+}
 
 function HomePage() {
     const dispatch = useDispatch();
@@ -18,10 +20,30 @@ function HomePage() {
     const locations = useSelector((state) => state.locations);
     const posts = useSelector((state) => state.posts);
 
+    const [lat, setLat] = useState(null);
+    const [lng, setLng] = useState(null);
+    const [status, setStatus] = useState(false);
+
+    const getLocation = () => {
+        if (!navigator.geolocation) {
+            setStatus(false);
+        } else {
+            navigator.geolocation.getCurrentPosition((position) => {
+                setStatus(true);
+                setLat(position.coords.latitude);
+                setLng(position.coords.longitude);
+            }, () => {
+                setStatus(false);
+            });
+        }
+    }
+    
+
     const helper = async (eventId) => {
         
         const allLocations = await dispatch(getAllLocationThunk());
         const allPosts = await dispatch(getAllPostThunk());
+        const currentLocation = await getLocation();
         
     }
     useEffect(() => {
@@ -52,18 +74,24 @@ function HomePage() {
     let locationArr = Object.values(locations);
     let postArr = Object.values(posts);
 
+    
 
     if (!loaded){
         return (
             <img src='https://res.cloudinary.com/hansenguo/image/upload/v1662133140/Hikinglp/Screen_Recording_2022-09-01_at_17_55_12_MOV_AdobeExpress_y187t2.gif' alt='loading' className='loading'/>
         )
     }
+    
+    let selectedLocations
 
-
-
-
-
-    let selectedLocations = getRandomFromArray(locationArr, 8);
+    if (status){
+        locationArr.sort((a, b) => {
+            return distance(lat, lng, a.lat, a.lng) - distance(lat, lng, b.lat, b.lng)
+        })
+        selectedLocations = locationArr.slice(0, 8)
+    } else {
+        selectedLocations = getRandomFromArray(locationArr, 8);
+    }
 
 
     return (
