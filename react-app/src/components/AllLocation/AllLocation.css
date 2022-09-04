@@ -1,0 +1,89 @@
+.all-loc-feed {
+    margin-top: 100px;
+}
+
+.all-location-container{
+    flex-wrap: wrap;
+    width: 80%;
+    margin: 0 auto;
+    justify-content: center;
+;
+}
+
+
+.all-location-card {
+    width: 400px;
+    height: 120px;
+    margin: 20px;
+    border: 1px solid #919191;
+
+}
+
+.all-location-image-div {
+    width: 150px;
+    height: 120px;
+}
+
+.all-location-image {
+    height: 100%;
+    max-width: 150px;
+    max-height: 120px;
+    min-width: 150px;
+    min-height: 120px;
+}
+
+.all-location-info {
+    padding: 5px;
+    overflow-y: hidden
+}
+
+.all-location-name {
+    font-size: 17px;
+    font-weight: bolder;
+    padding: 0 0 10px 0;
+    max-height: 40px;
+    overflow-y: hidden
+}
+
+.all-location-address {
+    font-size: 14px;
+    color: #919191;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    padding: 0 0 10px 0;
+    max-height: 50px;
+    overflow-y: hidden
+}
+
+.all-location-details {
+    font-size: 15px;
+    max-height: 100px;
+    overflow-y: hidden
+}
+
+.pagination-all{
+    width: 80%;
+    margin: 0 auto;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.pagination-control{
+    margin: 5px;
+    padding: 10px;
+}
+
+.pagination-control:hover{
+    background-color: #d1d1d1;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.current-page{
+    background-color: #919191;
+
+    border-radius: 5px;
+}
+
+.current-page a{
+    color: rgb(255, 254, 254);
+}

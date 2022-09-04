@@ -94,9 +94,6 @@ function HomePage() {
     }
 
 
-
-
-
     return (
         <div className="homepage">
             <div className="home-title flex">
