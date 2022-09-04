@@ -12,6 +12,8 @@ import HomePage from './components/Homepage';
 import LocationDetails from './components/LocationDetails';
 import CreateLocation from './components/CreateLocation';
 import Navigation from './components/Navigation';
+import LocationTest from './components/Location';
+
 function App() {
   const [loaded, setLoaded] = useState(false);
   const dispatch = useDispatch();
@@ -37,6 +39,10 @@ function App() {
         <Route path='/locations/:locationId'>
           <LocationDetails />
        </Route>
+
+        <Route path='/test'>
+          <LocationTest />
+        </Route>
 
         <Route path='/login' exact={true}>
           <LoginForm />

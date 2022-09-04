@@ -27,7 +27,6 @@ function LocationDetails () {
     const location = useSelector((state) => state.locations[locationId]);
     const user = useSelector((state) => state.session.user);
 
-    console.log(location.nsf_id)
 
     console.log('ENV', process.env.REACT_APP_NPS_API_KEY)
 
