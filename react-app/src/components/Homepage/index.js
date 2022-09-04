@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Component } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllLocationThunk } from "../../store/location";
 import { getAllPostThunk } from "../../store/posts";
@@ -8,6 +8,8 @@ import PostCard from "../PostCard";
 import { getRandomFromArray } from "../../util";
 
 require('dotenv').config()
+
+
 
 function HomePage() {
     const dispatch = useDispatch();
@@ -56,7 +58,13 @@ function HomePage() {
             <img src='https://res.cloudinary.com/hansenguo/image/upload/v1662133140/Hikinglp/Screen_Recording_2022-09-01_at_17_55_12_MOV_AdobeExpress_y187t2.gif' alt='loading' className='loading'/>
         )
     }
+
+
+
+
+
     let selectedLocations = getRandomFromArray(locationArr, 8);
+
 
     return (
         <div className="homepage">
