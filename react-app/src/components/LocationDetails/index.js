@@ -60,10 +60,7 @@ function LocationDetails () {
 
                 }
                 setLocationExtraData(location_extra_data)
-
             }
-          
-            
         })();
         window.scrollTo(0, 0)
     }, [location]);
