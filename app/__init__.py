@@ -12,6 +12,7 @@ from .api.album_router import album_routes
 from .api.comment_routers import comment_routes
 from .api.location_routers import location_routes
 from .api.post_routers import post_routes
+from .api.open_ai import ai_routes
 
 from .seeds import seed_commands
 
@@ -39,7 +40,7 @@ app.register_blueprint(album_routes, url_prefix='/api/albums')
 app.register_blueprint(comment_routes, url_prefix='/api/comments')
 app.register_blueprint(location_routes, url_prefix='/api/locations')
 app.register_blueprint(post_routes, url_prefix='/api/posts')
-
+app.register_blueprint(ai_routes, url_prefix='/api/ai')
 db.init_app(app)
 Migrate(app, db)
 

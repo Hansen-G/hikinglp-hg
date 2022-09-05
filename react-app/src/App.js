@@ -14,6 +14,7 @@ import CreateLocation from './components/CreateLocation';
 import Navigation from './components/Navigation';
 import LocationTest from './components/Location';
 import AllLocation from './components/AllLocation';
+import AI from './components/AI';
 
 function App() {
   const [loaded, setLoaded] = useState(false);
@@ -39,10 +40,16 @@ function App() {
         </ProtectedRoute>
         <Route path='/locations/:locationId'>
           <LocationDetails />
+          <AI />
        </Route>
 
-        <Route path='/alllocation'>
+        <Route exact={true} path='/alllocation'>
           <AllLocation />
+          <AI />
+        </Route>
+
+        <Route exact={true} path='/test'>
+          <AI />
         </Route>
 
         <Route path='/test'>
@@ -63,6 +70,7 @@ function App() {
         </ProtectedRoute>
         <Route path='/' exact={true} >
           <HomePage />
+          <AI />
         </Route>
       </Switch>
     </BrowserRouter>
