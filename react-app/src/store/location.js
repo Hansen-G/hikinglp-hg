@@ -145,15 +145,13 @@ const postReducer = (state = initialState, action) => {
             newState = {
                 ...state,
             }
-            delete newState.locations[action.id];
+            delete newState[action.id];
             return newState;
         case EDIT_LOCATION:
-
             newState = {
                 ...state,
             }
 
-            console.log("here", action.location)
             newState[action.location.id] = action.location;
             return newState;
         default:

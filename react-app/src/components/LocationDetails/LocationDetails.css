@@ -87,6 +87,7 @@
 .main-div{
     border-top: #ebebeb solid 1px;
     margin-top: 20px;
+    width: 100%;
 }
 
 .user-img {
@@ -138,4 +139,11 @@
 
 .loc-d-func{
     margin-left: 10%;
+}
+
+
+.google-map{
+    width: 100%;
+    height: 40vh;
+    z-index: 10;
 }

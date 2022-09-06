@@ -3,11 +3,12 @@ import './LocationDetails.css';
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { NavLink, useParams, Route, Switch, Link, useHistory } from 'react-router-dom';
-import { getALocatuinThunk, editLocationThunk } from '../../store/location';
+import { getALocatuinThunk, deleteLocationThunk } from '../../store/location';
 import { pastDate } from "./../../util";
 import EditLocationModal from '../EditLocationModal';
 import LoginFormModal from '../LoginFormModal';
 import ImageCard from "./ImageCard";
+import GoogleMapReact from 'google-map-react';
 require('dotenv').config();
 
 function postNumber(arr) {
@@ -90,6 +91,39 @@ function LocationDetails () {
     }
 
 
+    function googleMap (lat, lng) {
+        console.log('MAPPPPPP', process.env.REACT_APP_GOOGLE_MAPS_API_KEY)
+        return (
+            <div className='google-map'>
+                <GoogleMapReact
+                    bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY }}
+                    defaultCenter={{
+                        lat: 10.99835602,
+                        lng: 77.01502627
+                    }}
+                    defaultZoom={10}
+                >
+                </GoogleMapReact>
+            </div>
+        )
+    }
+
+
+
+
+    const handleDelete = async (e) => {
+        e.preventDefault();
+        if (window.confirm('Do you really want to delete this Location? This action can not be undone!')) {
+            const response = await dispatch(deleteLocationThunk(locationId));
+            if (response) {
+                window.alert('Successfully deleted the Location, Click OK to bring you back to Location List')
+                history.push('/locations/all');
+            }
+        }
+      
+    }
+
+
 
     return (
         <div className='loc-d'>
@@ -124,6 +158,14 @@ function LocationDetails () {
                         <EditLocationModal location={location} user={user} />
 
                 )}
+
+                <button
+                    className="e-loc-btm flex"
+                    onClick={handleDelete}
+                >
+                    <i class="fa-regular fa-pen-to-square"></i>
+                    Delete Location
+                </button>
             </div>
 
            
@@ -133,6 +175,7 @@ function LocationDetails () {
                     <div className='loc-map Poppins main-div'>
                         <h2 className='loc-map-title title'>Location & Hours</h2>
                         <div className='loc-map-add loc-main'>{location.address}, {location.city}, {location.state}</div>
+                        { googleMap(location.lat, location.lng) }
 
                     </div>
 

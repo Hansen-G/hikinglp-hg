@@ -29,43 +29,35 @@ function HomePage() {
     const getLocation = async () => {
         if (!navigator.geolocation) {
             setStatus(false);
+            setLoaded(true)
         } else {
             navigator.geolocation.getCurrentPosition((position) => {
                 setStatus(true);
                 setLat(position.coords.latitude);
                 setLng(position.coords.longitude);
+                setLoaded(true)
             }, () => {
                 setStatus(false);
+                setLoaded(true)
             });
         }
     }
     
 
     const helper = async (eventId) => {
-        
+
         const allLocations = await dispatch(getAllLocationThunk());
         const allPosts = await dispatch(getAllPostThunk());
         const currentLocation = await getLocation();
-        const setDisplay = await setLoaded(true);
-        
+        // const setDisplay = await setLoaded(true);
     }
+
     useEffect(() => {
         helper();
         window.scrollTo(0, 0)
-        // setLoaded(true);
     }, [dispatch, user]);
 
-    // useEffect(() => {
-    //     const timeout = setTimeout(() => {
-    //     }, 1000);
-    //     return () => clearTimeout(timeout);
-    // }, []);
-    // if (!locations || Object.keys(locations).length === 0){
-    //     return null
-    // }
-    // if (!posts || Object.keys(posts).length === 0) {
-    //     return null
-    // }
+
 
     let locationArr = Object.values(locations);
     let postArr = Object.values(posts);
