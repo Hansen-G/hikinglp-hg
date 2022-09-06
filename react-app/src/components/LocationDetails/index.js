@@ -90,18 +90,28 @@ function LocationDetails () {
         )
     }
 
+    // const renderMarkers = (map, maps, lat, lng) => {
+    //     let marker = new maps.Marker({
+    //         position: { lat: lat, lng: lng },
+    //         map,
+    //         title: 'Hello World!'
+    //     });
+    //     return marker;
+    // };
+
+
+
 
     function googleMap (lat, lng) {
-        console.log('MAPPPPPP', process.env.REACT_APP_GOOGLE_MAPS_API_KEY)
         return (
             <div className='google-map'>
                 <GoogleMapReact
                     bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY }}
-                    defaultCenter={{
-                        lat: 10.99835602,
-                        lng: 77.01502627
-                    }}
+                    defaultCenter={{lat: lat, lng: lng}}
                     defaultZoom={10}
+                    yesIWantToUseGoogleMapApiInternals={true}
+                    // onGoogleApiLoaded={({ map, maps, lat, lng }) => renderMarkers(map, maps, lat, lng)}
+            
                 >
                 </GoogleMapReact>
             </div>
@@ -155,17 +165,21 @@ function LocationDetails () {
             <div className='loc-d-func'>
             
                 {user && location.user_id === user.id && (
+                    <div>
                         <EditLocationModal location={location} user={user} />
+                        <button
+                            className="e-loc-btm flex"
+                            onClick={handleDelete}
+                        >
+                            <i class="fa-regular fa-pen-to-square"></i>
+                            Delete Location
+                        </button>
+                    </div>
+                    
 
                 )}
 
-                <button
-                    className="e-loc-btm flex"
-                    onClick={handleDelete}
-                >
-                    <i class="fa-regular fa-pen-to-square"></i>
-                    Delete Location
-                </button>
+
             </div>
 
            
