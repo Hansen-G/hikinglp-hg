@@ -23,23 +23,22 @@ function LocationDetails () {
     const history = useHistory();
     const { locationId } = useParams();
     const [location_extra_data, setLocationExtraData] = useState(null);
+    const [loaded, setLoaded] = useState(false);
 
     const location = useSelector((state) => state.locations[locationId]);
     const user = useSelector((state) => state.session.user);
 
 
-    console.log('ENV', process.env.REACT_APP_NPS_API_KEY)
-
-
-    useEffect(() => {
+    useEffect(async () => {
         if (!location) {
             return;
         }
         else if (!location.nsf_id){
+            setLoaded(true)
             return
         }
 
-        (async () => {
+        await (async () => {
             const response = await fetch(`https://developer.nps.gov/api/v1/parks?id=${location.nsf_id}&api_key=${process.env.REACT_APP_NPS_API_KEY}&limit=1`, {
                 headers: {
                     "Authorization": process.env.REACT_APP_NPS_API_KEY,
@@ -62,6 +61,7 @@ function LocationDetails () {
                 setLocationExtraData(location_extra_data)
             }
         })();
+        const setDisplay = await setLoaded(true);
         window.scrollTo(0, 0)
     }, [location]);
 
@@ -82,9 +82,13 @@ function LocationDetails () {
     if (!location || Object.keys(location).length === 0){
         return null
     }
-    
 
-    console.log("location_extra_data", location_extra_data)
+    if (!loaded) {
+        return (
+            <img src='https://res.cloudinary.com/hansenguo/image/upload/v1662133140/Hikinglp/Screen_Recording_2022-09-01_at_17_55_12_MOV_AdobeExpress_y187t2.gif' alt='loading' className='loading' />
+        )
+    }
+
 
 
     return (
@@ -105,6 +109,7 @@ function LocationDetails () {
                 </div>
 
             </div>
+            
 
             <div className='loc-d-img-div flex'>
                 {location_extra_data && location_extra_data.images && location_extra_data.images.map((image) => {
@@ -113,16 +118,17 @@ function LocationDetails () {
                     )
                 })}
             </div>
+            <div className='loc-d-func'>
+            
+                {user && location.user_id === user.id && (
+                        <EditLocationModal location={location} user={user} />
+
+                )}
+            </div>
 
            
             <div className={location_extra_data ? 'loc-d-main-yes flex' : 'loc-d-main-no flex'}>
-                {/* {user && location.user_id === user.id && (
-                    <div className='loc-d-func'>
-                        <h1>Edit Location</h1>
-                        <LoginFormModal location={location} user={user} />
 
-                    </div>
-                )} */}
                 <div className='loc-d-main-l'>
                     <div className='loc-map Poppins main-div'>
                         <h2 className='loc-map-title title'>Location & Hours</h2>

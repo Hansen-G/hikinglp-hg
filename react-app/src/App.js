@@ -38,15 +38,16 @@ function App() {
         <ProtectedRoute path='/locations/new' exact={true}>
           <CreateLocation />
         </ProtectedRoute>
+
+        <Route exact={true} path='/locations/all'>
+          <AllLocation />
+          <AI />
+        </Route>
+
         <Route path='/locations/:locationId'>
           <LocationDetails />
           <AI />
        </Route>
-
-        <Route exact={true} path='/alllocation'>
-          <AllLocation />
-          <AI />
-        </Route>
 
         <Route exact={true} path='/test'>
           <AI />
@@ -70,7 +71,7 @@ function App() {
         </ProtectedRoute>
         <Route path='/' exact={true} >
           <HomePage />
-          <AI />
+          
         </Route>
       </Switch>
     </BrowserRouter>

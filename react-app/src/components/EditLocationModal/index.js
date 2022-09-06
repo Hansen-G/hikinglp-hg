@@ -1,8 +1,7 @@
 // import './EditLocationModal.css';
-import React, { useState } from "react";
-import { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal } from "../../context/Modal";
-import LocationDetails from './LocationDetails';
+import EditLocationDetails from './EditLocationDetails';
 
 
 function EditLocationModal({location, user}) {
@@ -21,9 +20,10 @@ function EditLocationModal({location, user}) {
     return (
         <>
             <button
-                className="comments-botton"
+                className="e-loc-btm flex"
                 onClick={() => setShowModal(true)}
             >
+                <i class="fa-regular fa-pen-to-square"></i>
                 Edit Location
             </button>
             {showModal && (
@@ -32,7 +32,7 @@ function EditLocationModal({location, user}) {
                     onClose={() => setShowModal(false)}
                     className="post-model"
                 >
-                    <LocationDetails
+                    <EditLocationDetails
                         setModal={setModal}
                         location={location}
                         user={user}

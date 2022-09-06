@@ -94,6 +94,7 @@ export const editLocationThunk = (location) => async dispatch => {
     });
     if (response.ok) {
         const newLocation = await response.json();
+        console.log("newLocation", newLocation)
         dispatch(editLocation(newLocation));
         return newLocation;
     } else {
@@ -147,16 +148,13 @@ const postReducer = (state = initialState, action) => {
             delete newState.locations[action.id];
             return newState;
         case EDIT_LOCATION:
+
             newState = {
                 ...state,
-                locations: state.locations.map(location => {
-                    if (location.id === action.location.id) {
-                        return action.location;
-                    } else {
-                        return location;
-                    }
-                }),
             }
+
+            console.log("here", action.location)
+            newState[action.location.id] = action.location;
             return newState;
         default:
             return state

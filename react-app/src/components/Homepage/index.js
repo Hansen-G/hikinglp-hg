@@ -3,9 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAllLocationThunk } from "../../store/location";
 import { getAllPostThunk } from "../../store/posts";
 import './Homepage.css'
+import { NavLink, useParams, Route, Switch, Link, useHistory } from 'react-router-dom';
 import LocationCard from "../LocationCard";
 import PostCard from "../PostCard";
 import { getRandomFromArray } from "../../util";
+import AI from '../AI'
 
 require('dotenv').config()
 
@@ -24,7 +26,7 @@ function HomePage() {
     const [lng, setLng] = useState(null);
     const [status, setStatus] = useState(false);
 
-    const getLocation = () => {
+    const getLocation = async () => {
         if (!navigator.geolocation) {
             setStatus(false);
         } else {
@@ -44,29 +46,23 @@ function HomePage() {
         const allLocations = await dispatch(getAllLocationThunk());
         const allPosts = await dispatch(getAllPostThunk());
         const currentLocation = await getLocation();
+        const setDisplay = await setLoaded(true);
         
     }
     useEffect(() => {
         helper();
-
         window.scrollTo(0, 0)
         // setLoaded(true);
     }, [dispatch, user]);
 
-    useEffect(() => {
-        const timeout = setTimeout(() => {
-            setLoaded(true);
-        }, 1000);
-        return () => clearTimeout(timeout);
-    }, []);
-
-    
-
-
+    // useEffect(() => {
+    //     const timeout = setTimeout(() => {
+    //     }, 1000);
+    //     return () => clearTimeout(timeout);
+    // }, []);
     // if (!locations || Object.keys(locations).length === 0){
     //     return null
     // }
-
     // if (!posts || Object.keys(posts).length === 0) {
     //     return null
     // }
@@ -88,18 +84,25 @@ function HomePage() {
         locationArr.sort((a, b) => {
             return distance(lat, lng, a.lat, a.lng) - distance(lat, lng, b.lat, b.lng)
         })
-        selectedLocations = locationArr.slice(0, 8)
+        selectedLocations = locationArr.slice(0, 12)
     } else {
-        selectedLocations = getRandomFromArray(locationArr, 8);
+        selectedLocations = getRandomFromArray(locationArr, 12);
     }
 
 
     return (
         <div className="homepage">
-            <div className="home-title flex">
+            <div className="home-title">
                 <h1>
                     <span className='h1-span'>Suggested Hiking Place for you</span>
                 </h1>
+
+                <h2>
+                    <Link to='/locations/all' className="home-h2-link">
+                        <span className='h2-span'>All locations</span>
+                    </Link>
+                   
+                </h2>
             </div>
 
             
@@ -130,6 +133,7 @@ function HomePage() {
 
 
             </div>
+            <AI />
         </div>    
     )
 

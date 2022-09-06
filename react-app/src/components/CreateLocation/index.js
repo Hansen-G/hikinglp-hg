@@ -68,8 +68,6 @@ function CreateLocation(){
                 "Invalid URL: Please enter a valid URL ending in - jpg/jpeg/png/webp/avif/gif/svg. Also please make sure this image CORS policy compliant. Image can be blocked by CORS policy due to: No 'Access-Control-Allow-Origin' header being present on the requested resource."
             );
         }
-
-
         setError(newError);
     } , [name, address, details, preview_img, lat, lng]);
 

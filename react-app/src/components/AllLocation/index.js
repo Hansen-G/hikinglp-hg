@@ -17,7 +17,7 @@ function AllLocation() {
     const locations = useSelector((state) => state.locations);
     const [loaded, setLoaded] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage] = useState(30);
+    const [itemsPerPage] = useState(48);
 
 
     useEffect(() => {

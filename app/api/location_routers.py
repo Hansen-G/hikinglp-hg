@@ -87,6 +87,12 @@ def update_location(id):
             location_to_be_updated.lat = form.data['lat']
         if form.data['lng'] and form.data['lng'] <=180 and form.data['lng'] >= -180:
             location_to_be_updated.lng = form.data['lng']
+        if form.data['city'] and len(form.data['city']) <100 :
+            location_to_be_updated.city = form.data['city']
+        if form.data['state'] and len(form.data['state']) <100 :
+            location_to_be_updated.state = form.data['state']
+        if form.data['directionsInfo'] and len(form.data['directionsInfo']) <2000 :
+            location_to_be_updated.directionsInfo = form.data['directionsInfo']
 
         db.session.commit()
         location_to_be_updated = location_to_be_updated.to_dict()
