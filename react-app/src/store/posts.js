@@ -1,5 +1,4 @@
 const GET_POSTS = "session/GET_POSTS";
-const ADD_A_POST = "session/ADD_A_POST";
 const ADD_POST = "session/ADD_POST";
 const DELETE_POST = "session/DELETE_POST";
 const EDIT_POST = "session/EDIT_POST";
@@ -8,13 +7,6 @@ const getPost = (posts) => (
     {
         type: GET_POSTS,
         posts
-    }
-);
-
-const getAPost = (post) => (
-    {
-        type: ADD_A_POST,
-        post
     }
 );
 
@@ -52,39 +44,40 @@ export const getAllPostThunk = () => async dispatch => {
     }
 }
 
-export const getAPostThunk = (id) => async dispatch => {
-    const response = await fetch(`/api/posts/${id}`);
-    if (response.ok) {
-        const post = await response.json();
-        dispatch(getAPost(post));
-        return post;
-    } else {
-        return ["An error occurred. Please try again."]
-        // throw new Error("Something went wrong");
-    }
-}
+// export const getAPostThunk = (id) => async dispatch => {
+//     const response = await fetch(`/api/posts/${id}`);
+//     if (response.ok) {
+//         const post = await response.json();
+//         dispatch(getAPost(post));
+//         return post;
+//     } else {
+//         return ["An error occurred. Please try again."]
+//         // throw new Error("Something went wrong");
+//     }
+// }
 
-export const addLocationThunk = (post) => async dispatch => {
-    const response = await fetch("/api/posts/new", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(post)
-    });
+// export const addPostThunk = (post) => async dispatch => {
+//     const response = await fetch("/api/posts/new", {
+//         method: "POST",
+//         headers: {
+//             "Content-Type": "application/json"
+//         },
+//         body: JSON.stringify(post)
+//     });
 
-    console.log('Thunk', response)
-    if (response.ok) {
-        const newLocation = await response.json();
-        dispatch(addPost(newLocation));
-        return newLocation;
-    } else {
-        return ["An error occurred. Please try again."]
-        // throw new Error("Something went wrong");
-    }
-}
+//     console.log('Thunk', response)
+//     if (response.ok) {
+//         const newPost = await response.json();
+//         console.log('newPost', newPost)
+//         dispatch(addPost(newPost));
+//         return newPost;
+//     } else {
+//         return ["An error occurred. Please try again."]
+//         // throw new Error("Something went wrong");
+//     }
+// }
 
-export const editLocationThunk = (post) => async dispatch => {
+export const editPostThunk = (post) => async dispatch => {
     const response = await fetch(`/api/posts/${post.id}`, {
         method: "PUT",
         headers: {
@@ -128,18 +121,21 @@ const postReducer = (state = initialState, action) => {
             );
             // newState = action.posts;
             return newState;
-        case ADD_A_POST:
-            newState = {
-                ...state,
-            }
-            newState[action.post.id] = action.post;
-            return newState;
-        case ADD_POST:
-            newState = {
-                ...state,
-            }
-            newState[action.post.id] = action.post;
-            return newState;
+        // case ADD_A_POST:
+        //     newState = {
+        //         ...state,
+        //     }
+        //     newState.location[action.post.locationId].posts.push(action.post)
+        //     return newState;
+        // case ADD_POST:
+        //     newState = {
+        //         ...state,
+        //     }
+        //     console.log('Here')
+        //     console.log('Reducer', action.post)
+        //     console.log('Reducer', newState)
+           
+        //     return newState;
         case DELETE_POST:
             newState = {
                 ...state,

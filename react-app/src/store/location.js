@@ -4,6 +4,16 @@ const ADD_LOCATION = "session/ADD_LOCATION";
 const DELETE_LOCATION = "session/DELETE_LOCATION";
 const EDIT_LOCATION = "session/EDIT_LOCATION";
 
+const ADD_POST = "session/ADD_POST";
+const addPost = (post) => (
+    {
+        type: ADD_POST,
+        post
+    }
+);
+
+
+
 const getLocation = (locations) => (
     {
         type: GET_LOCATIONS,
@@ -116,10 +126,32 @@ export const deleteLocationThunk = (id) => async dispatch => {
     }
 }
 
+
+export const addPostThunk = (post) => async dispatch => {
+    const response = await fetch("/api/posts/new", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(post)
+    });
+
+    console.log('Thunk', response)
+    if (response.ok) {
+        const newPost = await response.json();
+        console.log('newPost', newPost)
+        dispatch(addPost(newPost));
+        return newPost;
+    } else {
+        return ["An error occurred. Please try again."]
+        // throw new Error("Something went wrong");
+    }
+}
+
 const initialState = {
 }
 
-const postReducer = (state = initialState, action) => {
+const locationReducer = (state = initialState, action) => {
     let newState = {};
     switch (action.type) {
         case GET_LOCATIONS:
@@ -154,11 +186,18 @@ const postReducer = (state = initialState, action) => {
 
             newState[action.location.id] = action.location;
             return newState;
+        case ADD_POST:
+            newState = {
+                ...state,
+            }
+            newState[action.post.location_id].posts.push(action.post);
+            return newState;
+            
         default:
             return state
     }
 }
 
-export default postReducer;
+export default locationReducer;
 
 

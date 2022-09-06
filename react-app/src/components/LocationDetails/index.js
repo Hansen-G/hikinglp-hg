@@ -1,5 +1,5 @@
+/* eslint-disable no-undef */
 import './LocationDetails.css';
-
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { NavLink, useParams, Route, Switch, Link, useHistory } from 'react-router-dom';
@@ -9,6 +9,13 @@ import EditLocationModal from '../EditLocationModal';
 import LoginFormModal from '../LoginFormModal';
 import ImageCard from "./ImageCard";
 import GoogleMapReact from 'google-map-react';
+import CreatePostModal from '../CreatePostModal';
+import PostCard from "../PostCard";
+// import { useJsApiLoader, GoogleMap, Marker, DirectionsRenderer } from "@react-google-maps/api"
+// import { GoogleMap, Marker } from "react-google-maps"
+
+
+
 require('dotenv').config();
 
 function postNumber(arr) {
@@ -21,13 +28,19 @@ function postNumber(arr) {
 
 function LocationDetails () {
     const dispatch = useDispatch();
+ 
     const history = useHistory();
     const { locationId } = useParams();
     const [location_extra_data, setLocationExtraData] = useState(null);
     const [loaded, setLoaded] = useState(false);
 
     const location = useSelector((state) => state.locations[locationId]);
+
     const user = useSelector((state) => state.session.user);
+
+
+
+
 
 
     useEffect(async () => {
@@ -61,6 +74,9 @@ function LocationDetails () {
                 }
                 setLocationExtraData(location_extra_data)
             }
+            else{
+                console.log('error')
+            }
         })();
         const setDisplay = await setLoaded(true);
         window.scrollTo(0, 0)
@@ -71,13 +87,13 @@ function LocationDetails () {
 
     const helper = async (locationId) => {
         const location = await dispatch(getALocatuinThunk(locationId));
+
     }
 
     useEffect(() => {
         helper(locationId);
+        // dispatch(getALocatuinThunk(locationId));
     }, [locationId, dispatch]);
-
-
 
 
     if (!location || Object.keys(location).length === 0){
@@ -98,7 +114,9 @@ function LocationDetails () {
     //     });
     //     return marker;
     // };
-
+    const postArr = location.posts.sort(function (a, b) {
+        return new Date(b["createdAt"]) - new Date(a["createdAt"]);
+    });
 
 
 
@@ -110,9 +128,15 @@ function LocationDetails () {
                     defaultCenter={{lat: lat, lng: lng}}
                     defaultZoom={10}
                     yesIWantToUseGoogleMapApiInternals={true}
-                    // onGoogleApiLoaded={({ map, maps, lat, lng }) => renderMarkers(map, maps, lat, lng)}
+                    isMarkerShown={true}
+                    
             
                 >
+                    {/* <Marker
+                        lat={lat}
+                        lng={lng}
+                        text="My Marker"
+                    /> */}
                 </GoogleMapReact>
             </div>
         )
@@ -179,6 +203,14 @@ function LocationDetails () {
 
                 )}
 
+                {user && (
+                    <div>
+                        <CreatePostModal location={location} user={user} />
+                    </div>
+
+
+                )}
+
 
             </div>
 
@@ -190,6 +222,15 @@ function LocationDetails () {
                         <h2 className='loc-map-title title'>Location & Hours</h2>
                         <div className='loc-map-add loc-main'>{location.address}, {location.city}, {location.state}</div>
                         { googleMap(location.lat, location.lng) }
+                       
+
+
+                      
+                       
+                   
+
+
+                
 
                     </div>
 
@@ -248,34 +289,13 @@ function LocationDetails () {
                             :
                             (
 
-                                location.posts.map((post) => {
-                                    return (
-                                        <div key={post.id} className='loc-post-card'>
-                                            <div className='loc-post-card-user flex'>
-                                                <div className='user-img-div'>
-                                                    <img src={post.user.profile_img} alt={post.user.name} className='user-img' />
-                                                </div>
-                                                <div className='user-info'>
-                                                    <div className='user-name'>{post.user.name}</div>
-                                                </div>
-
-                                            </div>
-                                            <div className='loc-post-card-time'>
-                                                <div>{pastDate(post.createdAt)}</div>
-                                            </div>
-
-                                            <div className='loc-post-card-post'>
-                                                <div>{post.post}</div>
-                                            </div>
-
-                                            <div className='loc-post-card-img'>
-                                                <img src={post.preview_img} alt={post.post} className='post-img' />
-                                            </div>
-
-                                        </div>
-                                    )
-
-                                })
+                                
+                                    postArr.map((post) => {
+                                        return (
+                                            <PostCard key={post.id} post={post} />
+                                        )
+                                    })
+                                
 
 
                             )}

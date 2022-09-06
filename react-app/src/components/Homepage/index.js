@@ -60,7 +60,9 @@ function HomePage() {
 
 
     let locationArr = Object.values(locations);
-    let postArr = Object.values(posts);
+    let postArr = Object.values(posts).sort(function (a, b) {
+        return new Date(b["createdAt"]) - new Date(a["createdAt"]);
+    });
 
     
 
@@ -119,7 +121,7 @@ function HomePage() {
             <div className="post-feed flex">
                 {postArr.map((post) => {
                     return (
-                        <PostCard key={postArr.id} post={post} />
+                        <PostCard key={post.id} post={post} />
                     )
                 })}
 
