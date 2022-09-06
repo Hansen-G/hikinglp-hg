@@ -5,12 +5,11 @@ const DELETE_LOCATION = "session/DELETE_LOCATION";
 const EDIT_LOCATION = "session/EDIT_LOCATION";
 
 const ADD_POST = "session/ADD_POST";
-const addPost = (post) => (
-    {
-        type: ADD_POST,
-        post
-    }
-);
+const EDIT_POST = "session/EDIT_POST";
+const DELETE_POST = "session/DELETE_POST";
+
+
+
 
 
 
@@ -34,6 +33,12 @@ const addLocation = (location) => (
         location
     }
 );
+const addPost = (post) => (
+    {
+        type: ADD_POST,
+        post
+    }
+);
 
 
 const editLocation = (location) => (
@@ -43,9 +48,25 @@ const editLocation = (location) => (
     }
 );
 
+const editPost = (post) => (
+    {
+        type: EDIT_POST,
+        post
+    }
+);
+
+
+
 const deleteLocation = (id) => (
     {
         type: DELETE_LOCATION,
+        id
+    }
+);
+
+const deletePost = (id) => (
+    {
+        type: DELETE_POST,
         id
     }
 );
@@ -94,39 +115,6 @@ export const addLocationThunk = (location) => async dispatch => {
     }
 }
 
-export const editLocationThunk = (location) => async dispatch => {
-    const response = await fetch(`/api/locations/${location.id}`, {
-        method: "PUT",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(location)
-    });
-    if (response.ok) {
-        const newLocation = await response.json();
-        console.log("newLocation", newLocation)
-        dispatch(editLocation(newLocation));
-        return newLocation;
-    } else {
-        return ["An error occurred. Please try again."]
-        // throw new Error("Something went wrong");
-    }
-}
-
-export const deleteLocationThunk = (id) => async dispatch => {
-    const response = await fetch(`/api/locations/${id}`, {
-        method: "DELETE"
-    });
-    if (response.ok) {
-        const response = dispatch(deleteLocation(id));
-        return response;
-    } else {
-        return ["An error occurred. Please try again."]
-        // throw new Error("Something went wrong");
-    }
-}
-
-
 export const addPostThunk = (post) => async dispatch => {
     const response = await fetch("/api/posts/new", {
         method: "POST",
@@ -147,6 +135,77 @@ export const addPostThunk = (post) => async dispatch => {
         // throw new Error("Something went wrong");
     }
 }
+
+
+export const editLocationThunk = (location) => async dispatch => {
+    const response = await fetch(`/api/locations/${location.id}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(location)
+    });
+    if (response.ok) {
+        const newLocation = await response.json();
+        console.log("newLocation", newLocation)
+        dispatch(editLocation(newLocation));
+        return newLocation;
+    } else {
+        return ["An error occurred. Please try again."]
+        // throw new Error("Something went wrong");
+    }
+}
+
+export const editPostThunk = (post) => async dispatch => {
+    const response = await fetch(`/api/posts/${post.id}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(post)
+    });
+    if (response.ok) {
+        
+        const newPost = await response.json();
+        console.log("newPost", newPost)
+        dispatch(editPost(newPost));
+        return newPost;
+    } else {
+        return ["An error occurred. Please try again."]
+        // throw new Error("Something went wrong");
+    }
+}
+
+
+export const deleteLocationThunk = (id) => async dispatch => {
+    const response = await fetch(`/api/locations/${id}`, {
+        method: "DELETE"
+    });
+    if (response.ok) {
+        const response = dispatch(deleteLocation(id));
+        return response;
+    } else {
+        return ["An error occurred. Please try again."]
+        // throw new Error("Something went wrong");
+    }
+}
+
+export const deletePostThunk = (id) => async dispatch => {
+    const response = await fetch(`/api/posts/${id}`, {
+        method: "DELETE"
+    });
+    if (response.ok) {
+        const response = dispatch(deletePost(id));
+        return response;
+    } else {
+        return ["An error occurred. Please try again."]
+        // throw new Error("Something went wrong");
+    }
+}
+
+
+
+
 
 const initialState = {
 }
@@ -191,6 +250,26 @@ const locationReducer = (state = initialState, action) => {
                 ...state,
             }
             newState[action.post.location_id].posts.push(action.post);
+            return newState;
+        case EDIT_POST:
+            newState = {
+                ...state,
+            }
+            newState[action.post.location_id].posts.forEach(post => {
+                if (post.id === action.post.id) {
+                    post = action.post;
+                }
+            })
+            return newState;
+        case DELETE_POST:
+            newState = {
+                ...state,
+            }
+            newState[action.post.location_id].posts.forEach((post, index) => {
+                if (post.id === action.post.id) {
+                    
+                }
+            })
             return newState;
             
         default:

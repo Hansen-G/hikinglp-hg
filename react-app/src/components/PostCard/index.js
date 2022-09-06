@@ -2,6 +2,7 @@ import './PostCard.css';
 import { Link } from 'react-router-dom';
 
 import { pastDate } from "./../../util";
+import EditPostModal from "../EditPostModal";
 
 const PostCard = ({ post }) => {
     return (
@@ -13,6 +14,9 @@ const PostCard = ({ post }) => {
                     </div>
                     <div className='user-info'>
                         <div className='user-name'>{post.user.name}</div>
+                    </div>
+                    <div>
+                        <EditPostModal post={post} />
                     </div>
 
                 </div>

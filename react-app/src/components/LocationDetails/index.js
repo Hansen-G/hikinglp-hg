@@ -288,16 +288,11 @@ function LocationDetails () {
                             (<div className='loc-main'>No posts yet</div>)
                             :
                             (
-
-                                
-                                    postArr.map((post) => {
-                                        return (
-                                            <PostCard key={post.id} post={post} />
-                                        )
-                                    })
-                                
-
-
+                                postArr.map((post) => {
+                                    return (
+                                        <PostCard key={post.id} post={post} />
+                                    )
+                                })
                             )}
                     </div>
                 </div>

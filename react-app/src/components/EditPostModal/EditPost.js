@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import './PostDetails.css';
+import './EditPostModal.css';
 
-import { addPostThunk, getALocatuinThunk } from '../../store/location';
+import { getALocatuinThunk, editPostThunk, deleteLocationThunk } from '../../store/location';
 import { isValidUrl, cut } from "../../util";
 import { NavLink, useParams, Route, Switch, Link, useHistory } from 'react-router-dom';
 
-function PostDetails({ setModal, location, user }) {
+function PostEdit({ setModal, postToBeEdited, user }) {
     const dispatch = useDispatch()
     const history = useHistory();
 
-    const [post, setPost] = useState('');
-    const [preview_img, setPreview_img] = useState(location.preview_img);
+    const [post, setPost] = useState(postToBeEdited.post);
+    const [preview_img, setPreview_img] = useState(postToBeEdited.preview_img);
     const [error, setError] = useState([]);
     const [validURL, setValidURL] = useState(false); // Boolean that will show if the URL below is actually a valid image url
    
@@ -52,7 +52,8 @@ function PostDetails({ setModal, location, user }) {
         setError(newError);
     }, [post, preview_img, validURL]);
 
-    const handleSubmit = (e) => {
+    const handleSubmitEdit = (e) => {
+        console.log("Here1")
         e.preventDefault();
 
         const submitErrors = [];
@@ -70,16 +71,17 @@ function PostDetails({ setModal, location, user }) {
 
         if (error.length === 0) {
             const mewPost = {
-                location_id: location.id,
+                location_id: postToBeEdited.location.id,
                 post, 
                 preview_img,
                 userId: user.id
             };
+            console.log("Here2")
             setError([]);
-            dispatch(addPostThunk(mewPost)).then((res) => {
+            dispatch(editPostThunk(mewPost)).then((res) => {
                 if (res.id) {
                     setModal(false);
-                    dispatch(getALocatuinThunk(location.id));
+                    dispatch(getALocatuinThunk(postToBeEdited.id));
                 }
             }).catch(
                 async (res) => {
@@ -96,14 +98,10 @@ function PostDetails({ setModal, location, user }) {
         <div className="e-location-details">
            
 
-            <form className='e-form' onSubmit={handleSubmit}>
+            <form className='e-form' onSubmit={handleSubmitEdit}>
                 <h1>
-                    Write a Post for {location.name}
+                    Edit this post
                 </h1>
-            
-               
-
-
                 <label>* Post:
                     <textarea type={'text'}
                         value={post}
@@ -166,11 +164,10 @@ function PostDetails({ setModal, location, user }) {
                     >
                         Post
                     </button>
-
                 </div>
             </form>
         </div>
     )
 }
 
-export default PostDetails;
+export default PostEdit;
