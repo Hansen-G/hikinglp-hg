@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, request, session, redirect
+from flask import Flask, render_template, request, session, redirect, jsonify
 from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_wtf.csrf import CSRFProtect, generate_csrf
@@ -12,6 +12,7 @@ from .api.album_router import album_routes
 from .api.comment_routers import comment_routes
 from .api.location_routers import location_routes
 from .api.post_routers import post_routes
+from .api.open_ai import ai_routes
 
 from .seeds import seed_commands
 
@@ -33,13 +34,14 @@ def load_user(id):
 app.cli.add_command(seed_commands)
 
 app.config.from_object(Config)
+
 app.register_blueprint(user_routes, url_prefix='/api/users')
 app.register_blueprint(auth_routes, url_prefix='/api/auth')
 app.register_blueprint(album_routes, url_prefix='/api/albums')
 app.register_blueprint(comment_routes, url_prefix='/api/comments')
 app.register_blueprint(location_routes, url_prefix='/api/locations')
 app.register_blueprint(post_routes, url_prefix='/api/posts')
-
+app.register_blueprint(ai_routes, url_prefix='/api/ai')
 db.init_app(app)
 Migrate(app, db)
 
@@ -81,6 +83,14 @@ def react_root(path):
     return app.send_static_file('index.html')
 
 
-@app.route('/test')
-def test():
-    return 'test'
+@app.route('/google_map_api_key')
+def google_map_api_key():
+    return jsonify(app.config['REACT_APP_GOOGLE_MAPS_API_KEY'])
+
+@app.route('/nps_api_key')
+def nps_api_key():
+    return jsonify(app.config['REACT_APP_NPS_API_KEY'])
+
+@app.route('/open_ai_api_key')
+def open_ai_api_key():
+    return jsonify(app.config['OPENAI_API_KEY'])

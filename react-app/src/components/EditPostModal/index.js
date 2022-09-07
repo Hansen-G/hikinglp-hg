@@ -1,10 +1,10 @@
 // import './EditLocationModal.css';
 import React, { useState, useEffect } from "react";
 import { Modal } from "../../context/Modal";
-import EditLocationDetails from './EditLocationDetails';
+import PostEdit from './EditPost';
 
 
-function EditLocationModal({location, user}) {
+function EditPostModal({ post }) {
 
     const [showModal, setShowModal] = useState(false);
     const setModal = (show) => setShowModal(show);
@@ -20,11 +20,10 @@ function EditLocationModal({location, user}) {
     return (
         <>
             <button
-                className="e-loc-btm flex"
+                className="e-post-btn flex"
                 onClick={() => setShowModal(true)}
             >
-                <i class="fa-regular fa-pen-to-square"></i>
-                Edit Location
+                <i class="fa-solid fa-ellipsis"></i>
             </button>
             {showModal && (
                 <Modal
@@ -32,10 +31,9 @@ function EditLocationModal({location, user}) {
                     onClose={() => setShowModal(false)}
                     className="post-model"
                 >
-                    <EditLocationDetails
+                    <PostEdit
                         setModal={setModal}
-                        location={location}
-                        user={user}
+                        postToBeEdited={post}
                         className="post-model"
                     />
                 </Modal>
@@ -45,4 +43,4 @@ function EditLocationModal({location, user}) {
 
 }
 
-export default EditLocationModal;
+export default EditPostModal;

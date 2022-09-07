@@ -86,13 +86,13 @@ def update_post(id):
         return jsonify(form.errors), 400
 
 # Create a post for a location
-@post_routes.route('/<int:id>', methods=['POST'])
+@post_routes.route('/new', methods=['POST'])
 @login_required
-def create_post(id):
+def create_post():
     form = PostForm()
     form['csrf_token'].data = request.cookies['csrf_token']
 
-    post_location = Location.query.get(id)
+    post_location = Location.query.get(form.location_id.data)
     userId = current_user.id
 
     if not post_location:
@@ -105,7 +105,7 @@ def create_post(id):
     if post_location and form.validate_on_submit():
         post = Post(
             user_id=userId,
-            location_id=id,
+            location_id=form.location_id.data,
             post=form.post.data,
             preview_img=form.preview_img.data,
         )

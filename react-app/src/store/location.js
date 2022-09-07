@@ -4,6 +4,13 @@ const ADD_LOCATION = "session/ADD_LOCATION";
 const DELETE_LOCATION = "session/DELETE_LOCATION";
 const EDIT_LOCATION = "session/EDIT_LOCATION";
 
+const ADD_POST = "session/ADD_POST";
+const EDIT_POST = "session/EDIT_POST";
+const DELETE_POST = "session/DELETE_POST";
+
+
+
+
 const getLocation = (locations) => (
     {
         type: GET_LOCATIONS,
@@ -24,6 +31,12 @@ const addLocation = (location) => (
         location
     }
 );
+const addPost = (post) => (
+    {
+        type: ADD_POST,
+        post
+    }
+);
 
 
 const editLocation = (location) => (
@@ -33,10 +46,27 @@ const editLocation = (location) => (
     }
 );
 
+const editPost = (post) => (
+    {
+        type: EDIT_POST,
+        post
+    }
+);
+
+
+
 const deleteLocation = (id) => (
     {
         type: DELETE_LOCATION,
         id
+    }
+);
+
+const deletePost = (location_id, id) => (
+    {
+        type: DELETE_POST,
+        location_id,
+        id,
     }
 );
 
@@ -84,6 +114,28 @@ export const addLocationThunk = (location) => async dispatch => {
     }
 }
 
+export const addPostThunk = (post) => async dispatch => {
+    const response = await fetch("/api/posts/new", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(post)
+    });
+
+    console.log('Thunk', response)
+    if (response.ok) {
+        const newPost = await response.json();
+        console.log('newPost', newPost)
+        dispatch(addPost(newPost));
+        return newPost;
+    } else {
+        return ["An error occurred. Please try again."]
+        // throw new Error("Something went wrong");
+    }
+}
+
+
 export const editLocationThunk = (location) => async dispatch => {
     const response = await fetch(`/api/locations/${location.id}`, {
         method: "PUT",
@@ -94,6 +146,7 @@ export const editLocationThunk = (location) => async dispatch => {
     });
     if (response.ok) {
         const newLocation = await response.json();
+        console.log("newLocation", newLocation)
         dispatch(editLocation(newLocation));
         return newLocation;
     } else {
@@ -101,6 +154,27 @@ export const editLocationThunk = (location) => async dispatch => {
         // throw new Error("Something went wrong");
     }
 }
+
+export const editPostThunk = (post) => async dispatch => {
+    const response = await fetch(`/api/posts/${post.id}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(post)
+    });
+    if (response.ok) {
+        
+        const newPost = await response.json();
+        console.log("newPost", newPost)
+        dispatch(editPost(newPost));
+        return newPost;
+    } else {
+        return ["An error occurred. Please try again."]
+        // throw new Error("Something went wrong");
+    }
+}
+
 
 export const deleteLocationThunk = (id) => async dispatch => {
     const response = await fetch(`/api/locations/${id}`, {
@@ -115,10 +189,27 @@ export const deleteLocationThunk = (id) => async dispatch => {
     }
 }
 
+export const deletePostThunk = (location_id, id) => async dispatch => {
+    const response = await fetch(`/api/posts/${id}`, {
+        method: "DELETE"
+    });
+    if (response.ok) {
+        const response = dispatch(deletePost(location_id, id));
+        return response;
+    } else {
+        return ["An error occurred. Please try again."]
+        // throw new Error("Something went wrong");
+    }
+}
+
+
+
+
+
 const initialState = {
 }
 
-const postReducer = (state = initialState, action) => {
+const locationReducer = (state = initialState, action) => {
     let newState = {};
     switch (action.type) {
         case GET_LOCATIONS:
@@ -144,25 +235,51 @@ const postReducer = (state = initialState, action) => {
             newState = {
                 ...state,
             }
-            delete newState.locations[action.id];
+            delete newState[action.id];
             return newState;
         case EDIT_LOCATION:
             newState = {
                 ...state,
-                locations: state.locations.map(location => {
-                    if (location.id === action.location.id) {
-                        return action.location;
-                    } else {
-                        return location;
-                    }
-                }),
             }
+
+            newState[action.location.id] = action.location;
             return newState;
+        case ADD_POST:
+            newState = {
+                ...state,
+            }
+            newState[action.post.location_id].posts.push(action.post);
+            return newState;
+        case EDIT_POST:
+            newState = {
+                ...state,
+            }
+            newState[action.post.location_id].posts.forEach(post => {
+                if (post.id === action.post.id) {
+                    post.post = action.post.post;
+                    
+                }
+            })
+            console.log('newState after change', newState)
+            return newState;
+        case DELETE_POST:
+            newState = {
+                ...state,
+            }
+            console.log('newState before change', newState)
+            console.log('action', action)
+            newState[action.location_id].posts.forEach((post, index) => {
+                if (post.id === action.id) {
+                    newState[action.location_id].posts.splice(index, 1);
+                }
+            })
+            return newState;
+            
         default:
             return state
     }
 }
 
-export default postReducer;
+export default locationReducer;
 
 

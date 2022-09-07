@@ -28,8 +28,8 @@ function Navigation() {
                 <NavLink to='/locations/new' exact={true} >
                     <div className='nav-button'>Create a Location</div>
                 </NavLink>
-                <NavLink to='/locations/new' exact={true} >
-                    <div className='nav-button'>Write a Post</div>
+                <NavLink to='/locations/all' exact={true} >
+                    <div className='nav-button'>Find all Locations</div>
                 </NavLink>
                
                 <div className='nav-button flex'>

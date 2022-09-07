@@ -131,7 +131,6 @@
     box-shadow: none;
     box-sizing: border-box;
     display: inline-flex;
-    cursor: pointer;
     height: 40px;
     justify-content: center;
     margin: 0;
@@ -144,8 +143,6 @@
     user-select: none;
     vertical-align: middle;
     width: auto;
-    background-color: rgba(224, 7, 7, 1);
-    color: rgba(255, 255, 255, 1);
     background-position: calc(var(--mousedown-x) - calc(var(--button-width, 100px) * 200) / 2) calc(var(--mousedown-y) - calc(var(--button-width, 100px) * 200) / 2);
     background-size: calc(var(--button-width, 100px) * 200) calc(var(--button-width, 100px) * 200);
 }

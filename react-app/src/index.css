@@ -64,7 +64,6 @@ input[type=text],
 input[type=password],
 input[type=number],
 input[type=datetime-local],
-textarea,
 select {
     width: 100%;
     padding: 12px 20px;
@@ -72,6 +71,21 @@ select {
     height: 50px;
     box-sizing: border-box;
     font-size: 17px;
+    max-width: 100%;
+    font-family: 'Poppins', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+textarea{
+    width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        height: 150px;
+        box-sizing: border-box;
+        font-size: 17px;
+        max-width: 100%;
+        font-family: 'Poppins', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    resize: none;
+   
 }
 
 .error-title {

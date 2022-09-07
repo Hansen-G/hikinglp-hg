@@ -1,9 +1,8 @@
 .image-card-div {
     width: 300px;
-
-   height: 200px;
-        float: left;
-        object-fit: cover
+    height: 200px;
+    float: left;
+    object-fit: cover
 }
 
 .image-card-image {

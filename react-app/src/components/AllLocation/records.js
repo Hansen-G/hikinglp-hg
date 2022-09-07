@@ -3,30 +3,7 @@ import { Link } from "react-router-dom";
 
 const Records = ({ locations }) => {
 
-    // return (
-    //     <table className="table">
-    //         <thead>
-    //             <tr>
-    //                 <th scope='col'>ID</th>
-    //                 <th scope='col'>Name</th>
-    //                 <th scope='col'>City</th>
-    //                 <th scope='col'>State</th>
-
-    //             </tr>
-    //         </thead>
-    //         <tbody>
-    //             {data.map(item => (
-    //                 <tr>
-    //                     <td>{item.id} </td>
-    //                     <td>{item.name} </td>
-    //                     <td>{item.city} </td>
-    //                     <td>{item.state} </td>
-    //                 </tr>
-    //             ))}
-    //         </tbody>
-    //     </table>
-    // )
-    
+  
     return (
         <div className="all-loc-feed">
             <div className="all-location-container flex">

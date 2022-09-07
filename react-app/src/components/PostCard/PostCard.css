@@ -9,5 +9,30 @@
                     padding: 10px;
                     font: inherit;
                     vertical-align: baseline;
+                    width: 322px;
                    
+}
+
+.loc-post-card-img {
+    width: 300px;
+    height: 211.5px;
+    object-fit: cover;
+
+}
+
+.post-img{
+    height: 100%;
+    min-width: 300px;
+    min-height: 211.5px;
+    max-width: 300px;
+    max-height: 211.5px;
+}
+
+.loc-post-card-user{
+    align-items: center;
+}
+
+.user-info{
+    width: 200px;
+    padding: 10px;
 }
