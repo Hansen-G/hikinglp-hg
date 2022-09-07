@@ -30,8 +30,8 @@
         user-select: none;
         vertical-align: middle;
         width: auto;
-        background-color:cornflowerblue;
-        color: rgba(255, 255, 255, 1);
+        background-color:rgb(255, 255, 255);
+        color: rgb(0, 0, 0);
         background-position: calc(var(--mousedown-x) - calc(var(--button-width, 100px) * 200) / 2) calc(var(--mousedown-y) - calc(var(--button-width, 100px) * 200) / 2);
         background-size: calc(var(--button-width, 100px) * 200) calc(var(--button-width, 100px) * 200);
 }
@@ -69,9 +69,8 @@
     user-select: none;
     vertical-align: middle;
     width: auto;
-    background-color: rgba(224, 7, 7, 1);
     border: 0;
-    color: rgb(255, 255, 255);
+
     background-position: calc(var(--mousedown-x) - calc(var(--button-width, 100px) * 200) / 2) calc(var(--mousedown-y) - calc(var(--button-width, 100px) * 200) / 2);
     background-size: calc(var(--button-width, 100px) * 200) calc(var(--button-width, 100px) * 200);
     text-align: center;
@@ -85,7 +84,17 @@
     font-weight: 500 !important;
     margin-right: 20px;
 }
+.enabled{
+    background-color: rgba(224, 7, 7, 1);
+    color: rgb(255, 255, 255);
+    cursor: pointer;
+}
 
+.disabled {
+    background-color: rgb(196, 196, 196);
+    color: rgb(0, 0, 0);
+    cursor: not-allowed;
+}
 
 .e-loc-btm:hover{
     background-color: rgb(232, 232, 232);
@@ -94,4 +103,40 @@
 
 .c-post-btn i {
     padding: 0 10px 0 0;
+}
+
+
+.e-post-btn {
+    cursor: pointer;
+    background-color: white;
+    border: 0;
+    height: 30px;
+    width: 30px;
+    box-shadow: none;
+    box-sizing: border-box;
+    display: flex;
+    -webkit-box-pack: center;
+    justify-content: center;
+    position: relative;
+    text-align: center;
+    user-select: none;
+    vertical-align: middle;
+    background-color: transparent;
+    color: rgb(45, 46, 47);
+    background-size: calc(var(--button-width, 100px) * 200) calc(var(--button-width, 100px) * 200);
+    margin: 0px;
+    transition: background-image 0.8s ease 0s, background-color, background-position, background-size, border-color, box-shadow, opacity;
+    border-radius: 50%;
+    padding: 7px;
+    background-position: calc(var(--mousedown-x) - calc(var(--button-width, 100px) * 200) / 2) calc(var(--mousedown-y) - calc(var(--button-width, 100px) * 200) / 2);
+
+}
+.e-post-btn:hover{
+    background-color: #d4d4d4;
+}
+
+#delete-btn {
+    cursor: pointer;
+    background-color: cornflowerblue;
+    color: rgba(255, 255, 255, 1);
 }

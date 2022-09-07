@@ -5,7 +5,7 @@ import { pastDate } from "./../../util";
 import EditPostModal from "../EditPostModal";
 import { useSelector } from "react-redux";
 
-const PostCard = ({ post }) => {
+const PostCard = ({ post, HomePage }) => {
     const user = useSelector((state) => state.session.user);
 
 
@@ -32,12 +32,21 @@ const PostCard = ({ post }) => {
                 <div className='loc-post-card-post'>
                     <div>{post.post}</div>
                 </div>
-                <Link to={`/locations/${post.location_id}`}>
+                {HomePage ? (
+                    <Link to={`/locations/${post.location_id}`}>
+                        <div className='loc-post-card-img'>
+                            <img src={post.preview_img} alt={post.post} className='post-img' />
+                        </div>
+                    </Link>
+                ): (
+                  
                     <div className='loc-post-card-img'>
                         <img src={post.preview_img} alt={post.post} className='post-img' />
-                    </div> 
-                </Link>
+                    </div>
+                  
 
+                )}
+               
             </div>
        
     )

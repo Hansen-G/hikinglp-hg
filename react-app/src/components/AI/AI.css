@@ -21,7 +21,6 @@
 .user-chat-img, .ai-chat-img {
     width: 45px;
     height: 45px;
-
     object-fit: cover;
 }
 
@@ -50,6 +49,7 @@
     margin: 10px;
     width: 300px;
     overflow-y: scroll;
+    min-height: 42px;
 }
 
 .chatting-continer{

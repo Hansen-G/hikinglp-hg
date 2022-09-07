@@ -23,7 +23,7 @@ function EditPostModal({ post }) {
                 className="e-post-btn flex"
                 onClick={() => setShowModal(true)}
             >
-                <i class="fa-regular fa-star"></i>
+                <i class="fa-solid fa-ellipsis"></i>
             </button>
             {showModal && (
                 <Modal

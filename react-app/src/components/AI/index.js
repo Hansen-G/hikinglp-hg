@@ -60,6 +60,42 @@ function AI() {
             </div>
         )
     }
+    
+
+    const handleSubmit = async (e) => {
+            e.preventDefault();
+            setSubmit(true);
+            setLoading(true);
+            setLoaded(false);
+            setError(false);
+            setInitial(false);
+            setInitial(false);
+            setErrorMessage('');
+            setLastMessage(userInput);
+            const data = { prompt: userInput }
+            fetch('/api/ai', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+                .then(res => res.json())
+                .then(data => {
+                    setAiReply(data);
+                    setSubmit(false);
+                    setUserInput('');
+                    setLoading(false);
+                    setLoaded(true);
+
+                })
+                .catch(err => {
+                    setError(true);
+                    setErrorMessage(err);
+                })
+        }
+        
+    
 
     return (
         <div className="ai-function">
@@ -88,45 +124,16 @@ function AI() {
 
                     </div>
                     <div className="user-input">
-                        <form onSubmit={(e) => {
-                            e.preventDefault();
-                            setSubmit(true);
-                            setLoading(true);
-                            setLoaded(false);
-                            setError(false);
-                            setInitial(false);
-                            setErrorMessage('');
-                            setLastMessage(userInput);
-
-                            const data = { prompt: userInput }
-                            fetch('/api/ai', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify(data)
-                            })
-                                .then(res => res.json())
-                                .then(data => {
-                                    setAiReply(data);
-                                    setSubmit(false);
-                                    setUserInput('');
-                                    setLoading(false);
-                                    setLoaded(true);
-
-                                })
-                                .catch(err => {
-                                    setError(true);
-                                    setErrorMessage(err);
-                                })
-                        }
-                        }>
+                        <form onSubmit={handleSubmit}>
                             <input type="text"
                                 value={userInput}
                                 onChange={(e) => setUserInput(e.target.value)}
                                 minLength='1'
                                 maxLength='200'
-                                id='ai-input' />
+                                id='ai-input' 
+                                placeholder='Type your question here'
+                                disabled={loading}
+                                />
                             <button type="submit"
                                 disabled={
                                     userInput === '' || submit ? true : false

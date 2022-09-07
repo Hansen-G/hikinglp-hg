@@ -11,8 +11,6 @@ const DELETE_POST = "session/DELETE_POST";
 
 
 
-
-
 const getLocation = (locations) => (
     {
         type: GET_LOCATIONS,

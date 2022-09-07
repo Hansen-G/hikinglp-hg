@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import './EditPostModal.css';
 
 import { getAllLocationThunk, editPostThunk, deletePostThunk } from '../../store/location';
+import { getAllPostThunk } from '../../store/posts'
 import { isValidUrl, cut } from "../../util";
 import { NavLink, useParams, Route, Switch, Link, useHistory } from 'react-router-dom';
 
@@ -84,6 +85,7 @@ function PostEdit({ setModal, postToBeEdited }) {
                 if (res.id) {
                     setModal(false);
                     dispatch(getAllLocationThunk());
+                    dispatch(getAllPostThunk());
                 }
             }).catch(
                 async (res) => {
@@ -102,6 +104,7 @@ function PostEdit({ setModal, postToBeEdited }) {
             if (res.id) {
                 setModal(false);
                 dispatch(getAllLocationThunk());
+                dispatch(getAllPostThunk());
             }
         }).catch(
             async (res) => {
@@ -119,7 +122,7 @@ function PostEdit({ setModal, postToBeEdited }) {
 
             {/* <form className='e-form' onSubmit={handleSubmitEdit}> */}
                 <h1>
-                    Edit this post
+                    Edit or delete this post
                 </h1>
                 <label>* Post:
                     <textarea type={'text'}
@@ -164,7 +167,7 @@ function PostEdit({ setModal, postToBeEdited }) {
                 <div className="e-buttem-div flex">
 
                     <button type="button" onClick={() => setModal(false)} className='cancel-btn'>
-                        Cancale
+                        Cancel
                     </button>
                     
                     <button type="submit"
@@ -182,9 +185,9 @@ function PostEdit({ setModal, postToBeEdited }) {
                         id='e-submit-btn'
                         onClick={handleSubmitEdit}
                     >
-                        Post
+                        Save Edit
                     </button>
-                <button type="button" onClick={handleDelete} className='delete-btn'>
+                <button type="button" onClick={handleDelete} className='submit-btn' id="delete-btn">
                         Delete
                     </button>
                 </div>

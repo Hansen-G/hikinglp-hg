@@ -71,7 +71,7 @@ function CreateLocation(){
         setError(newError);
     } , [name, address, details, preview_img, lat, lng]);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         const submitErrors = [];

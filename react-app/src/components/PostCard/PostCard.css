@@ -27,3 +27,12 @@
     max-width: 300px;
     max-height: 211.5px;
 }
+
+.loc-post-card-user{
+    align-items: center;
+}
+
+.user-info{
+    width: 200px;
+    padding: 10px;
+}

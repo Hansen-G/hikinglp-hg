@@ -77,36 +77,36 @@ export const getAllPostThunk = () => async dispatch => {
 //     }
 // }
 
-export const editPostThunk = (post) => async dispatch => {
-    const response = await fetch(`/api/posts/${post.id}`, {
-        method: "PUT",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(post)
-    });
-    if (response.ok) {
-        const newLocation = await response.json();
-        dispatch(editPost(newLocation));
-        return newLocation;
-    } else {
-        return ["An error occurred. Please try again."]
-        // throw new Error("Something went wrong");
-    }
-}
+// export const editPostThunk = (post) => async dispatch => {
+//     const response = await fetch(`/api/posts/${post.id}`, {
+//         method: "PUT",
+//         headers: {
+//             "Content-Type": "application/json"
+//         },
+//         body: JSON.stringify(post)
+//     });
+//     if (response.ok) {
+//         const newLocation = await response.json();
+//         dispatch(editPost(newLocation));
+//         return newLocation;
+//     } else {
+//         return ["An error occurred. Please try again."]
+//         // throw new Error("Something went wrong");
+//     }
+// }
 
-export const deletePostThunk = (id) => async dispatch => {
-    const response = await fetch(`/api/posts/${id}`, {
-        method: "DELETE"
-    });
-    if (response.ok) {
-        const response = dispatch(deletePost(id));
-        return response;
-    } else {
-        return ["An error occurred. Please try again."]
-        // throw new Error("Something went wrong");
-    }
-}
+// export const deletePostThunk = (id) => async dispatch => {
+//     const response = await fetch(`/api/posts/${id}`, {
+//         method: "DELETE"
+//     });
+//     if (response.ok) {
+//         const response = dispatch(deletePost(id));
+//         return response;
+//     } else {
+//         return ["An error occurred. Please try again."]
+//         // throw new Error("Something went wrong");
+//     }
+// }
 
 const initialState = {
 }
