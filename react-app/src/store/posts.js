@@ -136,24 +136,24 @@ const postReducer = (state = initialState, action) => {
         //     console.log('Reducer', newState)
            
         //     return newState;
-        case DELETE_POST:
-            newState = {
-                ...state,
-            }
-            delete newState.posts[action.id];
-            return newState;
-        case EDIT_POST:
-            newState = {
-                ...state,
-                posts: state.posts.map(post => {
-                    if (post.id === action.post.id) {
-                        return action.post;
-                    } else {
-                        return post;
-                    }
-                }),
-            }
-            return newState;
+        // case DELETE_POST:
+        //     newState = {
+        //         ...state,
+        //     }
+        //     delete newState.posts[action.id];
+        //     return newState;
+        // case EDIT_POST:
+        //     newState = {
+        //         ...state,
+        //         posts: state.posts.map(post => {
+        //             if (post.id === action.post.id) {
+        //                 return action.post;
+        //             } else {
+        //                 return post;
+        //             }
+        //         }),
+        //     }
+        //     return newState;
         default:
             return state
     }

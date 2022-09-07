@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import './EditPostModal.css';
 
-import { getALocatuinThunk, editPostThunk, deleteLocationThunk } from '../../store/location';
+import { getAllLocationThunk, editPostThunk, deletePostThunk } from '../../store/location';
 import { isValidUrl, cut } from "../../util";
 import { NavLink, useParams, Route, Switch, Link, useHistory } from 'react-router-dom';
 
-function PostEdit({ setModal, postToBeEdited, user }) {
+function PostEdit({ setModal, postToBeEdited }) {
     const dispatch = useDispatch()
     const history = useHistory();
 
+    const user = useSelector((state) => state.session.user);
     const [post, setPost] = useState(postToBeEdited.post);
     const [preview_img, setPreview_img] = useState(postToBeEdited.preview_img);
     const [error, setError] = useState([]);
@@ -53,7 +54,6 @@ function PostEdit({ setModal, postToBeEdited, user }) {
     }, [post, preview_img, validURL]);
 
     const handleSubmitEdit = (e) => {
-        console.log("Here1")
         e.preventDefault();
 
         const submitErrors = [];
@@ -70,18 +70,20 @@ function PostEdit({ setModal, postToBeEdited, user }) {
         }
 
         if (error.length === 0) {
-            const mewPost = {
-                location_id: postToBeEdited.location.id,
+            const newPost = {
+                id: postToBeEdited.id,
+                location_id: postToBeEdited.location_id,
                 post, 
                 preview_img,
                 userId: user.id
             };
-            console.log("Here2")
+
             setError([]);
-            dispatch(editPostThunk(mewPost)).then((res) => {
+            dispatch(editPostThunk(newPost)).then((res) => {
+                console.log('RES', res);
                 if (res.id) {
                     setModal(false);
-                    dispatch(getALocatuinThunk(postToBeEdited.id));
+                    dispatch(getAllLocationThunk());
                 }
             }).catch(
                 async (res) => {
@@ -93,12 +95,29 @@ function PostEdit({ setModal, postToBeEdited, user }) {
         }
     }
 
+    const handleDelete = (e) => {
+        e.preventDefault();
+        dispatch(deletePostThunk(postToBeEdited.location_id, postToBeEdited.id)).then((res) => {
+            console.log('RES', res);
+            if (res.id) {
+                setModal(false);
+                dispatch(getAllLocationThunk());
+            }
+        }).catch(
+            async (res) => {
+                console.log('res', res)
+                // const error = await res.json();
+                // setError(error.errors);
+            }
+        );
+    }
+
     return (
        
         <div className="e-location-details">
            
 
-            <form className='e-form' onSubmit={handleSubmitEdit}>
+            {/* <form className='e-form' onSubmit={handleSubmitEdit}> */}
                 <h1>
                     Edit this post
                 </h1>
@@ -128,13 +147,13 @@ function PostEdit({ setModal, postToBeEdited, user }) {
                     "URL", (preview_img.length > 1000 || !validURL))}
 
 
-                {error.length > 0 && (
+                {error &&error.length > 0 && (
                     <div className='error-title'>
                         Please correct the following errors before submit:
                     </div>
                 )}
 
-                {error.length > 0 && (
+                {error && error.length > 0 && (
                     <ol className='error'>
                         {error.map((err, i) => (
                             <li key={i} className='error-item'>{err}</li>
@@ -161,11 +180,15 @@ function PostEdit({ setModal, postToBeEdited, user }) {
                             : "enabled"
                             }`}
                         id='e-submit-btn'
+                        onClick={handleSubmitEdit}
                     >
                         Post
                     </button>
+                <button type="button" onClick={handleDelete} className='delete-btn'>
+                        Delete
+                    </button>
                 </div>
-            </form>
+            {/* </form> */}
         </div>
     )
 }

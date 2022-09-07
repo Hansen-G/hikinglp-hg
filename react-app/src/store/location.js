@@ -64,10 +64,11 @@ const deleteLocation = (id) => (
     }
 );
 
-const deletePost = (id) => (
+const deletePost = (location_id, id) => (
     {
         type: DELETE_POST,
-        id
+        location_id,
+        id,
     }
 );
 
@@ -190,12 +191,12 @@ export const deleteLocationThunk = (id) => async dispatch => {
     }
 }
 
-export const deletePostThunk = (id) => async dispatch => {
+export const deletePostThunk = (location_id, id) => async dispatch => {
     const response = await fetch(`/api/posts/${id}`, {
         method: "DELETE"
     });
     if (response.ok) {
-        const response = dispatch(deletePost(id));
+        const response = dispatch(deletePost(location_id, id));
         return response;
     } else {
         return ["An error occurred. Please try again."]
@@ -257,17 +258,21 @@ const locationReducer = (state = initialState, action) => {
             }
             newState[action.post.location_id].posts.forEach(post => {
                 if (post.id === action.post.id) {
-                    post = action.post;
+                    post.post = action.post.post;
+                    
                 }
             })
+            console.log('newState after change', newState)
             return newState;
         case DELETE_POST:
             newState = {
                 ...state,
             }
-            newState[action.post.location_id].posts.forEach((post, index) => {
-                if (post.id === action.post.id) {
-                    
+            console.log('newState before change', newState)
+            console.log('action', action)
+            newState[action.location_id].posts.forEach((post, index) => {
+                if (post.id === action.id) {
+                    newState[action.location_id].posts.splice(index, 1);
                 }
             })
             return newState;

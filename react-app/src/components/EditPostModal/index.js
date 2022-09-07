@@ -4,7 +4,7 @@ import { Modal } from "../../context/Modal";
 import PostEdit from './EditPost';
 
 
-function EditPostModal({ post, user}) {
+function EditPostModal({ post }) {
 
     const [showModal, setShowModal] = useState(false);
     const setModal = (show) => setShowModal(show);
@@ -34,7 +34,6 @@ function EditPostModal({ post, user}) {
                     <PostEdit
                         setModal={setModal}
                         postToBeEdited={post}
-                        user={user}
                         className="post-model"
                     />
                 </Modal>
