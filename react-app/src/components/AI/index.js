@@ -79,26 +79,39 @@ function AI() {
             setErrorMessage('');
             setLastMessage(userInput);
             const data = { prompt: userInput }
-            fetch('/api/ai', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            })
-                .then(res => res.json())
-                .then(data => {
-                    setAiReply(data);
-                    setSubmit(false);
-                    setUserInput('');
-                    setLoading(false);
-                    setLoaded(true);
 
+            try{
+                fetch('/api/ai', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
                 })
-                .catch(err => {
-                    setError(true);
-                    setErrorMessage(err);
-                })
+                    .then(res => res.json())
+                    .then(data => {
+                        setAiReply(data);
+                        setSubmit(false);
+                        setUserInput('');
+                        setLoading(false);
+                        setLoaded(true);
+
+                    })
+                    .catch(err => {
+                        setError(true);
+                        setErrorMessage(err);
+                        setAiReply('Hmmmmm, something went wrong. Please try again later.');
+                    })
+
+            }
+            catch(err){
+                setError(true);
+                setErrorMessage(err);
+                setAiReply('Hmmmmm, something went wrong. Please try again later.');
+            }
+
+
+           
         }
         
     

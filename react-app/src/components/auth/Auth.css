@@ -37,3 +37,13 @@
     font-size: 12px;
     color: rgb(124, 124, 124);
 }
+
+
+.login-btn{
+    justify-content: space-between;
+}
+
+.demo{
+    background-color: #54b3d6;
+    cursor: pointer;
+}
