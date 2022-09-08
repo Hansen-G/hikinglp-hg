@@ -4,6 +4,8 @@ import { NavLink, useParams, Route, Switch, Link, useHistory } from 'react-route
 import { addLocationThunk } from '../../store/location';
 import "./CreateLocation.css";
 import { isValidUrl, cut } from "../../util";
+import AI from '../AI'
+import ButtomBar from '../ButtomBar'
 
 function CreateLocation(){
     const dispatch = useDispatch()
@@ -20,7 +22,6 @@ function CreateLocation(){
     const [lat, setLat] = useState(0.0000);
     const [lng, setLng] = useState(0.0000);
     const [error, setError] = useState([]);
-
     const [validURL, setValidURL] = useState(false); // Boolean that will show if the URL below is actually a valid image url
     const setURLAndCheckURL = async (urlInput) => {
         const res = await isValidUrl(urlInput, setError, error);
@@ -285,14 +286,7 @@ function CreateLocation(){
 
 
 
-                    {console.log(
-                        "name", (name.length === 0 || name.length > 100),
-                        "address", (address.length > 1000 || address.length === 0),
-                        "lat", (lat < -90 || lat > 90),
-                        "lng", (lng < -180 || lng > 180),
-                        "details", (details.length === 0 || details.length > 2000),
-                        "URL", (preview_img.length > 1000 || !validURL))}
-
+                  
                     
                     {error.length > 0 && (
                         <div className='error-title'>
@@ -356,7 +350,7 @@ function CreateLocation(){
             
                 <div className='loc-c-header flex'>
                     <div>
-                        {validURL && (<img src={preview_img} className='loc-c-header-img' />)}
+                        {validURL && (<img src={preview_img} className='loc-c-header-img' onError={e => { e.currentTarget.src = "https://res.cloudinary.com/hansenguo/image/upload/v1661959406/Hikinglp/Logo_sytg4b.png"; }} />)}
                         {!validURL && (<img src="https://res.cloudinary.com/hansenguo/image/upload/v1661959406/Hikinglp/Logo_sytg4b.png" className='loc-c-header-img' />)}
                     </div>
                     <div className='loc-c-info'>
@@ -384,6 +378,8 @@ function CreateLocation(){
 
                 
             </div>
+            <AI />
+            <ButtomBar />
 
         </div>
     )

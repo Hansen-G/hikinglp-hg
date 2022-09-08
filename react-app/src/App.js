@@ -12,9 +12,9 @@ import HomePage from './components/Homepage';
 import LocationDetails from './components/LocationDetails';
 import CreateLocation from './components/CreateLocation';
 import Navigation from './components/Navigation';
-import LocationTest from './components/Location';
 import AllLocation from './components/AllLocation';
 import AI from './components/AI';
+
 
 function App() {
   const [loaded, setLoaded] = useState(false);
@@ -42,19 +42,17 @@ function App() {
         <Route exact={true} path='/locations/all'>
           <AllLocation />
           <AI />
+         
         </Route>
 
         <Route path='/locations/:locationId'>
           <LocationDetails />
           <AI />
+       
        </Route>
 
-        <Route exact={true} path='/test'>
+        <Route exact={true} path='/ai'>
           <AI />
-        </Route>
-
-        <Route path='/test'>
-          <LocationTest />
         </Route>
 
         <Route path='/login' exact={true}>

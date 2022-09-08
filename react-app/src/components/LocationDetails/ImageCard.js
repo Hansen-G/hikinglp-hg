@@ -5,7 +5,11 @@ function ImageCard (image){
         <div className="image-card flex">
            
                 <div className='image-card-div'>
-                    <img src={image.image.url} className='image-card-image' />
+                    <img 
+                    src={image.image.url} 
+                    className='image-card-image' 
+                    onError={e => { e.currentTarget.src = "https://res.cloudinary.com/hansenguo/image/upload/v1661959406/Hikinglp/Logo_sytg4b.png"; }}
+                    />
                 </div>
                 
               

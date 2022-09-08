@@ -7,6 +7,8 @@ import axios from 'axios'
 import './AllLocation.css'
 import Records from './records'
 import Pagination from './Pagination'
+import AI from '../AI'
+import ButtomBar from '../ButtomBar'
 
 //!!! Pagination inspired by https://levelup.gitconnected.com/a-simple-guide-to-pagination-in-react-facd6f785bd0
 
@@ -55,6 +57,8 @@ function AllLocation() {
                 currentPage={currentPage}
                 setCurrentPage={setCurrentPage}
             />
+            <AI />
+            <ButtomBar />
         </div>
 
     )
