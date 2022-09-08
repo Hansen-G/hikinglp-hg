@@ -6,12 +6,13 @@ import { NavLink, useParams, Route, Switch, Link, useHistory } from 'react-route
 import { getALocatuinThunk, deleteLocationThunk } from '../../store/location';
 import { pastDate } from "./../../util";
 import EditLocationModal from '../EditLocationModal';
-import LoginFormModal from '../LoginFormModal';
 import ImageCard from "./ImageCard";
 import GoogleMapReact from 'google-map-react';
 import CreatePostModal from '../CreatePostModal';
 import PostCard from "../PostCard";
 import { isValidUrl } from "../../util";
+import AI from '../AI'
+import ButtomBar from '../ButtomBar'
 
 // import { useJsApiLoader, GoogleMap, Marker, DirectionsRenderer } from "@react-google-maps/api"
 // import { GoogleMap, Marker } from "react-google-maps"
@@ -62,16 +63,27 @@ function LocationDetails () {
             return
         }
         const REACT_APP_NPS_API_KEY = await NSF_API_KEY.json()
-        console.log(REACT_APP_NPS_API_KEY)
 
         try {
-            const response = await fetch(`https://developer.nps.gov/api/v1/parks?parkCode=${location.nsf_id}&api_key=${REACT_APP_NPS_API_KEY}`);
+            const response = await fetch(`https://developer.nps.gov/api/v1/parks?id=${location.nsf_id}&api_key=${REACT_APP_NPS_API_KEY}`);
             const data = await response.json();
-            setLocationExtraData(data.data[0]);
+            let usedData = data.data[0]
+            let location_extra_data = {
+                url: usedData.url,
+                activities: usedData.activities,
+                topics: usedData.topics,
+                contacts: usedData.contacts,
+                entranceFees: usedData.entranceFees,
+                operatingHours: usedData.operatingHours,
+                images: usedData.images,
+                weatherInfo: usedData.weatherInfo,
+
+            }
+            setLocationExtraData(location_extra_data)
             setLoaded(true)
         }
         catch (e) {
-            console.log(e)
+        
             setLocationExtraData(null)
         }
 
@@ -81,7 +93,6 @@ function LocationDetails () {
             setGoogleMapAPIKey(data)
         } 
         catch (e) {
-            console.log(e)
             setGoogleMapAPIKey(null)
         }
         const setDisplay = await setLoaded(true);
@@ -161,7 +172,6 @@ function LocationDetails () {
             </script>
             <div className='loc-d-header'>
                 <div>
-                    {console.log('isValidUrl(location.preview_img)',isValidUrl(location.preview_img))}
                     {isValidUrl(location.preview_img) && (
                     <img 
                     onError={e => { e.currentTarget.src = "https://res.cloudinary.com/hansenguo/image/upload/v1662189939/Hikinglp/WX20220903-032532_2x_re1fri.png"; }}
@@ -303,6 +313,8 @@ function LocationDetails () {
                 
 
             </div>
+            <AI />
+            <ButtomBar />
         </div>
     )
 

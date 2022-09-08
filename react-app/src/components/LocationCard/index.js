@@ -11,10 +11,15 @@ function LocationCard ({location, user}) {
         <Link to={`/locations/${location.id}`}>
             <div className="location-card flex">
                 <div className="location-image-div">
-                    <img src={location.preview_img} alt={location.name} className="location-image" />
+                    <img 
+                    src={location.preview_img} 
+                    alt={location.name} 
+                    className="location-image" 
+                    onError={e => { e.currentTarget.src = "https://res.cloudinary.com/hansenguo/image/upload/v1661959406/Hikinglp/Logo_sytg4b.png"; }}
+                    />
                 </div>
 
-                <div className="location-info">
+                <div className="location-info card">
                     <div className="location-name">
                         {location.name}
                     </div>

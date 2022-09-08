@@ -9,13 +9,14 @@ user1 = User(
     email='demo@aa.io',
     name='Charlie',
     password='password',
-    profile_img='https://res.cloudinary.com/hansenguo/image/upload/v1660950302/TheGramme/user_yiqxol.png',
+    profile_img='https://res.cloudinary.com/hansenguo/image/upload/v1662413467/Hikinglp/f20ffc372c2009378905e712b032b4f0_s0jt2j.jpg',
 )
 user2 = User(
     username='marnie',
     email='marnie@aa.io',
     name='Marnie',
     password='password',
+    profile_img='https://res.cloudinary.com/hansenguo/image/upload/v1662413463/Hikinglp/07c5a53870c411bd6f7aa78b26f9a3e1_kpwvbr.jpg',
     followers=[user1]
 )
 user3 = User(
@@ -23,13 +24,16 @@ user3 = User(
     email='bobbie@aa.io',
     name='Bobbie',
     password='password',
+     profile_img='https://res.cloudinary.com/hansenguo/image/upload/v1662189939/Hikinglp/WX20220903-032532_2x_re1fri.png',
     followers=[user2, user1]
 )
 user4 = User(
     username='hansen',
     email='hansen@aa.io',
     name='Hansen',
-    password='password',
+    password='password', 
+    profile_img='https://res.cloudinary.com/hansenguo/image/upload/v1654572769/cld-sample-2.jpg',
+
     followers=[user2, user3]
 )
 user5 = User(
@@ -37,6 +41,7 @@ user5 = User(
     email='kevin@aa.io',
     name='Kevin',
     password='password',
+     profile_img='https://res.cloudinary.com/hansenguo/image/upload/v1654572769/cld-sample.jpg',
     followers=[user1, user4]
     
 )

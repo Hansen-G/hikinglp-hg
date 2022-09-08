@@ -8,6 +8,7 @@ import LocationCard from "../LocationCard";
 import PostCard from "../PostCard";
 import { getRandomFromArray } from "../../util";
 import AI from '../AI'
+import ButtomBar from '../ButtomBar'
 
 require('dotenv').config()
 
@@ -63,6 +64,7 @@ function HomePage() {
     let postArr = Object.values(posts).sort(function (a, b) {
         return new Date(b["createdAt"]) - new Date(a["createdAt"]);
     });
+    let sellectedPost = postArr.slice(0, 12);
 
     
 
@@ -119,15 +121,18 @@ function HomePage() {
 
 
             <div className="post-feed flex">
-                {postArr.map((post) => {
-                    return (
-                        <PostCard key={post.id} post={post} HomePage={true} />
-                    )
+                {sellectedPost.map((post) => {
+                    if (post){
+                        return (
+                            <PostCard key={post.id} post={post} HomePage={true} />
+                        )
+                    } 
                 })}
 
 
             </div>
             <AI />
+            <ButtomBar />
         </div>    
     )
 

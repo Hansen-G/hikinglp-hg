@@ -35,7 +35,10 @@ function AI() {
                 </div>
 
                 <div className="user-chat-img">
-                    <img src={user.profile_img} alt="user" className="chat-img" />
+                    <img src={user.profile_img} 
+                    alt="user" 
+                    className="chat-img" 
+                    onError={e => { e.currentTarget.src = "https://res.cloudinary.com/hansenguo/image/upload/v1661959406/Hikinglp/Logo_sytg4b.png"; }} />
                 </div>
             </div>
         )
@@ -45,7 +48,10 @@ function AI() {
         return (
             <div className="ai-chat flex">
                 <div className="ai-chat-img">
-                    <img src="https://res.cloudinary.com/hansenguo/image/upload/v1662413464/Hikinglp/7e99c18116b61b099fb877d810f4b9cf_z0lxbq.jpg" alt="ai" className="chat-img" />
+                    <img src="https://res.cloudinary.com/hansenguo/image/upload/v1662413464/Hikinglp/7e99c18116b61b099fb877d810f4b9cf_z0lxbq.jpg" 
+                    alt="ai" 
+                    className="chat-img" 
+                    onError={e => { e.currentTarget.src = "https://res.cloudinary.com/hansenguo/image/upload/v1661959406/Hikinglp/Logo_sytg4b.png"; }} />
                 </div>
 
                 <div className="ai-chat-text">
@@ -138,25 +144,19 @@ function AI() {
                                 disabled={
                                     userInput === '' || submit ? true : false
                                 }
-
                                 className={
                                     userInput === '' || submit ? 'disabled-ai-submit ai-submit' : 'enabled-ai-submit ai-submit'
                                 }
-
                             >
                                 <i class="fa-regular fa-paper-plane"
                                     id={
                                         userInput === '' || submit ? 'disabled-ai-submit-icon' : 'enabled-ai-submit-icon'
                                     }
-
                                 ></i>
 
                             </button>
                         </form>
                     </div>
-
-
-
                 </div>  
                 ) : null}
    

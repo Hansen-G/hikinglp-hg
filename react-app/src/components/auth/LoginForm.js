@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { login } from '../../store/session';
+import './Auth.css';
 
 const LoginForm = () => {
   const [errors, setErrors] = useState([]);
@@ -31,34 +32,71 @@ const LoginForm = () => {
   }
 
   return (
-    <form onSubmit={onLogin}>
-      <div>
-        {errors.map((error, ind) => (
-          <div key={ind}>{error}</div>
-        ))}
+    <div className='auth-page flex'>
+      <form onSubmit={onLogin} className='login'>
+        <h1>
+          Login
+        </h1>
+        <div>
+          <label htmlFor='email'>Email</label>
+          <input
+            name='email'
+            type='text'
+            placeholder='Email'
+            value={email}
+            onChange={updateEmail}
+          />
+        </div>
+        <div>
+          <label htmlFor='password'>Password</label>
+          <input
+            name='password'
+            type='password'
+            placeholder='Password'
+            value={password}
+            onChange={updatePassword}
+          />
+
+          {errors.length > 0 && (
+            <div className='error-title'>
+              Please correct the following errors before submit:
+            </div>
+          )}
+
+          {errors.length > 0 && (
+            <ol className='error'>
+              {errors.map((err, i) => (
+                <li key={i} className='error-item'>{err}</li>
+              ))}
+            </ol>
+          )}
+
+          
+        </div>
+        <button type='submit'
+
+          disabled={
+            password.length < 6 || password.length === 0 ||
+            email.length < 1 || email.length > 255
+
+          }
+
+          className={`submit-btn ${password.length < 6 || password.length === 0 ||
+              email.length < 1 || email.length > 255
+              ? "disabled"
+              : "enabled"
+            }`}
+
+        >Login</button>
+      </form>
+
+      <div className='auth-img-div'>
+        <img src='https://res.cloudinary.com/hansenguo/image/upload/v1662604451/Hikinglp/349d45d4bb3e76c72a4475b9163de5cc_aalzeg.jpg' className='auth-img'/>
+
       </div>
-      <div>
-        <label htmlFor='email'>Email</label>
-        <input
-          name='email'
-          type='text'
-          placeholder='Email'
-          value={email}
-          onChange={updateEmail}
-        />
-      </div>
-      <div>
-        <label htmlFor='password'>Password</label>
-        <input
-          name='password'
-          type='password'
-          placeholder='Password'
-          value={password}
-          onChange={updatePassword}
-        />
-        <button type='submit'>Login</button>
-      </div>
-    </form>
+
+    </div>
+   
   );
 };
 

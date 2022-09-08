@@ -60,11 +60,8 @@ function ProfileButton({ user }) {
                         <div className="linkDiv" >
                             <Link to='/' id="menuLink">Find a Location</Link>
                         </div>
-                        <div className="linkDiv">
-                            <Link to='/locations/new' id="menuLink">Create a Location</Link>
-                        </div>
                         <div className="linkDiv" id='linkDiv'>
-                            <Link to='/locations/new' id="menuLink">Write a Post</Link>
+                            <Link to='/locations/new' id="menuLink">Create a Location</Link>
                         </div>
 
                         <div className="logoutDiv" onClick={logout}>Log Out</div>

@@ -11,10 +11,15 @@ const PostCard = ({ post, HomePage }) => {
 
     return (
         
-            <div className='loc-post-card' id='home-post-card'>
+            <div className='loc-post-card card2' id='home-post-card'>
                 <div className='loc-post-card-user flex'>
                     <div className='user-img-div'>
-                        <img src={post.user.profile_img} alt={post.user.name} className='user-img' />
+                        <img 
+                        src={post.user.profile_img} 
+                        alt={post.user.name} 
+                        className='user-img' 
+                        onError={e => { e.currentTarget.src = "https://res.cloudinary.com/hansenguo/image/upload/v1661959406/Hikinglp/Logo_sytg4b.png"; }}
+                        />
                     </div>
                     <div className='user-info'>
                         <div className='user-name'>{post.user.name}</div>
@@ -35,13 +40,23 @@ const PostCard = ({ post, HomePage }) => {
                 {HomePage ? (
                     <Link to={`/locations/${post.location_id}`}>
                         <div className='loc-post-card-img'>
-                            <img src={post.preview_img} alt={post.post} className='post-img' />
+                            <img 
+                            src={post.preview_img} 
+                            alt={post.post} 
+                            className='post-img' 
+                            onError={e => { e.currentTarget.src = "https://res.cloudinary.com/hansenguo/image/upload/v1662189939/Hikinglp/WX20220903-032532_2x_re1fri.png"; }}
+                            />
                         </div>
                     </Link>
                 ): (
                   
                     <div className='loc-post-card-img'>
-                        <img src={post.preview_img} alt={post.post} className='post-img' />
+                        <img 
+                        src={post.preview_img} 
+                        alt={post.post} 
+                        className='post-img' 
+                        onError={e => { e.currentTarget.src = "https://res.cloudinary.com/hansenguo/image/upload/v1662189939/Hikinglp/WX20220903-032532_2x_re1fri.png"; }}
+                        />
                     </div>
                   
 

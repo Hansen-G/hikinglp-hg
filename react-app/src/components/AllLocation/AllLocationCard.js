@@ -9,7 +9,11 @@ function AllLocationCard({ location, user }) {
         <Link to={`/locations/${location.id}`}>
             <div className="all-location-card flex">
                 <div className="all-location-image-div">
-                    <img src={location.preview_img} alt={location.name} className="all-location-image" />
+                    <img src={location.preview_img} 
+                    alt={location.name} 
+                    className="all-location-image" 
+                    onError={e => { e.currentTarget.src = "https://res.cloudinary.com/hansenguo/image/upload/v1661959406/Hikinglp/Logo_sytg4b.png"; }}
+                    />
                 </div>
 
                 <div className="all-location-info">
