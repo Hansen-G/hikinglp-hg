@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { login } from '../../store/session';
+import { Link } from 'react-router-dom';
 import './Auth.css';
 
 const LoginForm = () => {
@@ -14,6 +15,17 @@ const LoginForm = () => {
   const onLogin = async (e) => {
     e.preventDefault();
     const data = await dispatch(login(email, password));
+    if (data) {
+      setErrors(data);
+    }
+  };
+
+  const demoLogin = async (e) => {
+    e.preventDefault();
+    let demoEmail = 'demo@aa.io';
+    let demoPassword = 'password'
+
+    const data = await dispatch(login(demoEmail, demoPassword));
     if (data) {
       setErrors(data);
     }
@@ -37,6 +49,12 @@ const LoginForm = () => {
         <h1>
           Login
         </h1>
+        <h3>
+          Do not have an account?     <Link to='/sign-up' className='link'>
+            <span className='h2-span'>Sign up here </span>
+          </Link>
+        </h3>
+
         <div>
           <label htmlFor='email'>Email</label>
           <input
@@ -73,21 +91,30 @@ const LoginForm = () => {
 
           
         </div>
-        <button type='submit'
 
-          disabled={
-            password.length < 6 || password.length === 0 ||
-            email.length < 1 || email.length > 255
+        <div className='login-btn flex'>
+          <button type='submit'
 
-          }
+            disabled={
+              password.length < 6 || password.length === 0 ||
+              email.length < 1 || email.length > 255
 
-          className={`submit-btn ${password.length < 6 || password.length === 0 ||
+            }
+
+            className={`submit-btn ${password.length < 6 || password.length === 0 ||
               email.length < 1 || email.length > 255
               ? "disabled"
               : "enabled"
-            }`}
+              }`}
 
-        >Login</button>
+          >Login</button>
+
+          <button type='button' onClick={demoLogin} className='submit-btn demo'>Demo Login</button>
+
+
+
+        </div>
+        
       </form>
 
       <div className='auth-img-div'>

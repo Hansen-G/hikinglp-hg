@@ -1,7 +1,7 @@
 .ai-card {
     margin-top: 100px;
     width: 400px;
-    max-height:800px;
+    max-height:600px;
     overflow-y: scroll;
     border: 1px solid #ebebeb;
     padding: 20px;
@@ -111,7 +111,7 @@
     /* width: 50px;
     height: 50px; */
     border-radius: 6px;
-    background-color: cornflowerblue;
+    background-color: #54b3d6;
     color: white;
     border: 0px;
     cursor: pointer;
@@ -123,7 +123,7 @@
     height: 50px; */
     border-radius: 6px;
     background-color: #ebebeb;
-    color: cornflowerblue;
+    color: #54b3d6;
     border: 0px;
     cursor: pointer;
     padding: 10px;

@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Redirect } from 'react-router-dom';
 import { signUp } from '../../store/session';
 import { isValidUrl, cut } from "../../util";
+import { Link } from 'react-router-dom';
 
 const SignUpForm = () => {
   const dispatch = useDispatch();
@@ -110,6 +111,13 @@ const SignUpForm = () => {
           <h1>
             Sign Up
           </h1>
+         
+          <h3>
+            Already have an account?
+            <Link to='/login' className='link'>
+              <span className='h2-span'>Login here </span>
+            </Link>
+          </h3>
           <label>* User Name</label>
           <div className='hints'>Username should be between 4 and 50 characters</div>
           <input
