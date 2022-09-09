@@ -35,20 +35,38 @@ const SignUpForm = () => {
   useEffect(() => {
     const newError = [];
     if (name.length === 0) newError.push('Name is required');
-    if (name.length > 50) newError.push('Name must be less than 50 characters');
+    if (name.length > 64) newError.push('Name must be less than 64 characters');
+    if (name.length !== name.trim().length) newError.push('Name cannot have leading or trailing spaces');
 
     if (username.length === 0) newError.push('Username is required');
     if (username.length < 4) newError.push('Username must be at least 4 characters');
+    if (username.length !== username.trim().length) newError.push('Username cannot have leading or trailing spaces');
+    if (username.length > 50) newError.push('Username must be less than 50 characters');
 
     if (email.length === 0) newError.push('Email is required');
+    if (email.length > 255) newError.push('Email must be less than 255 characters');
+    if (email.length > 0 && !email.includes('@')) {
+      newError.push('Email must be a valid email address (with @)');
+    }
+
+    if (email.length > 0 && !email.includes('.')) {
+      newError.push('Email must be a valid email address (with .)');
+    }
+
+    if (email.length !== email.trim().length) newError.push('Email cannot have leading or trailing spaces');
+
     if (password.length === 0) newError.push('Password is required');
     if (repeatPassword.length === 0) newError.push('Please confirm your password');
+    if (password.length !== password.trim().length) newError.push('Password cannot have leading or trailing spaces');
+    if (repeatPassword.length !== repeatPassword.trim().length) newError.push('Password confirmation cannot have leading or trailing spaces');
+
+
     if (password !== repeatPassword) newError.push('Passwords must match');
     if (password.length < 6) newError.push('Password must be at least 6 characters');
    
     
     if (username.length > 50) newError.push('Username must be less than 50 characters');
-    if (email.length > 255) newError.push('Email must be less than 255 characters');
+    
     if (password.length > 64) newError.push('Password must be less than 64 characters');
     if (repeatPassword.length > 64) newError.push('Password confirmation must be less than 64 characters');
 
@@ -60,6 +78,8 @@ const SignUpForm = () => {
       }
 
     }
+
+
     
     setErrors(newError);
   }, [password, repeatPassword, username, email, name, preview_image, validURL]);
@@ -146,11 +166,13 @@ const SignUpForm = () => {
         <div>
           <label>* Email</label>
           <input
-            type='text'
+            type='email'
             name='email'
             onChange={updateEmail}
             value={email}
             required={true}
+            minLength='2'
+            maxLength='255'
           ></input>
         </div>
         <div>
@@ -213,7 +235,7 @@ const SignUpForm = () => {
               repeatPassword.length < 6 || repeatPassword.length === 0 || password !== repeatPassword ||
               username.length < 4 || username.length > 50 ||
               name.length < 4 || name.length > 64 ||
-            email.length < 1 || email.length > 255 || errors.length > 0
+              email.length < 1 || email.length > 255 || errors.length > 0
               ? "disabled"
               : "enabled"
             }`}

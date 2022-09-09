@@ -45,6 +45,7 @@ function EditLocationDetails({ setModal, location, user }) {
 
     useEffect(() => {
         const newError = [];
+        
         if (name.length === 0) newError.push('Name is required');
         if (name.length > 100) newError.push('Name should be less than 100 characters');
         if (address.length === 0) newError.push('Address is required');
@@ -62,11 +63,14 @@ function EditLocationDetails({ setModal, location, user }) {
         if (lat > 90) newError.push('Latitude should be less than 90');
         if (lng < -180) newError.push('Longitude should be greater than -180');
         if (lng > 180) newError.push('Longitude should be less than 180');
-        if (!validURL) {
-            newError.push(
-                "Invalid URL: Please enter a valid URL ending in - jpg/jpeg/png/webp/avif/gif/svg. Also please make sure this image CORS policy compliant. Image can be blocked by CORS policy due to: No 'Access-Control-Allow-Origin' header being present on the requested resource."
-            );
+        if (preview_img) {
+            if (!validURL) {
+                newError.push(
+                    "Invalid URL: Please enter a valid URL ending in - jpg/jpeg/png/webp/avif/gif/svg. Also please make sure this image CORS policy compliant. Image can be blocked by CORS policy due to: No 'Access-Control-Allow-Origin' header being present on the requested resource."
+                );
+            }
         }
+       
         setError(newError);
     }, [name, address, details, preview_img, lat, lng, city, state, directionsInfo, validURL]);
 
@@ -74,12 +78,14 @@ function EditLocationDetails({ setModal, location, user }) {
         e.preventDefault();
 
         const submitErrors = [];
-        if (!validURL) {
-            submitErrors.push(
-                "Invalid URL: Please enter a valid URL ending in - jpg/jpeg/png/webp/avif/gif/svg. Also please make sure this image CORS policy compliant. Image can be blocked by CORS policy due to: No 'Access-Control-Allow-Origin' header being present on the requested resource."
-            );
+        if (preview_img) {
+            if (!validURL) {
+                submitErrors.push(
+                    "Invalid URL: Please enter a valid URL ending in - jpg/jpeg/png/webp/avif/gif/svg. Also please make sure this image CORS policy compliant. Image can be blocked by CORS policy due to: No 'Access-Control-Allow-Origin' header being present on the requested resource."
+                );
+            }
         }
-
+       
         if (submitErrors.length > 0) {
             return setError(submitErrors);
         } else {
@@ -101,16 +107,24 @@ function EditLocationDetails({ setModal, location, user }) {
                 userId: user.id
             };
             setError([]);
+            // dispatch(editLocationThunk(newLocation)).then((res) => {
+            //     if (res.ok) {
+            //         setModal(false);
+            //     }
+            // }).catch(
+            //     async (res) => {
+            //         const error = await res.json();
+            //         setError(error.errors);
+            //     }
+            // );
             dispatch(editLocationThunk(newLocation)).then((res) => {
-                if (res.ok) {
+                if (res.errors) {
+                    setError(res.errors);
+                }
+                else {
                     setModal(false);
                 }
-            }).catch(
-                async (res) => {
-                    const error = await res.json();
-                    setError(error.errors);
-                }
-            );
+            });
         }
     }
 
@@ -260,20 +274,9 @@ function EditLocationDetails({ setModal, location, user }) {
                         value={preview_img}
                         onChange={e => setPreview_img(e.target.value)}
                         maxLength={1000}
-                        required>
+                        >
                     </input>
                 </label>
-
-
-
-
-                {console.log(
-                    "name", (name.length === 0 || name.length > 100),
-                    "address", (address.length > 1000 || address.length === 0),
-                    "lat", (lat < -90 || lat > 90),
-                    "lng", (lng < -180 || lng > 180),
-                    "details", (details.length === 0 || details.length > 2000),
-                    "URL", (preview_img.length > 1000 || !validURL))}
 
 
                 {error.length > 0 && (
@@ -308,7 +311,7 @@ function EditLocationDetails({ setModal, location, user }) {
                             lng < -180 || lng > 180 ||
                             details.length === 0 || details.length > 2000 ||
                             directionsInfo.length === 0 || directionsInfo.length > 2000 ||
-                            preview_img.length > 1000 || !validURL
+                            preview_img.length > 1000 || error.length > 0
 
                         }
                         className={`submit-btn ${name.length === 0 || name.length > 100 ||
@@ -319,7 +322,8 @@ function EditLocationDetails({ setModal, location, user }) {
                             lng < -180 || lng > 180 ||
                             details.length === 0 || details.length > 2000 ||
                             directionsInfo.length === 0 || directionsInfo.length > 2000 ||
-                            preview_img.length > 1000 || !validURL
+                            preview_img.length > 1000 
+                            || error.length > 0
                             ? "disabled"
                             : "enabled"
                             }`}

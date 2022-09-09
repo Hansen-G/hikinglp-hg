@@ -76,18 +76,30 @@ function PostDetails({ setModal, location, user }) {
                 userId: user.id
             };
             setError([]);
+            // dispatch(addPostThunk(mewPost)).then((res) => {
+            //     if (res.id) {
+            //         setModal(false);
+            //         dispatch(getALocatuinThunk(location.id));
+            //     }
+            // }).catch(
+            //     async (res) => {
+            //         console.log('res', res)
+            //         // const error = await res.json();
+            //         // setError(error.errors);
+            //     }
+            // );
             dispatch(addPostThunk(mewPost)).then((res) => {
-                if (res.id) {
+                if (res.errors) {
+                    setError(res.errors);
+                }
+                else if (res.id) {
                     setModal(false);
                     dispatch(getALocatuinThunk(location.id));
                 }
-            }).catch(
-                async (res) => {
-                    console.log('res', res)
-                    // const error = await res.json();
-                    // setError(error.errors);
+                else {
+                    setError(['Something went wrong. Please try again.']);
                 }
-            );
+            });
         }
     }
 

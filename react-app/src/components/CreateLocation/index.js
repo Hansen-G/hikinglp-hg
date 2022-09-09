@@ -23,6 +23,7 @@ function CreateLocation(){
     const [lng, setLng] = useState(0.0000);
     const [error, setError] = useState([]);
     const [validURL, setValidURL] = useState(false); // Boolean that will show if the URL below is actually a valid image url
+    
     const setURLAndCheckURL = async (urlInput) => {
         const res = await isValidUrl(urlInput, setError, error);
         setValidURL(res);
@@ -45,15 +46,17 @@ function CreateLocation(){
             history.push('/login');
         }
     } , [sessionUser, history]);
+    
     useEffect(() => {
         const newError = [];
-        if (name.length === 0) newError.push('Name is required');
+        if (name.trim().length === 0) newError.push('Name is required');
+       
         if (name.length > 100) newError.push('Name should be less than 100 characters');
-        if (address.length === 0) newError.push('Address is required');
+        if (address.trim().length === 0) newError.push('Address is required');
         if (address.length > 1000) newError.push('Address should be less than 1000 characters');
-        if (details.length === 0) newError.push('Details is required');
+        if (details.trim().length === 0) newError.push('Details is required');
         if (details.length > 2000) newError.push('Details should be less than 2000 characters');
-        if (directionsInfo.length === 0) newError.push('Direction Infomation is required');
+        if (directionsInfo.trim().length === 0) newError.push('Direction Infomation is required');
         if (directionsInfo.length > 2000) newError.push('Direction Infomation should be less than 2000 characters');
         if (preview_img.length > 1000) newError.push('Preview image should be less than 1000 characters');
         if (city.length > 1000) newError.push("City must be less than 1000 characters");
@@ -64,11 +67,14 @@ function CreateLocation(){
         if (lat > 90) newError.push('Latitude should be less than 90');
         if (lng < -180) newError.push('Longitude should be greater than -180');
         if (lng > 180) newError.push('Longitude should be less than 180');
-        if (!validURL) {
-            newError.push(
-                "Invalid URL: Please enter a valid URL ending in - jpg/jpeg/png/webp/avif/gif/svg. Also please make sure this image CORS policy compliant. Image can be blocked by CORS policy due to: No 'Access-Control-Allow-Origin' header being present on the requested resource."
-            );
+        if (preview_img) {
+            if (!validURL) {
+                newError.push(
+                    "Invalid URL: Please enter a valid URL ending in - jpg/jpeg/png/webp/avif/gif/svg. Also please make sure this image CORS policy compliant. Image can be blocked by CORS policy due to: No 'Access-Control-Allow-Origin' header being present on the requested resource."
+                );
+            } 
         }
+       
         setError(newError);
     } , [name, address, details, preview_img, lat, lng]);
 
@@ -76,12 +82,14 @@ function CreateLocation(){
         e.preventDefault();
 
         const submitErrors = [];
-        if (!validURL) {
-            submitErrors.push(
-                "Invalid URL: Please enter a valid URL ending in - jpg/jpeg/png/webp/avif/gif/svg. Also please make sure this image CORS policy compliant. Image can be blocked by CORS policy due to: No 'Access-Control-Allow-Origin' header being present on the requested resource."
-            );
+        if (preview_img){
+            if (!validURL) {
+                submitErrors.push(
+                    "Invalid URL: Please enter a valid URL ending in - jpg/jpeg/png/webp/avif/gif/svg. Also please make sure this image CORS policy compliant. Image can be blocked by CORS policy due to: No 'Access-Control-Allow-Origin' header being present on the requested resource."
+                );
+            }
         }
-
+       
         if (submitErrors.length > 0) {
             return setError(submitErrors);
         } else {
@@ -103,13 +111,16 @@ function CreateLocation(){
             };
             setError([]);
             dispatch(addLocationThunk(newLocation)).then((res) => {
-                history.push('/locations/' + res.id);
-            }).catch(
-                async (res) => {
-                    const error = await res.json();
-                    setError(error.errors);
+                if (res.errors) {
+                    setError(res.errors);
                 }
-            );
+                else if (res.id) {
+                    history.push('/locations/' + res.id);
+                }
+                else {
+                   setError(['Something went wrong. Please try again.']);
+                }
+            });
         }
     }
     
@@ -274,12 +285,12 @@ function CreateLocation(){
                     </h2>
                     <p></p>
 
-                    <label>* Preview image:
+                    <label>Preview image:
                         <input type={'text'}
                             value={preview_img}
                             onChange={e => setPreview_img(e.target.value)}
                             maxLength={1000}
-                            required>
+                            >
                         </input>
                     </label>
 
@@ -312,7 +323,7 @@ function CreateLocation(){
                             lng < -180 || lng > 180 ||
                             details.length === 0 || details.length > 2000 ||
                             directionsInfo.length === 0 || directionsInfo.length > 2000 ||
-                            preview_img.length > 1000 || !validURL
+                            preview_img.length > 1000 || error.length > 0 
 
                         }
                         className={`submit-btn ${
@@ -324,7 +335,7 @@ function CreateLocation(){
                                 lng < -180 || lng > 180 ||
                                 details.length === 0 || details.length > 2000 ||
                                 directionsInfo.length === 0 || directionsInfo.length > 2000 ||
-                                preview_img.length > 1000 || !validURL
+                                preview_img.length > 1000 || error.length > 0 
                                 ? "disabled"
                                 : "enabled"
                             }`}

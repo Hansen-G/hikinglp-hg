@@ -77,8 +77,8 @@ export const getAllLocationThunk = () => async dispatch => {
         dispatch(getLocation(locations));
         return locations;
     } else {
-        return ["An error occurred. Please try again."]
-        // throw new Error("Something went wrong");
+        const error = await response.json();
+        return error;
     }
 }
 
@@ -89,8 +89,8 @@ export const getALocatuinThunk = (id) => async dispatch => {
         dispatch(getALocation(location));
         return location;
     } else {
-        return ["An error occurred. Please try again."]
-        // throw new Error("Something went wrong");
+        const error = await response.json();
+        return error;
     }
 }
 
@@ -109,8 +109,8 @@ export const addLocationThunk = (location) => async dispatch => {
         dispatch(addLocation(newLocation));
         return newLocation;
     } else {
-        return ["An error occurred. Please try again."]
-        // throw new Error("Something went wrong");
+        const error = await response.json();
+        return error;
     }
 }
 
@@ -126,12 +126,12 @@ export const addPostThunk = (post) => async dispatch => {
     console.log('Thunk', response)
     if (response.ok) {
         const newPost = await response.json();
-        console.log('newPost', newPost)
+        console.log('???????', newPost.errors)
         dispatch(addPost(newPost));
         return newPost;
     } else {
-        return ["An error occurred. Please try again."]
-        // throw new Error("Something went wrong");
+        const error = await response.json();
+        return error;
     }
 }
 
@@ -146,12 +146,11 @@ export const editLocationThunk = (location) => async dispatch => {
     });
     if (response.ok) {
         const newLocation = await response.json();
-        console.log("newLocation", newLocation)
         dispatch(editLocation(newLocation));
         return newLocation;
     } else {
-        return ["An error occurred. Please try again."]
-        // throw new Error("Something went wrong");
+        const error = await response.json();
+        return error;
     }
 }
 
@@ -166,12 +165,11 @@ export const editPostThunk = (post) => async dispatch => {
     if (response.ok) {
         
         const newPost = await response.json();
-        console.log("newPost", newPost)
         dispatch(editPost(newPost));
         return newPost;
     } else {
-        return ["An error occurred. Please try again."]
-        // throw new Error("Something went wrong");
+        const error = await response.json();
+        return error;
     }
 }
 
@@ -184,8 +182,8 @@ export const deleteLocationThunk = (id) => async dispatch => {
         const response = dispatch(deleteLocation(id));
         return response;
     } else {
-        return ["An error occurred. Please try again."]
-        // throw new Error("Something went wrong");
+        const error = await response.json();
+        return error;
     }
 }
 
@@ -197,8 +195,8 @@ export const deletePostThunk = (location_id, id) => async dispatch => {
         const response = dispatch(deletePost(location_id, id));
         return response;
     } else {
-        return ["An error occurred. Please try again."]
-        // throw new Error("Something went wrong");
+        const error = await response.json();
+        return error;
     }
 }
 
@@ -217,7 +215,6 @@ const locationReducer = (state = initialState, action) => {
                 newState[location.id] = location;
             }
             );
-            // newState = action.locations;
             return newState;
         case ADD_A_LOCATION:
             newState = {
@@ -260,14 +257,12 @@ const locationReducer = (state = initialState, action) => {
                     
                 }
             })
-            console.log('newState after change', newState)
+          
             return newState;
         case DELETE_POST:
             newState = {
                 ...state,
             }
-            console.log('newState before change', newState)
-            console.log('action', action)
             newState[action.location_id].posts.forEach((post, index) => {
                 if (post.id === action.id) {
                     newState[action.location_id].posts.splice(index, 1);

@@ -7,7 +7,7 @@ import { getALocatuinThunk, deleteLocationThunk } from '../../store/location';
 import { pastDate } from "./../../util";
 import EditLocationModal from '../EditLocationModal';
 import ImageCard from "./ImageCard";
-import GoogleMapReact from 'google-map-react';
+import  GoogleMapReact from 'google-map-react';
 import CreatePostModal from '../CreatePostModal';
 import PostCard from "../PostCard";
 import { isValidUrl } from "../../util";
@@ -17,7 +17,7 @@ import ButtomBar from '../ButtomBar'
 // import { useJsApiLoader, GoogleMap, Marker, DirectionsRenderer } from "@react-google-maps/api"
 // import { GoogleMap, Marker } from "react-google-maps"
 
-
+import { withGoogleMap, GoogleMap, Marker } from "react-google-maps";
 
 require('dotenv').config();
 
@@ -35,6 +35,9 @@ function LocationDetails () {
     const history = useHistory();
     const { locationId } = useParams();
     const [location_extra_data, setLocationExtraData] = useState(null);
+    const [lat, setLat] = useState();
+    const [lng, setLng] = useState()
+
     const [loaded, setLoaded] = useState(false);
     const location = useSelector((state) => state.locations[locationId]);
     const user = useSelector((state) => state.session.user);
@@ -54,6 +57,16 @@ function LocationDetails () {
             return;
         }
         else if (!location.nsf_id) {
+            try {
+                const response = await fetch(`/google_map_api_key`);
+                const data = await response.json();
+
+            
+                setGoogleMapAPIKey(data)
+            }
+            catch (e) {
+                setGoogleMapAPIKey(null)
+            }
             setLoaded(true)
             return
         }
@@ -90,6 +103,8 @@ function LocationDetails () {
         try {
             const response = await fetch(`/google_map_api_key`);
             const data = await response.json();
+
+            console.log('!!!!!!!!1', data)
             setGoogleMapAPIKey(data)
         } 
         catch (e) {
@@ -133,17 +148,10 @@ function LocationDetails () {
                 <GoogleMapReact
                     bootstrapURLKeys={{ key: googleMapAPIKey }}
                     defaultCenter={{lat: lat, lng: lng}}
-                    defaultZoom={10}
+                    defaultZoom={15}
                     yesIWantToUseGoogleMapApiInternals={true}
                     isMarkerShown={true}
-                    
-            
                 >
-                    {/* <Marker
-                        lat={lat}
-                        lng={lng}
-                        text="My Marker"
-                    /> */}
                 </GoogleMapReact>
             </div>
         )
@@ -164,12 +172,13 @@ function LocationDetails () {
       
     }
 
+    console.log(location)
+    console.log('googleMapAPIKey', googleMapAPIKey)
+
 
     return (
         <div className='loc-d'>
-            <script>
-                
-            </script>
+
             <div className='loc-d-header'>
                 <div>
                     {isValidUrl(location.preview_img) && (
@@ -201,10 +210,15 @@ function LocationDetails () {
                 })}
             </div>
             <div className='loc-d-func'>
+                {user && (
+                    <CreatePostModal location={location} user={user} />
+                )}
             
                 {user && location.user_id === user.id && (
-                    <div>
                         <EditLocationModal location={location} user={user} />
+                )}
+
+                {user && location.user_id === user.id && (   
                         <button
                             className="e-loc-btm flex"
                             onClick={handleDelete}
@@ -212,23 +226,9 @@ function LocationDetails () {
                             <i class="fa-regular fa-pen-to-square"></i>
                             Delete Location
                         </button>
-                    </div>
-                    
-
                 )}
-
-                {user && (
-                    <div>
-                        <CreatePostModal location={location} user={user} />
-                    </div>
-
-
-                )}
-
-
             </div>
 
-           
             <div className={location_extra_data ? 'loc-d-main-yes flex' : 'loc-d-main-no flex'}>
 
                 <div className='loc-d-main-l'>
@@ -236,16 +236,18 @@ function LocationDetails () {
                         <h2 className='loc-map-title title'>Location & Hours</h2>
                         <div className='loc-map-add loc-main'>{location.address}, {location.city}, {location.state}</div>
                         {googleMapAPIKey && googleMap(location.lat, location.lng, googleMapAPIKey) }
-                       
 
-
-                      
-                       
-                   
-
-
-                
-
+                        <div className='google-map'>
+                            <GoogleMapReact
+                                bootstrapURLKeys={{ key: googleMapAPIKey }}
+                                defaultCenter={{ lat: location.lat, lng: location.lng }}
+                                defaultZoom={15}
+                                yesIWantToUseGoogleMapApiInternals={true}
+                                isMarkerShown={true}
+                            >
+                            </GoogleMapReact>
+                        </div>
+            
                     </div>
 
                     <div className='loc-directionsInfo Poppins main-div'>
@@ -291,8 +293,6 @@ function LocationDetails () {
                             </div>
                         </div>
                     )}
-
-
                 </div>
 
                 <div className='loc-d-main-r'>
@@ -302,11 +302,15 @@ function LocationDetails () {
                             (<div className='loc-main'>No posts yet</div>)
                             :
                             (
-                                postArr.map((post) => {
-                                    return (
+                                <div className='loc-post-card-div flex'>
+                                    {postArr.map((post) => {
+                                        return (
                                         <PostCard key={post.id} post={post} />
-                                    )
-                                })
+                                        )
+                                     })}
+
+                                </div>
+                                
                             )}
                     </div>
                 </div>
@@ -317,9 +321,6 @@ function LocationDetails () {
             <ButtomBar />
         </div>
     )
-
-
-    
 }
 
 export default LocationDetails;

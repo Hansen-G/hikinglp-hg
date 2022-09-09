@@ -1,31 +1,35 @@
 #home-post-card{
-        box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-            height: 376px;
-            padding: 16px 24px;
-            border: 1px solid #ebebeb;
-                margin: 10px;
-                    padding: 10px;
-                    font: inherit;
-                    vertical-align: baseline;
-                    width: 322px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    max-height: 600px;
+    padding: 16px 24px;
+    border: 1px solid #ebebeb;
+    margin: 10px;
+    padding: 10px;
+    font: inherit;
+    vertical-align: baseline;
+    width: 400px;
                    
 }
 
 .loc-post-card-img {
-    width: 300px;
-    height: 211.5px;
+    width: 380px;
+    min-height: 200px;
+    max-height: 400px;
     object-fit: cover;
 
 }
 
 .post-img{
     height: 100%;
-    min-width: 300px;
-    min-height: 211.5px;
-    max-width: 300px;
-    max-height: 211.5px;
+    min-height: 100%;
+    max-height: 100%;
+    min-width: 100%;
+    /* min-height: 211.5px; */
+    max-width: 100%;
+    /* max-height: 211.5px; */
 }
 
 .loc-post-card-user{
@@ -33,6 +37,14 @@
 }
 
 .user-info{
-    width: 200px;
+    width: 300px;
     padding: 10px;
+}
+
+.loc-post-card-post{
+   max-width: 380px;
+max-height: 200px;
+overflow: scroll;
+    
+   
 }
