@@ -4,6 +4,7 @@ from flask import Blueprint, jsonify, session, request, redirect, url_for
 from app.models import User, db, Location, Comment, Post, Image, Album
 from flask_login import current_user, login_user, logout_user, login_required
 from app.forms import PostForm, FormValidation
+from .auth_routes import validation_errors_to_error_messages
 
 post_routes = Blueprint('posts', __name__)
 
@@ -19,14 +20,14 @@ def delete_post(id):
 
     if not post_to_be_deleted:
         result = {
-            "message": "post couldn't be found",
+            "errors": ["post couldn't be found"],
             "statusCode": 404
         }
         return jsonify(result), 404
 
     if userId != post_to_be_deleted.user_id :
         result = {
-            "message": "Could not delete other's post",
+            "errors": ["Could not delete other's post"],
             "statusCode": 403
         }
         return jsonify(result), 403
@@ -43,7 +44,7 @@ def delete_post(id):
 
     else:
         result = {
-            "message": "post couldn't be deleted",
+            "errors": ["post couldn't be deleted"],
             "statusCode": 400
         }
         return jsonify(result), 400
@@ -60,14 +61,14 @@ def update_post(id):
 
     if not post_to_be_updated:
         result = {
-            "message": "post couldn't be found",
+            "errors": ["post couldn't be found"],
             "statusCode": 404
         }
         return jsonify(result), 404
 
     if userId != post_to_be_updated.user_id :
         result = {
-            "message": "Could not update other's post",
+            "errors": ["Could not update other's post"],
             "statusCode": 403
         }
         return jsonify(result), 403
@@ -83,7 +84,7 @@ def update_post(id):
         return jsonify(post_to_be_updated), 200
 
     else:
-        return jsonify(form.errors), 400
+        return {'errors': validation_errors_to_error_messages(form.errors)}, 400
 
 # Create a post for a location
 @post_routes.route('/new', methods=['POST'])
@@ -97,7 +98,7 @@ def create_post():
 
     if not post_location:
         result = {
-            "message": "location couldn't be found",
+            "errors": ["location couldn't be found"],
             "statusCode": 404
         }
         return jsonify(result), 404
@@ -114,7 +115,7 @@ def create_post():
         return jsonify(post.to_dict()), 200
 
     else:
-        return jsonify(form.errors), 400
+        return {'errors': validation_errors_to_error_messages(form.errors)}, 400
 
 # Get post by id
 @post_routes.route('/<int:id>', methods=['GET'])
@@ -122,7 +123,7 @@ def get_post(id):
     post = Post.query.get(id)
     if not post:
         result = {
-            "message": "post couldn't be found",
+            "errors": ["post couldn't be found"],
             "statusCode": 404
         }
         return jsonify(result), 404

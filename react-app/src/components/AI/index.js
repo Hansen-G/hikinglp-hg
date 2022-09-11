@@ -99,14 +99,12 @@ function AI() {
                     })
                     .catch(err => {
                         setError(true);
-                        setErrorMessage(err);
                         setAiReply('Hmmmmm, something went wrong. Please try again later.');
                     })
 
             }
             catch(err){
                 setError(true);
-                setErrorMessage(err);
                 setAiReply('Hmmmmm, something went wrong. Please try again later.');
             }
 

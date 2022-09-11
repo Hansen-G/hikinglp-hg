@@ -45,6 +45,7 @@ function PostEdit({ setModal, postToBeEdited }) {
         if (post.length === 0) newError.push('Please write a post');
         if (post.length > 2000) newError.push('Post should be less than 2000 characters');
         if (preview_img.length > 1000) newError.push('Preview image should be less than 1000 characters');
+        if (preview_img.length === 0) newError.push('Please enter a preview image');
         
         if (!validURL) {
             newError.push(
@@ -81,38 +82,39 @@ function PostEdit({ setModal, postToBeEdited }) {
 
             setError([]);
             dispatch(editPostThunk(newPost)).then((res) => {
-                console.log('RES', res);
-                if (res.id) {
+                if (res.errors) {
+                    setError(res.errors);
+
+                }
+                else if (res.id) {
                     setModal(false);
                     dispatch(getAllLocationThunk());
                     dispatch(getAllPostThunk());
                 }
-            }).catch(
-                async (res) => {
-                    console.log('res', res)
-                    // const error = await res.json();
-                    // setError(error.errors);
+                else {
+                    setError(['Something went wrong. Please try again.']);
                 }
-            );
+            });
+            
         }
     }
 
     const handleDelete = (e) => {
         e.preventDefault();
+
         dispatch(deletePostThunk(postToBeEdited.location_id, postToBeEdited.id)).then((res) => {
-            console.log('RES', res);
-            if (res.id) {
+            if (res.errors) {
+                setError(res.errors);
+            }
+            else if (res.id) {
                 setModal(false);
                 dispatch(getAllLocationThunk());
                 dispatch(getAllPostThunk());
             }
-        }).catch(
-            async (res) => {
-                console.log('res', res)
-                // const error = await res.json();
-                // setError(error.errors);
+            else {
+                setError(['Something went wrong. Please try again.']);
             }
-        );
+        });
     }
 
     return (
@@ -129,7 +131,6 @@ function PostEdit({ setModal, postToBeEdited }) {
                         value={post}
                         onChange={e => setPost(e.target.value)}
                         maxLength={2000}
-                    
                         required>
                     </textarea>
                 </label>
@@ -144,11 +145,7 @@ function PostEdit({ setModal, postToBeEdited }) {
                     </input>
                 </label>
 
-                {console.log(
-                   
-                    "details", (post.length === 0 || post.length > 2000),
-                    "URL", (preview_img.length > 1000 || !validURL))}
-
+              
 
                 {error &&error.length > 0 && (
                     <div className='error-title'>
@@ -173,12 +170,14 @@ function PostEdit({ setModal, postToBeEdited }) {
                     <button type="submit"
                         disabled={
                             post.length === 0 || post.length > 2000 ||
-                            preview_img.length > 1000 || !validURL
+                            preview_img.length > 1000 || !validURL || preview_img.length === 0
+                            || error.length > 0
 
                         }
                         className={`submit-btn ${
                             post.length === 0 || post.length > 2000 ||
-                            preview_img.length > 1000 || !validURL
+                            preview_img.length > 1000 || !validURL || preview_img.length === 0
+                            || error.length > 0
                             ? "disabled"
                             : "enabled"
                             }`}

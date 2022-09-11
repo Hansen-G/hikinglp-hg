@@ -7,6 +7,8 @@ from app.forms import LocationForm, FormValidation
 from app.aws import (
     upload_file_to_s3, allowed_file, get_unique_filename)
 
+from .auth_routes import validation_errors_to_error_messages
+
 location_routes = Blueprint('locations', __name__)
 
 # delete location
@@ -21,14 +23,14 @@ def delete_location(id):
 
     if not location_to_be_deleted:
         result = {
-            "message": "location couldn't be found",
+            "errors": ["location couldn't be found"],
             "statusCode": 404
         }
         return jsonify(result), 404
 
     if userId != location_to_be_deleted.user_id :
         result = {
-            "message": "Could not delete other's location",
+            "errors": ["Could not delete other's location"],
             "statusCode": 403
         }
         return jsonify(result), 403
@@ -45,7 +47,7 @@ def delete_location(id):
 
     else:
         result = {
-            "message": "location couldn't be deleted",
+            "errors": ["location couldn't be deleted"],
             "statusCode": 400
         }
         return jsonify(result), 400
@@ -62,14 +64,14 @@ def update_location(id):
 
     if not location_to_be_updated:
         result = {
-            "message": "location couldn't be found",
+            "errors": ["location couldn't be found"],
             "statusCode": 404
         }
         return jsonify(result), 404
 
     if userId != location_to_be_updated.user_id :
         result = {
-            "message": "Could not update other's location",
+            "errors": ["Could not update other's location"],
             "statusCode": 403
         }
         return jsonify(result), 403
@@ -99,7 +101,7 @@ def update_location(id):
         location_to_be_updated['location_user'] = User.query.get(userId).to_dict()
         return jsonify(location_to_be_updated), 200
     else:
-        return jsonify(form.errors), 400
+        return {'errors': validation_errors_to_error_messages(form.errors)}, 400
 
 
 # Create new location
@@ -124,7 +126,7 @@ def create_location():
     #     url = upload["url"]
     #     # flask_login allows us to get the current user from the request
     #     form.preview_img.data = url
-    print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!',form.data, form.errors, form.validate_on_submit())
+   
     if form.validate_on_submit():
         new_location = Location(
             name=form.name.data,
@@ -142,7 +144,7 @@ def create_location():
         db.session.commit()
         return jsonify(new_location.to_dict())
 
-    return jsonify(form.errors), 400
+    return {'errors': validation_errors_to_error_messages(form.errors)}, 400
 
 # Get location by id
 @location_routes.route('/<int:id>', methods=['GET'])
@@ -151,7 +153,7 @@ def get_location_by_id(id):
     if location:
         return jsonify(location.to_dict())
     return jsonify({
-        "message": "Location not found",
+        "errors": ["Location not found"],
         "statusCode": 404
         }), 404
     

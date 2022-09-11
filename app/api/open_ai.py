@@ -26,14 +26,19 @@ def call_robot():
             model="text-davinci-002",
             prompt=form.data['prompt'],
             temperature=0.7,
-            max_tokens=1500,
+            max_tokens=500,
             top_p=1,
             frequency_penalty=0,
             presence_penalty=0
         )
-        response_string = response.choices[0].text
-        response_array = response_string.split('\n')
-        response_array = response_array[1:]
-        response_string = '\n'.join(response_array)
-        return jsonify(response_string)
+        if response.choices[0].text:
+            response_string = response.choices[0].text
+            response_array = response_string.split('\n')
+            response_array = response_array[1:]
+            response_string = '\n'.join(response_array)
+            if len(response_string) == 0:
+                return jsonify('Hmmmmm, something went wrong. Please try again later.')
+            return jsonify(response_string)
+        else: 
+            return jsonify('Hmmmmm, something went wrong. Please try again later.')
     return {'errors':form.errors}, 401
