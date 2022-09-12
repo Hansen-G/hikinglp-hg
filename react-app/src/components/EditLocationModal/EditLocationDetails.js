@@ -41,7 +41,7 @@ function EditLocationDetails({ setModal, location, user }) {
         if (directionsInfo.trim().length === 0) newError.push('Direction Infomation is required');
         if (directionsInfo.length > 2000) newError.push('Direction Infomation should be less than 2000 characters');
         if (preview_img.length > 1000) newError.push('Preview image should be less than 1000 characters');
-        if (city.length > 1000) newError.push("City must be less than 1000 characters");
+        if (city.length > 100) newError.push("City must be less than 100 characters");
         if (city.length === 0) newError.push("City is required");
         if (state.length > 1000) newError.push("State must be less than 1000 characters");
         if (state.length === 0) newError.push("State is required");
@@ -49,8 +49,16 @@ function EditLocationDetails({ setModal, location, user }) {
         if (lat > 90) newError.push('Latitude should be less than 90');
         if (lng < -180) newError.push('Longitude should be greater than -180');
         if (lng > 180) newError.push('Longitude should be less than 180');
-        
-       
+        if (typeof lat === 'string') {
+            if (lat.split('.')[1]) {
+                if (lat.split('.')[1].length > 6) newError.push('Latitude should have less than 6 decimal places');
+            }
+        }
+        if (typeof lng === 'string') {
+            if (lng.split('.')[1]) {
+                if (lng.split('.')[1].length > 6) newError.push('Longitude should have less than 6 decimal places');
+            }
+        }
         setError(newError);
     }, [name, address, details, preview_img, lat, lng, city, state, directionsInfo]);
 
@@ -175,6 +183,7 @@ function EditLocationDetails({ setModal, location, user }) {
                     <input type={'text'}
                         value={city}
                         onChange={e => setCity(e.target.value)}
+                        maxLength={100}
                         required>
                     </input>
                 </label>
@@ -272,7 +281,6 @@ function EditLocationDetails({ setModal, location, user }) {
                         value={details}
                         onChange={e => setDetails(e.target.value)}
                         maxLength={2000}
-                        
                         required>
                     </textarea>
                 </label>
