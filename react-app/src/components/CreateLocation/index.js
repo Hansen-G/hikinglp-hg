@@ -180,7 +180,7 @@ function CreateLocation(){
                         <input type={'text'}
                             value={address}
                             onChange={e => setAddress(e.target.value)}
-                            maxLength={1999}
+                            maxLength={999}
                             required>
                         </input>
                     </label>
