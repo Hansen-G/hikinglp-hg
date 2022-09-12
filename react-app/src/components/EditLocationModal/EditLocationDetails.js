@@ -162,7 +162,7 @@ function EditLocationDetails({ setModal, location, user }) {
                     <input type={'text'}
                         value={name}
                         onChange={e => setName(e.target.value)}
-                        maxLength={100}
+                        maxLength={99}
                         required>
                     </input>
                 </label>
@@ -171,7 +171,7 @@ function EditLocationDetails({ setModal, location, user }) {
                     <input type={'text'}
                         value={address}
                         onChange={e => setAddress(e.target.value)}
-                        maxLength={1000}
+                        maxLength={999}
                         required>
                     </input>
                 </label>
@@ -180,7 +180,7 @@ function EditLocationDetails({ setModal, location, user }) {
                     <input type={'text'}
                         value={city}
                         onChange={e => setCity(e.target.value)}
-                        maxLength={100}
+                        maxLength={99}
                         required>
                     </input>
                 </label>
@@ -267,7 +267,7 @@ function EditLocationDetails({ setModal, location, user }) {
                     <textarea type={'text'}
                         value={directionsInfo}
                         onChange={e => setDirectionsInfo(e.target.value)}
-                        maxLength={2000}
+                        maxLength={1999}
                     
                         required>
                     </textarea>
@@ -277,7 +277,7 @@ function EditLocationDetails({ setModal, location, user }) {
                     <textarea type={'text'}
                         value={details}
                         onChange={e => setDetails(e.target.value)}
-                        maxLength={2000}
+                        maxLength={1999}
                         required>
                     </textarea>
                 </label>
@@ -312,7 +312,7 @@ function EditLocationDetails({ setModal, location, user }) {
 
                 {error.length > 0 && (
                     <div className='error-title'>
-                        Please correct the following errors before submit:
+                        Please correct the following errors before editting:
                     </div>
                 )}
 
