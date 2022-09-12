@@ -319,6 +319,7 @@ function CreateLocation(){
                         <button
                             onClick={ () => {
                                 setImage(null)
+                                setPreview_img('')
                                 document.getElementById('file-input').value = null;
                             }}
                             className={`file-input-button ${image ? 'active' : ''}`}

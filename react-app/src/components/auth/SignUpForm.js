@@ -245,6 +245,7 @@ const SignUpForm = () => {
             <button
               onClick={() => {
                 setImage(null)
+                setPreview_image('');
                 document.getElementById('file-input').value = null;
               }}
               className={`file-input-button ${image ? 'active' : ''}`}
@@ -294,7 +295,6 @@ const SignUpForm = () => {
         <img src='https://res.cloudinary.com/hansenguo/image/upload/v1662604451/Hikinglp/349d45d4bb3e76c72a4475b9163de5cc_aalzeg.jpg' className='auth-img' />
 
       </div>
-
     </div>
 
   );
