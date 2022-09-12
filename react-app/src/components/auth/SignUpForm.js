@@ -18,6 +18,17 @@ const SignUpForm = () => {
   const [imageLoading, setImageLoading] = useState(false);
 
   const user = useSelector(state => state.session.user);
+
+
+  function CheckEmail(email) {
+    let mailformat = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/;
+    if (email.match(mailformat)) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
  
 
   useEffect(() => {
@@ -39,6 +50,10 @@ const SignUpForm = () => {
 
     if (email.length > 0 && !email.includes('.')) {
       newError.push('Email must be a valid email address (with .)');
+    }
+
+    if (email.length > 0 && !CheckEmail(email)) {
+      newError.push('Email must be a valid email address');
     }
 
     if (email.length !== email.trim().length) newError.push('Email cannot have leading or trailing spaces');
