@@ -29,7 +29,7 @@ function PostEdit({ setModal, postToBeEdited }) {
         if (post.trim().length === 0) newError.push('Please write a post');
         if (post.length > 2000) newError.push('Post should be less than 2000 characters');
         if (preview_img.length > 1000) newError.push('Preview image should be less than 1000 characters');
-        if (preview_img.trim().length === 0) newError.push('Please enter a preview image');
+        if (preview_img.trim().length === 0) newError.push('Please submit a post image');
         setError(newError);
     }, [post, preview_img]);
 
@@ -181,7 +181,7 @@ function PostEdit({ setModal, postToBeEdited }) {
 
                 {error &&error.length > 0 && (
                     <div className='error-title'>
-                        Please correct the following errors before submit:
+                        Please correct the following errors before post:
                     </div>
                 )}
 
