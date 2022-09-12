@@ -13,7 +13,8 @@ function ButtomBar() {
                     
                     <div className='tooBar'>
                         <p className='barTitle'>
-                            Hikinglp
+                            <a href='https://github.com/Hansen-G/hikinglp-hg' target='_blank' rel="noreferrer">Hikinglp Github</a>
+                            
                         </p>
                     </div>
                 </div>

@@ -15,7 +15,7 @@ const Pagination = ({ totalPage, currentPage, setCurrentPage }) => {
     return (
         <div className='pagination-nav flex'>
             <div className='pagination-all flex'>
-                <div className="pagination-control">
+                <div className="pagination-control flex">
                     <a className="pagination-link"
                         onClick={prevPage}
                         href='#'>
@@ -25,7 +25,7 @@ const Pagination = ({ totalPage, currentPage, setCurrentPage }) => {
                 </div>
                 {pageNumbers.map(pgNumber => (
                     <div key={pgNumber}
-                        className={`pagination-control ${currentPage == pgNumber ? 'current-page' : ''} `} >
+                        className={`pagination-control flex ${currentPage == pgNumber ? 'current-page' : ''} `} >
 
                         <a onClick={() => setCurrentPage(pgNumber)}
                             className='pagination-link'
@@ -35,7 +35,7 @@ const Pagination = ({ totalPage, currentPage, setCurrentPage }) => {
                         </a>
                     </div>
                 ))}
-                <div className="pagination-control">
+                <div className="pagination-control flex">
                     <a className="pagination-link"
                         onClick={nextPage}
                         href='#'>

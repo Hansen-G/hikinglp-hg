@@ -298,6 +298,7 @@ function EditLocationDetails({ setModal, location, user }) {
                     <button
                         onClick={() => {
                             setImage(null)
+                            setPreview_img('')
                             document.getElementById('file-input').value = null;
                         }}
                         className={`file-input-button ${image ? 'active' : ''}`}
@@ -328,7 +329,7 @@ function EditLocationDetails({ setModal, location, user }) {
                 <div className="e-buttem-div flex">
 
                     <button type="button" onClick={() => setModal(false)} className='cancel-btn'>
-                        Cancale
+                        Cancel
                     </button>
                     
                     <button type="submit"

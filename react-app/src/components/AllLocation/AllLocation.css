@@ -79,7 +79,10 @@
 
 .pagination-control{
     margin: 5px;
-    padding: 10px;
+  
+    height: 30px;
+    justify-content: center;
+    align-items: center;
 }
 
 .pagination-control:hover{
@@ -96,4 +99,9 @@
 
 .current-page a{
     color: rgb(255, 254, 254);
+}
+
+.pagination-link{
+    text-align: center;
+    padding: 10px;
 }

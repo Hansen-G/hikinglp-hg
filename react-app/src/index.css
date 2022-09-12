@@ -84,6 +84,7 @@ input[type=file] {
     font-size: 17px;
     max-width: 100%;
     font-family: 'Poppins', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    cursor: pointer;
 }
 #file-upload-button, .file-input-button {
     width: 150px;
@@ -102,7 +103,7 @@ input[type=file] {
     box-sizing: border-box;
     font-size: 17px;
     max-width: 100%;
-
+cursor: pointer;
     color: dodgerblue;
     border: thin solid grey;
     border-radius: 3px;
@@ -111,6 +112,7 @@ input[type=file] {
 
 .active{
     color: dodgerblue;
+    cursor: pointer;
 
 }
 

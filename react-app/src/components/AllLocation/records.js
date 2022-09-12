@@ -8,7 +8,7 @@ const Records = ({ locations }) => {
         <div className="all-loc-feed">
             <div className="all-location-container flex">
                 {locations.map(location => (
-                    <Link to={`/locations/${location.id}`}>
+                    <Link to={`/locations/${location.id}`} key={location.id}>
                         <div className="all-location-card flex">
                             {/* <div className="all-location-image-div">
                                 <img 
