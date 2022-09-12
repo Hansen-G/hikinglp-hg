@@ -22,7 +22,7 @@ function ButtomBar() {
 
 
                     <div className='followMe'>
-                        <p className='barTitle'>
+                        <p className='follow-me-title'>
                             Follow me
                         </p>
                         <div className='followMe'>
@@ -44,6 +44,11 @@ function ButtomBar() {
                         </div>
 
                     </div>
+                </div>
+
+                <div className='copy-right'>
+                    Copyright © 2022, Hikinglp and related marks are registered trademarks of Hikinglp.
+
                 </div>
 
             </div>

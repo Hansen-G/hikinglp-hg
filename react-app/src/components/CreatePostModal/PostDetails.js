@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import './PostDetails.css';
 
 import { addPostThunk, getALocatuinThunk } from '../../store/location';
-import { isValidUrl, cut } from "../../util";
+import { cut } from "../../util";
 import { NavLink, useParams, Route, Switch, Link, useHistory } from 'react-router-dom';
 
 function PostDetails({ setModal, location, user }) {
@@ -11,25 +11,47 @@ function PostDetails({ setModal, location, user }) {
     const history = useHistory();
 
     const [post, setPost] = useState('');
-    const [preview_img, setPreview_img] = useState(location.preview_img);
+    const [preview_img, setPreview_img] = useState('');
     const [error, setError] = useState([]);
-    const [validURL, setValidURL] = useState(false); // Boolean that will show if the URL below is actually a valid image url
-   
-    const setURLAndCheckURL = async (urlInput) => {
-        const res = await isValidUrl(urlInput, setError, error);
-        setValidURL(res);
-        setPreview_img(urlInput);
-    };
+    const [image, setImage] = useState(null);
+    const [imageLoading, setImageLoading] = useState(false);
+  
+    const handleSubmitImage = async (e) => {
+        e.preventDefault();
+        const formData = new FormData();
+        formData.append("image", image);
 
-    useEffect(() => {
-        if (preview_img) {
-            setURLAndCheckURL(preview_img);
+        // aws uploads can be a bit slow—displaying
+        // some sort of loading message is a good idea
+        setImageLoading(true);
+
+
+        const res = await fetch('/api/locations/upload', {
+            method: "POST",
+            body: formData,
+        });
+        if (res.ok) {
+            const response = await res.json();
+            setPreview_img(response.url);
+
+            setImageLoading(false);
+            // history.push("/images");
         }
-    }, [preview_img]);
+        else {
+            setImageLoading(false);
+            // a real app would probably use more advanced
+            // error handling
+            alert("An error occurred while uploading the image.");
 
-    useEffect(() => {
-        setError([]);
-    }, [validURL]);
+        }
+    }
+
+    const updateImage = (e) => {
+        const file = e.target.files[0];
+        setImage(file);
+    }
+
+
 
     useEffect(() => {
         if (user === null) {
@@ -43,24 +65,16 @@ function PostDetails({ setModal, location, user }) {
         if (post.length === 0) newError.push('Please write a post');
         if (post.length > 2000) newError.push('Post should be less than 2000 characters');
         if (preview_img.length > 1000) newError.push('Preview image should be less than 1000 characters');
-        
-        if (!validURL) {
-            newError.push(
-                "Invalid URL: Please enter a valid URL ending in - jpg/jpeg/png/webp/avif/gif/svg. Also please make sure this image CORS policy compliant. Image can be blocked by CORS policy due to: No 'Access-Control-Allow-Origin' header being present on the requested resource."
-            );
-        }
+        if (preview_img.length === 0) newError.push('Please upload an image');
         setError(newError);
-    }, [post, preview_img, validURL]);
+
+    }, [post, preview_img]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
         const submitErrors = [];
-        if (!validURL) {
-            submitErrors.push(
-                "Invalid URL: Please enter a valid URL ending in - jpg/jpeg/png/webp/avif/gif/svg. Also please make sure this image CORS policy compliant. Image can be blocked by CORS policy due to: No 'Access-Control-Allow-Origin' header being present on the requested resource."
-            );
-        }
+        if (!post) submitErrors.push('Please write a post');
 
         if (submitErrors.length > 0) {
             return setError(submitErrors);
@@ -76,18 +90,6 @@ function PostDetails({ setModal, location, user }) {
                 userId: user.id
             };
             setError([]);
-            // dispatch(addPostThunk(mewPost)).then((res) => {
-            //     if (res.id) {
-            //         setModal(false);
-            //         dispatch(getALocatuinThunk(location.id));
-            //     }
-            // }).catch(
-            //     async (res) => {
-            //         console.log('res', res)
-            //         // const error = await res.json();
-            //         // setError(error.errors);
-            //     }
-            // );
             dispatch(addPostThunk(mewPost)).then((res) => {
                 if (res.errors) {
                     setError(res.errors);
@@ -113,6 +115,9 @@ function PostDetails({ setModal, location, user }) {
                     Write a Post for {location.name}
                 </h1>
             
+                <div className='instructions'>
+                    The items marked with an asterisk (*) are required.
+                </div>
                
 
 
@@ -126,21 +131,35 @@ function PostDetails({ setModal, location, user }) {
                     </textarea>
                 </label>
 
-               
-                <label>* Preview image:
-                    <input type={'text'}
-                        value={preview_img}
-                        onChange={e => setPreview_img(e.target.value)}
-                        maxLength={1000}
-                        required>
-                    </input>
+                <label>* Post Image:
+                    <input
+                        type="file"
+                        accept="image/*"
+                        onChange={updateImage}
+                        className='file-input'
+                        id='file-input'
+                    />
+                    <button
+                        onClick={handleSubmitImage}
+                        className={`file-input-button ${image ? 'active' : ''}`}
+                        disabled={image === null}
+                    >Submit</button>
+                    <button
+                        onClick={() => {
+                            setImage(null)
+                            document.getElementById('file-input').value = null;
+                        }}
+                        className={`file-input-button ${image ? 'active' : ''}`}
+                        disabled={image === null}
+                    >Delete</button>
+
+                    {(imageLoading) && <p>Loading...</p>}
                 </label>
 
-                {console.log(
-                   
-                    "details", (post.length === 0 || post.length > 2000),
-                    "URL", (preview_img.length > 1000 || !validURL))}
+               
+               
 
+            
 
                 {error.length > 0 && (
                     <div className='error-title'>
@@ -165,12 +184,11 @@ function PostDetails({ setModal, location, user }) {
                     <button type="submit"
                         disabled={
                             post.length === 0 || post.length > 2000 ||
-                            preview_img.length > 1000 || !validURL
-
+                            preview_img.length > 1000 || preview_img.length === 0
                         }
                         className={`submit-btn ${
                             post.length === 0 || post.length > 2000 ||
-                            preview_img.length > 1000 || !validURL
+                            preview_img.length > 1000 || preview_img.length === 0
                             ? "disabled"
                             : "enabled"
                             }`}

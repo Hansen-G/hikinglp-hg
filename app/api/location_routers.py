@@ -11,6 +11,53 @@ from .auth_routes import validation_errors_to_error_messages
 
 location_routes = Blueprint('locations', __name__)
 
+
+# add image to AWS S3 bucket, return url to image
+@location_routes.route('/upload', methods=['POST'])
+@login_required
+def upload_image():
+    if "image" not in request.files:
+        return {"errors": "image required"}, 400
+
+    image = request.files["image"]
+
+    if not allowed_file(image.filename):
+        return {"errors": "file type not permitted"}, 400
+
+    image.filename = get_unique_filename(image.filename)
+
+    upload = upload_file_to_s3(image)
+
+    if "url" not in upload:
+        # if the dictionary doesn't have a url key
+        # it means that there was an error when we tried to upload
+        # so we send back that error message
+        return upload, 400
+    url = upload["url"]
+    return {"url": url}
+
+@location_routes.route('/signupimg', methods=['POST'])
+def upload_image_sign_up():
+    if "image" not in request.files:
+        return {"errors": "image required"}, 400
+
+    image = request.files["image"]
+
+    if not allowed_file(image.filename):
+        return {"errors": "file type not permitted"}, 400
+
+    image.filename = get_unique_filename(image.filename)
+
+    upload = upload_file_to_s3(image)
+
+    if "url" not in upload:
+        # if the dictionary doesn't have a url key
+        # it means that there was an error when we tried to upload
+        # so we send back that error message
+        return upload, 400
+    url = upload["url"]
+    return {"url": url}
+
 # delete location
 @location_routes.route('/<int:id>', methods=['DELETE'])
 @login_required
@@ -110,22 +157,6 @@ def update_location(id):
 def create_location():
     form = LocationForm()
     form['csrf_token'].data = request.cookies['csrf_token']
-    # if "image" not in request.files:
-    #     form.preview_img.data = 'https://res.cloudinary.com/hansenguo/image/upload/v1654572769/cld-sample-2.jpg'
-    # else:
-    #     image = request.files['image']
-    #     if not allowed_file(image.filename):
-    #         return {"errors": "file type not permitted"}, 400
-    #     image.filename = get_unique_filename(image.filename)
-    #     upload = upload_file_to_s3(image)
-    #     if "url" not in upload:
-    #     # if the dictionary doesn't have a url key
-    #     # it means that there was an error when we tried to upload
-    #     # so we send back that error message
-    #         return upload, 400
-    #     url = upload["url"]
-    #     # flask_login allows us to get the current user from the request
-    #     form.preview_img.data = url
    
     if form.validate_on_submit():
         new_location = Location(
@@ -143,7 +174,7 @@ def create_location():
         db.session.add(new_location)
         db.session.commit()
         return jsonify(new_location.to_dict())
-
+    print ('!!!!!!!!!!!!!!!!!!!!!', {'errors': validation_errors_to_error_messages(form.errors)})
     return {'errors': validation_errors_to_error_messages(form.errors)}, 400
 
 # Get location by id

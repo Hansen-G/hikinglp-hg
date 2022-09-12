@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: e90437960207
+Revision ID: eb86e54361c3
 Revises: 
-Create Date: 2022-09-08 00:10:28.278378
+Create Date: 2022-09-11 22:01:14.995872
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'e90437960207'
+revision = 'eb86e54361c3'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -55,7 +55,6 @@ def upgrade():
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('id'),
-    sa.UniqueConstraint('name'),
     sa.UniqueConstraint('nsf_id')
     )
     op.create_table('albums',
@@ -103,12 +102,14 @@ def upgrade():
     op.create_table('images',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
-    sa.Column('album_id', sa.Integer(), nullable=False),
+    sa.Column('location_id', sa.Integer(), nullable=False),
+    sa.Column('post_id', sa.Integer(), nullable=False),
     sa.Column('tag', sa.String(length=64), nullable=False),
     sa.Column('url', sa.String(length=1000), nullable=True),
     sa.Column('createdAt', sa.DateTime(timezone=True), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=True),
     sa.Column('updatedAt', sa.DateTime(timezone=True), nullable=True),
-    sa.ForeignKeyConstraint(['album_id'], ['albums.id'], ),
+    sa.ForeignKeyConstraint(['location_id'], ['locations.id'], ),
+    sa.ForeignKeyConstraint(['post_id'], ['posts.id'], ),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('id')

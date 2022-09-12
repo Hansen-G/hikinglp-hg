@@ -2,12 +2,25 @@
 import React, { useState, useEffect } from "react";
 import { Modal } from "../../context/Modal";
 import PostDetails from './PostDetails';
+import { useSelector, useDispatch } from 'react-redux';
+import { NavLink, useParams, Route, Switch, Link, useHistory } from 'react-router-dom';
 
 
 function CreatePostModal({location, user}) {
-
+    const history = useHistory();
+    const sessionUser = useSelector(state => state.session.user);
     const [showModal, setShowModal] = useState(false);
     const setModal = (show) => setShowModal(show);
+
+
+   
+
+
+    useEffect(() => {
+        if (sessionUser === null) {
+            history.push('/login');
+        }
+    }, [sessionUser, history]);
 
     useEffect(() => {
         if (showModal) {

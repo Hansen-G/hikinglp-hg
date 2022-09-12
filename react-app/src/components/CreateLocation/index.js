@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { NavLink, useParams, Route, Switch, Link, useHistory } from 'react-router-dom';
 import { addLocationThunk } from '../../store/location';
 import "./CreateLocation.css";
-import { isValidUrl, cut } from "../../util";
+import { cut } from "../../util";
 import AI from '../AI'
 import ButtomBar from '../ButtomBar'
 
@@ -22,23 +22,9 @@ function CreateLocation(){
     const [lat, setLat] = useState(0.0000);
     const [lng, setLng] = useState(0.0000);
     const [error, setError] = useState([]);
-    const [validURL, setValidURL] = useState(false); // Boolean that will show if the URL below is actually a valid image url
-    
-    const setURLAndCheckURL = async (urlInput) => {
-        const res = await isValidUrl(urlInput, setError, error);
-        setValidURL(res);
-        setPreview_img(urlInput);
-    };
-
-    useEffect(() => {
-        if (preview_img) {
-            setURLAndCheckURL(preview_img);
-        }
-    }, [preview_img]);
-
-    useEffect(() => {
-        setError([]);
-    }, [validURL]);
+  
+    const [image, setImage] = useState(null);
+    const [imageLoading, setImageLoading] = useState(false);
 
 
     useEffect(() => {
@@ -50,7 +36,6 @@ function CreateLocation(){
     useEffect(() => {
         const newError = [];
         if (name.trim().length === 0) newError.push('Name is required');
-       
         if (name.length > 100) newError.push('Name should be less than 100 characters');
         if (address.trim().length === 0) newError.push('Address is required');
         if (address.length > 1000) newError.push('Address should be less than 1000 characters');
@@ -58,7 +43,7 @@ function CreateLocation(){
         if (details.length > 2000) newError.push('Details should be less than 2000 characters');
         if (directionsInfo.trim().length === 0) newError.push('Direction Infomation is required');
         if (directionsInfo.length > 2000) newError.push('Direction Infomation should be less than 2000 characters');
-        if (preview_img.length > 1000) newError.push('Preview image should be less than 1000 characters');
+        if (preview_img.length > 1000) newError.push('Please try a different image');
         if (city.length > 1000) newError.push("City must be less than 1000 characters");
         if (city.length === 0) newError.push("City is required");
         if (state.length > 1000) newError.push("State must be less than 1000 characters");
@@ -67,13 +52,6 @@ function CreateLocation(){
         if (lat > 90) newError.push('Latitude should be less than 90');
         if (lng < -180) newError.push('Longitude should be greater than -180');
         if (lng > 180) newError.push('Longitude should be less than 180');
-        if (preview_img) {
-            if (!validURL) {
-                newError.push(
-                    "Invalid URL: Please enter a valid URL ending in - jpg/jpeg/png/webp/avif/gif/svg. Also please make sure this image CORS policy compliant. Image can be blocked by CORS policy due to: No 'Access-Control-Allow-Origin' header being present on the requested resource."
-                );
-            } 
-        }
        
         setError(newError);
     } , [name, address, details, preview_img, lat, lng]);
@@ -81,21 +59,7 @@ function CreateLocation(){
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const submitErrors = [];
-        if (preview_img){
-            if (!validURL) {
-                submitErrors.push(
-                    "Invalid URL: Please enter a valid URL ending in - jpg/jpeg/png/webp/avif/gif/svg. Also please make sure this image CORS policy compliant. Image can be blocked by CORS policy due to: No 'Access-Control-Allow-Origin' header being present on the requested resource."
-                );
-            }
-        }
        
-        if (submitErrors.length > 0) {
-            return setError(submitErrors);
-        } else {
-            setError(submitErrors);
-        }
-
         if (error.length === 0) {
             const newLocation = {
                 name,
@@ -123,7 +87,45 @@ function CreateLocation(){
             });
         }
     }
+
+    const handleSubmitImage = async (e) => {
+        e.preventDefault();
+        const formData = new FormData();
+        formData.append("image", image);
+
+        // aws uploads can be a bit slow—displaying
+        // some sort of loading message is a good idea
+        setImageLoading(true);
+
+        console.log('formData', formData);
+
+        const res = await fetch('/api/locations/upload', {
+            method: "POST",
+            body: formData,
+        });
+        console.log('???????', res);
+        if (res.ok) {
+            const response = await res.json();
+            setPreview_img(response.url);
+           
+            setImageLoading(false);
+            // history.push("/images");
+        }
+        else {
+            setImageLoading(false);
+            // a real app would probably use more advanced
+            // error handling
+            alert("An error occurred while uploading the image.");
+
+        }
+    }
+
+    const updateImage = (e) => {
+        const file = e.target.files[0];
+        setImage(file);
+    }
     
+
 
 
 
@@ -136,6 +138,10 @@ function CreateLocation(){
                     <h1>
                         Create New Location
                     </h1>
+
+                    <div className='instructions'>
+                        The items marked with an asterisk (*) are required.
+                    </div>
 
                     <h2>
                         Hello! Let’s start with your location name
@@ -285,13 +291,32 @@ function CreateLocation(){
                     </h2>
                     <p></p>
 
-                    <label>Preview image:
-                        <input type={'text'}
-                            value={preview_img}
-                            onChange={e => setPreview_img(e.target.value)}
-                            maxLength={1000}
-                            >
-                        </input>
+                   
+
+
+                    <label>Preview Image:
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={updateImage}
+                            className='file-input'
+                            id='file-input'
+                        />
+                        <button 
+                            onClick={handleSubmitImage}
+                            className={`file-input-button ${image ? 'active' : ''}`}
+                            disabled={image === null}
+                        >Submit</button>
+                        <button
+                            onClick={ () => {
+                                setImage(null)
+                                document.getElementById('file-input').value = null;
+                            }}
+                            className={`file-input-button ${image ? 'active' : ''}`}
+                            disabled={image === null}
+                        >Delete</button>
+
+                        {(imageLoading) && <p>Loading...</p>}
                     </label>
 
 
@@ -313,21 +338,10 @@ function CreateLocation(){
                         </ol>
                     )}
 
-                    <button type="submit"
-                        disabled={
-                            name.length === 0 || name.length > 100 ||
-                            address.length > 1000 || address.length === 0 || 
-                            city.length > 100 || city.length === 0 || 
-                            state.length > 100 || state.length === 0 || 
-                            lat < -90 || lat > 90 ||
-                            lng < -180 || lng > 180 ||
-                            details.length === 0 || details.length > 2000 ||
-                            directionsInfo.length === 0 || directionsInfo.length > 2000 ||
-                            preview_img.length > 1000 || error.length > 0 
-
-                        }
-                        className={`submit-btn ${
-                            name.length === 0 || name.length > 100 ||
+                    <div className='submit-area'>
+                        <button type="submit"
+                            disabled={
+                                name.length === 0 || name.length > 100 ||
                                 address.length > 1000 || address.length === 0 ||
                                 city.length > 100 || city.length === 0 ||
                                 state.length > 100 || state.length === 0 ||
@@ -335,19 +349,35 @@ function CreateLocation(){
                                 lng < -180 || lng > 180 ||
                                 details.length === 0 || details.length > 2000 ||
                                 directionsInfo.length === 0 || directionsInfo.length > 2000 ||
-                                preview_img.length > 1000 || error.length > 0 
-                                ? "disabled"
-                                : "enabled"
-                            }`}
-                    >
-                        Create Location
-                    </button>
+                                preview_img.length > 1000 || error.length > 0
+
+                            }
+                            className={`submit-btn ${name.length === 0 || name.length > 100 ||
+                                    address.length > 1000 || address.length === 0 ||
+                                    city.length > 100 || city.length === 0 ||
+                                    state.length > 100 || state.length === 0 ||
+                                    lat < -90 || lat > 90 ||
+                                    lng < -180 || lng > 180 ||
+                                    details.length === 0 || details.length > 2000 ||
+                                    directionsInfo.length === 0 || directionsInfo.length > 2000 ||
+                                    preview_img.length > 1000 || error.length > 0
+                                    ? "disabled"
+                                    : "enabled"
+                                }`}
+                        >
+                            Create Location
+                        </button>
+
+                    </div>
+
+           
 
 
 
 
 
                 </form>
+               
 
             </div>
 
@@ -361,8 +391,8 @@ function CreateLocation(){
             
                 <div className='loc-c-header flex'>
                     <div>
-                        {validURL && (<img src={preview_img} className='loc-c-header-img' onError={e => { e.currentTarget.src = "https://res.cloudinary.com/hansenguo/image/upload/v1661959406/Hikinglp/Logo_sytg4b.png"; }} />)}
-                        {!validURL && (<img src="https://res.cloudinary.com/hansenguo/image/upload/v1661959406/Hikinglp/Logo_sytg4b.png" className='loc-c-header-img' />)}
+                        {preview_img && (<img src={preview_img} className='loc-c-header-img' onError={e => { e.currentTarget.src = "https://res.cloudinary.com/hansenguo/image/upload/v1661959406/Hikinglp/Logo_sytg4b.png"; }} />)}
+                        {!preview_img && (<img src="https://res.cloudinary.com/hansenguo/image/upload/v1661959406/Hikinglp/Logo_sytg4b.png" className='loc-c-header-img' />)}
                     </div>
                     <div className='loc-c-info'>
                         {!name && (<div className='loc-c-info-name'>Your Location Name</div>)}
@@ -384,13 +414,8 @@ function CreateLocation(){
 
 
                 </div>
-
-               
-
                 
             </div>
-            <AI />
-            <ButtomBar />
 
         </div>
     )

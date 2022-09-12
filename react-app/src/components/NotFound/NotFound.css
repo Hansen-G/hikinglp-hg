@@ -1,0 +1,40 @@
+.not-found{
+    width: 80%;
+    margin: 0 auto;
+    margin-top: 200px;
+    flex-wrap: wrap;
+    height: 60vh;
+}
+
+.not-found-text{
+    width: 30vw;
+    min-width: 400px;
+}
+
+.not-found-img{
+    display: block;
+    height: 40vh;
+    width: 40vw;
+}
+
+.not-found-text h2 {
+    font-family: 'Poppins', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 36px;
+    letter-spacing: -0.4px;
+    padding-top: 40px;
+
+}
+
+.not-found-text a {
+    font-family: 'Poppins', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 28px;
+    letter-spacing: -0.4px;
+    border-radius: 4px;
+    color: #027a97;
+    text-decoration: none;
+
+}

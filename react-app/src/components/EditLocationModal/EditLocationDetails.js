@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import './EditLocationModal.css';
 
 import { editLocationThunk } from '../../store/location';
-import { isValidUrl, cut } from "../../util";
+import { cut } from "../../util";
 import { NavLink, useParams, Route, Switch, Link, useHistory } from 'react-router-dom';
 
 function EditLocationDetails({ setModal, location, user }) {
@@ -19,23 +19,10 @@ function EditLocationDetails({ setModal, location, user }) {
     const [lat, setLat] = useState(location.lat);
     const [lng, setLng] = useState(location.lng);
     const [error, setError] = useState([]);
-    const [validURL, setValidURL] = useState(false); // Boolean that will show if the URL below is actually a valid image url
+
+    const [image, setImage] = useState(null);
+    const [imageLoading, setImageLoading] = useState(false);
    
-    const setURLAndCheckURL = async (urlInput) => {
-        const res = await isValidUrl(urlInput, setError, error);
-        setValidURL(res);
-        setPreview_img(urlInput);
-    };
-
-    useEffect(() => {
-        if (preview_img) {
-            setURLAndCheckURL(preview_img);
-        }
-    }, [preview_img]);
-
-    useEffect(() => {
-        setError([]);
-    }, [validURL]);
 
     useEffect(() => {
         if (user === null) {
@@ -45,14 +32,13 @@ function EditLocationDetails({ setModal, location, user }) {
 
     useEffect(() => {
         const newError = [];
-        
-        if (name.length === 0) newError.push('Name is required');
+        if (name.trim().length === 0) newError.push('Name is required');
         if (name.length > 100) newError.push('Name should be less than 100 characters');
-        if (address.length === 0) newError.push('Address is required');
+        if (address.trim().length === 0) newError.push('Address is required');
         if (address.length > 1000) newError.push('Address should be less than 1000 characters');
-        if (details.length === 0) newError.push('Details is required');
+        if (details.trim().length === 0) newError.push('Details is required');
         if (details.length > 2000) newError.push('Details should be less than 2000 characters');
-        if (directionsInfo.length === 0) newError.push('Direction Infomation is required');
+        if (directionsInfo.trim().length === 0) newError.push('Direction Infomation is required');
         if (directionsInfo.length > 2000) newError.push('Direction Infomation should be less than 2000 characters');
         if (preview_img.length > 1000) newError.push('Preview image should be less than 1000 characters');
         if (city.length > 1000) newError.push("City must be less than 1000 characters");
@@ -63,28 +49,18 @@ function EditLocationDetails({ setModal, location, user }) {
         if (lat > 90) newError.push('Latitude should be less than 90');
         if (lng < -180) newError.push('Longitude should be greater than -180');
         if (lng > 180) newError.push('Longitude should be less than 180');
-        if (preview_img) {
-            if (!validURL) {
-                newError.push(
-                    "Invalid URL: Please enter a valid URL ending in - jpg/jpeg/png/webp/avif/gif/svg. Also please make sure this image CORS policy compliant. Image can be blocked by CORS policy due to: No 'Access-Control-Allow-Origin' header being present on the requested resource."
-                );
-            }
-        }
+        
        
         setError(newError);
-    }, [name, address, details, preview_img, lat, lng, city, state, directionsInfo, validURL]);
+    }, [name, address, details, preview_img, lat, lng, city, state, directionsInfo]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
         const submitErrors = [];
-        if (preview_img) {
-            if (!validURL) {
-                submitErrors.push(
-                    "Invalid URL: Please enter a valid URL ending in - jpg/jpeg/png/webp/avif/gif/svg. Also please make sure this image CORS policy compliant. Image can be blocked by CORS policy due to: No 'Access-Control-Allow-Origin' header being present on the requested resource."
-                );
-            }
-        }
+
+       if (!name) submitErrors.push('Name is required');
+        
        
         if (submitErrors.length > 0) {
             return setError(submitErrors);
@@ -107,16 +83,6 @@ function EditLocationDetails({ setModal, location, user }) {
                 userId: user.id
             };
             setError([]);
-            // dispatch(editLocationThunk(newLocation)).then((res) => {
-            //     if (res.ok) {
-            //         setModal(false);
-            //     }
-            // }).catch(
-            //     async (res) => {
-            //         const error = await res.json();
-            //         setError(error.errors);
-            //     }
-            // );
             dispatch(editLocationThunk(newLocation)).then((res) => {
                 if (res.errors) {
                     setError(res.errors);
@@ -126,6 +92,44 @@ function EditLocationDetails({ setModal, location, user }) {
                 }
             });
         }
+    }
+
+
+    const handleSubmitImage = async (e) => {
+        e.preventDefault();
+        const formData = new FormData();
+        formData.append("image", image);
+
+        // aws uploads can be a bit slow—displaying
+        // some sort of loading message is a good idea
+        setImageLoading(true);
+
+        console.log('formData', formData);
+
+        const res = await fetch('/api/locations/upload', {
+            method: "POST",
+            body: formData,
+        });
+        console.log('???????', res);
+        if (res.ok) {
+            const response = await res.json();
+            setPreview_img(response.url);
+
+            setImageLoading(false);
+            // history.push("/images");
+        }
+        else {
+            setImageLoading(false);
+            // a real app would probably use more advanced
+            // error handling
+            alert("An error occurred while uploading the image.");
+
+        }
+    }
+
+    const updateImage = (e) => {
+        const file = e.target.files[0];
+        setImage(file);
     }
 
 
@@ -144,6 +148,10 @@ function EditLocationDetails({ setModal, location, user }) {
                 <h1>
                     Edit Location
                 </h1>
+
+                <div className='instructions'>
+                    The items marked with an asterisk (*) are required.
+                </div>
             
                 <label>* Name:
                     <input type={'text'}
@@ -269,15 +277,32 @@ function EditLocationDetails({ setModal, location, user }) {
                     </textarea>
                 </label>
 
-                <label>* Preview image:
-                    <input type={'text'}
-                        value={preview_img}
-                        onChange={e => setPreview_img(e.target.value)}
-                        maxLength={1000}
-                        >
-                    </input>
+                <label>Preview Image:
+                    <input
+                        type="file"
+                        accept="image/*"
+                        onChange={updateImage}
+                        className='file-input'
+                        id='file-input'
+                    />
+                    <button
+                        onClick={handleSubmitImage}
+                        className={`file-input-button ${image ? 'active' : ''}`}
+                        disabled={image === null}
+                    >Submit</button>
+                    <button
+                        onClick={() => {
+                            setImage(null)
+                            document.getElementById('file-input').value = null;
+                        }}
+                        className={`file-input-button ${image ? 'active' : ''}`}
+                        disabled={image === null}
+                    >Delete</button>
+
+                    {(imageLoading) && <p>Loading...</p>}
                 </label>
 
+                
 
                 {error.length > 0 && (
                     <div className='error-title'>

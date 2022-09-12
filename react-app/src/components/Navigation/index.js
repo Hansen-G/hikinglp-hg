@@ -19,7 +19,7 @@ function Navigation() {
                 <NavLink to='/' exact={true}>
                     <div className='nav-logo-div flex'>
                         <img src='https://res.cloudinary.com/hansenguo/image/upload/v1661959406/Hikinglp/Logo_sytg4b.png' className='nav-logo' />
-                        <div>Hikinglp</div>
+                        <div id='hikinglp-logo'>Hikinglp</div>
                     </div>
                     
                 </NavLink>

@@ -8,7 +8,7 @@ class Location(db.Model):
     id = db.Column(db.Integer, primary_key=True, unique=True, nullable=False)
     nsf_id = db.Column(db.String, unique=True, nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
-    name = db.Column(db.String(100), nullable=False, unique=True)
+    name = db.Column(db.String(100), nullable=False)
     details = db.Column(db.String(2000), nullable=False)
     directionsInfo = db.Column(db.String(2000), nullable=False)
     address = db.Column(db.String(1000), nullable=False)
@@ -25,6 +25,10 @@ class Location(db.Model):
     user = db.relationship('User', back_populates='locations')
     posts = db.relationship(
         'Post', back_populates='locations', cascade="all, delete-orphan")
+    images = db.relationship(
+        'Image', back_populates='locations', cascade="all, delete-orphan")
+
+    
 
     def to_dict(self):
         return {
