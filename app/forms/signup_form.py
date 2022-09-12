@@ -1,7 +1,7 @@
 from app.forms.login_form import password_matches
 from flask_wtf import FlaskForm
 from wtforms import StringField
-from wtforms.validators import DataRequired, Email, ValidationError, Length, url
+from wtforms.validators import DataRequired, ValidationError, Length, url
 from app.models import User
 
 
@@ -81,7 +81,6 @@ class SignUpForm(FlaskForm):
     email = StringField(
         'email', validators=[
             DataRequired(), 
-            Email(),
             Length(max=255, message="Email cannot exceed 255 characters!"), 
             user_exists
             ])
