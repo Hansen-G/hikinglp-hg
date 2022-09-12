@@ -64,7 +64,7 @@ function PostDetails({ setModal, location, user }) {
         if (post.length === 0) newError.push('Please write a post');
         if (post.length > 2000) newError.push('Post should be less than 2000 characters');
         if (preview_img.length > 1000) newError.push('Preview image should be less than 1000 characters');
-        if (preview_img.length === 0) newError.push('Please upload an image');
+        if (preview_img.length === 0) newError.push('Please submit an image before posting');
         setError(newError);
 
     }, [post, preview_img]);
@@ -163,7 +163,7 @@ function PostDetails({ setModal, location, user }) {
 
                 {error.length > 0 && (
                     <div className='error-title'>
-                        Please correct the following errors before submit:
+                        Please correct the following errors before post:
                     </div>
                 )}
 
