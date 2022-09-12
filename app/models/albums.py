@@ -21,8 +21,7 @@ class Album(db.Model):
 
 
     user = db.relationship('User', back_populates='albums')
-    images = db.relationship('Image', back_populates='album', cascade="all, delete-orphan")
-
+    
     def to_dict(self):
         return {
             'id': self.id,

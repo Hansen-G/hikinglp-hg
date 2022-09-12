@@ -2,11 +2,23 @@ from wsgiref.validate import validator
 from flask_wtf import FlaskForm
 from wtforms import StringField, FloatField, DecimalField
 from wtforms.validators import DataRequired, Email, ValidationError, url, Length, NumberRange
+from app.models import Location
+
+
+# def location_exists(form, field):
+#     # Checking if location exists
+#     # if (form.method.data == 'POST'):
+#     name = field.data
+#     location = Location.query.filter(Location.name == name).first()
+#     if location:
+#         raise ValidationError('Location already exists.')
+
 
 
 class LocationForm(FlaskForm):
     name = StringField("Name", validators=[
         DataRequired(message="Name is required"), 
+        # location_exists,
         Length(min=1, max=100, message="Name must be between 1 and 100 characters")])
     details = StringField("Location Details", validators=[
         DataRequired(message="Details is required"), 
@@ -31,7 +43,7 @@ class LocationForm(FlaskForm):
     lng = FloatField("Longitude", validators=[
         # DataRequired(message="Longitude is required"), 
         NumberRange(min=-180, max=180, message="Longitude must be between -180 and 180")])
-    
+
 class DeleteLocationForm(FlaskForm):
     pass
 

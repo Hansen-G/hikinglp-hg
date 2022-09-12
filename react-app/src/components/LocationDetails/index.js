@@ -2,7 +2,7 @@
 import './LocationDetails.css';
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { NavLink, useParams, Route, Switch, Link, useHistory } from 'react-router-dom';
+import { NavLink, useParams, Route, Switch, Link, useHistory, useLocation } from 'react-router-dom';
 import { getALocatuinThunk, deleteLocationThunk } from '../../store/location';
 import { pastDate } from "./../../util";
 import EditLocationModal from '../EditLocationModal';
@@ -10,14 +10,13 @@ import ImageCard from "./ImageCard";
 import  GoogleMapReact from 'google-map-react';
 import CreatePostModal from '../CreatePostModal';
 import PostCard from "../PostCard";
-import { isValidUrl } from "../../util";
+
 import AI from '../AI'
 import ButtomBar from '../ButtomBar'
 
 // import { useJsApiLoader, GoogleMap, Marker, DirectionsRenderer } from "@react-google-maps/api"
 // import { GoogleMap, Marker } from "react-google-maps"
-
-import { withGoogleMap, GoogleMap, Marker } from "react-google-maps";
+// import { withGoogleMap, GoogleMap, Marker } from "react-google-maps";
 
 require('dotenv').config();
 
@@ -31,9 +30,10 @@ function postNumber(arr) {
 
 function LocationDetails () {
     const dispatch = useDispatch();
- 
     const history = useHistory();
+    let path = useLocation()
     const { locationId } = useParams();
+
     const [location_extra_data, setLocationExtraData] = useState(null);
     const [lat, setLat] = useState();
     const [lng, setLng] = useState()
@@ -43,12 +43,25 @@ function LocationDetails () {
     const user = useSelector((state) => state.session.user);
     const [googleMapAPIKey, setGoogleMapAPIKey] = useState(null);
 
-    const helper = async (locationId) => {
+
+
+
+
+    const helper = async (locationId, path) => {
+        if (path.pathname.split("/").length > 3) {
+            return history.push("/notfound");
+        }
+        if (!Number(locationId) || locationId === 0) {
+            return history.push("/notfound");
+        }
         const location = await dispatch(getALocatuinThunk(locationId));
+        if (location.errors) {
+            history.push('/notfound')
+        }
     }
     useEffect(() => {
-        helper(locationId);
-    }, [locationId, dispatch]);
+        helper(locationId, path);
+    }, [locationId, dispatch, path]);
 
 
 
@@ -181,13 +194,13 @@ function LocationDetails () {
 
             <div className='loc-d-header'>
                 <div>
-                    {isValidUrl(location.preview_img) && (
+                   
                     <img 
                     onError={e => { e.currentTarget.src = "https://res.cloudinary.com/hansenguo/image/upload/v1662189939/Hikinglp/WX20220903-032532_2x_re1fri.png"; }}
                     src={location.preview_img} 
                     alt={location.name} 
                     className='loc-d-bg' />
-                    )}
+                    
                     
                 </div>
                 <div className='loc-d-info'>
@@ -235,18 +248,8 @@ function LocationDetails () {
                     <div className='loc-map Poppins main-div'>
                         <h2 className='loc-map-title title'>Location & Hours</h2>
                         <div className='loc-map-add loc-main'>{location.address}, {location.city}, {location.state}</div>
-                        {googleMapAPIKey && googleMap(location.lat, location.lng, googleMapAPIKey) }
+                        {/* {googleMapAPIKey && googleMap(location.lat, location.lng, googleMapAPIKey) } */}
 
-                        <div className='google-map'>
-                            <GoogleMapReact
-                                bootstrapURLKeys={{ key: googleMapAPIKey }}
-                                defaultCenter={{ lat: location.lat, lng: location.lng }}
-                                defaultZoom={15}
-                                yesIWantToUseGoogleMapApiInternals={true}
-                                isMarkerShown={true}
-                            >
-                            </GoogleMapReact>
-                        </div>
             
                     </div>
 
@@ -314,10 +317,7 @@ function LocationDetails () {
                             )}
                     </div>
                 </div>
-                
-
             </div>
-            <AI />
             <ButtomBar />
         </div>
     )

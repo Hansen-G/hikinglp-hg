@@ -21,7 +21,8 @@
 
 .location-info {
     padding: 20px;
-    overflow-y: hidden
+    overflow-y: hidden;
+    width: 100%;
 }
 
 .location-name {

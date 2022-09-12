@@ -50,14 +50,13 @@ function AllLocation() {
 
     return (
         <div className='container mt-5'>
-            <h2> All Locations </h2>
+            <h2 className="all-loc-title"> All Locations </h2>
             <Records locations={currentPages} />
             <Pagination
                 totalPage={totalPage}
                 currentPage={currentPage}
                 setCurrentPage={setCurrentPage}
             />
-            <AI />
             <ButtomBar />
         </div>
 

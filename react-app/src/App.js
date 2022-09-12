@@ -14,7 +14,10 @@ import CreateLocation from './components/CreateLocation';
 import Navigation from './components/Navigation';
 import AllLocation from './components/AllLocation';
 import AI from './components/AI';
+import NotFound from './components/NotFound';
+import ButtomBar from './components/ButtomBar'
 
+import { Redirect } from 'react-router-dom';
 
 function App() {
   const [loaded, setLoaded] = useState(false);
@@ -35,25 +38,24 @@ function App() {
     <BrowserRouter>
       <Navigation />
       <Switch>
+        <Route path='/notfound' exact={true}>
+          <NotFound />
+          <ButtomBar />
+        </Route>
         <ProtectedRoute path='/locations/new' exact={true}>
           <CreateLocation />
         </ProtectedRoute>
 
         <Route exact={true} path='/locations/all'>
           <AllLocation />
-          <AI />
-         
         </Route>
-
         <Route path='/locations/:locationId'>
           <LocationDetails />
-          <AI />
-       
-       </Route>
-
-        <Route exact={true} path='/ai'>
-          <AI />
         </Route>
+
+        {/* <Route exact={true} path='/ai'>
+          <AI />
+        </Route> */}
 
         <Route path='/login' exact={true}>
           <LoginForm />
@@ -69,13 +71,11 @@ function App() {
         </ProtectedRoute>
         <Route path='/' exact={true} >
           <HomePage />
-          
         </Route>
-        <Route>
+        {/* <Route>
           <h1>404 Page Not Found</h1>
-        </Route>
-
-
+        </Route> */}
+        <Route render={() => <Redirect to={{ pathname: "/notfound" }} />} />
       </Switch>
     </BrowserRouter>
   );

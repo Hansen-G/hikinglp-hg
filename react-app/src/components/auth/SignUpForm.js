@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
 import { Redirect } from 'react-router-dom';
 import { signUp } from '../../store/session';
-import { isValidUrl, cut } from "../../util";
+import { cut } from "../../util";
 import { Link } from 'react-router-dom';
 
 const SignUpForm = () => {
@@ -14,23 +14,11 @@ const SignUpForm = () => {
   const [repeatPassword, setRepeatPassword] = useState('');
   const [name, setName] = useState('');
   const [preview_image, setPreview_image] = useState('');
+  const [image, setImage] = useState(null);
+  const [imageLoading, setImageLoading] = useState(false);
+
   const user = useSelector(state => state.session.user);
-  const [validURL, setValidURL] = useState(false); // Boolean that will show if the URL below is actually a valid image url
-  const setURLAndCheckURL = async (urlInput) => {
-    const res = await isValidUrl(urlInput, setErrors, errors);
-    setValidURL(res);
-    setPreview_image(urlInput);
-  };
-
-  useEffect(() => {
-    if (preview_image) {
-      setURLAndCheckURL(preview_image);
-    }
-  }, [preview_image]);
-
-  useEffect(() => {
-    setErrors([]);
-  }, [validURL]);
+ 
 
   useEffect(() => {
     const newError = [];
@@ -69,20 +57,10 @@ const SignUpForm = () => {
     
     if (password.length > 64) newError.push('Password must be less than 64 characters');
     if (repeatPassword.length > 64) newError.push('Password confirmation must be less than 64 characters');
-
-    if (preview_image){
-      if (!validURL) {
-        newError.push(
-          "Invalid URL: Please enter a valid URL ending in - jpg/jpeg/png/webp/avif/gif/svg. Also please make sure this image CORS policy compliant. Image can be blocked by CORS policy due to: No 'Access-Control-Allow-Origin' header being present on the requested resource."
-        );
-      }
-
-    }
-
-
+    if (preview_image.length > 1000) newError.push('Please try a different image');
     
     setErrors(newError);
-  }, [password, repeatPassword, username, email, name, preview_image, validURL]);
+  }, [password, repeatPassword, username, email, name, preview_image]);
 
   
 
@@ -124,6 +102,44 @@ const SignUpForm = () => {
     return <Redirect to='/' />;
   }
 
+  const handleSubmitImage = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("image", image);
+
+    // aws uploads can be a bit slow—displaying
+    // some sort of loading message is a good idea
+    setImageLoading(true);
+
+    console.log('formData', formData);
+
+    const res = await fetch('/api/locations/signupimg', {
+      method: "POST",
+      body: formData,
+    });
+    console.log('???????', res);
+    if (res.ok) {
+      const response = await res.json();
+      setPreview_image(response.url);
+
+      setImageLoading(false);
+      // history.push("/images");
+    }
+    else {
+      setImageLoading(false);
+      // a real app would probably use more advanced
+      // error handling
+      alert("An error occurred while uploading the image.");
+
+    }
+  }
+
+  const updateImage = (e) => {
+    const file = e.target.files[0];
+    setImage(file);
+  }
+
+
   return (
     <div className='auth-page flex'>
       <form onSubmit={onSignUp} className='login'>
@@ -138,6 +154,9 @@ const SignUpForm = () => {
               <span className='h2-span'>Login here </span>
             </Link>
           </h3>
+          <div className='instructions'>
+            The items marked with an asterisk (*) are required.
+          </div>
           <label>* User Name</label>
           <div className='hints'>Username should be between 4 and 50 characters</div>
           <input
@@ -199,14 +218,30 @@ const SignUpForm = () => {
           ></input>
         </div>
         <div>
-          <label>Preview Image</label>
-          <input
-            type='text'
-            name='preview_image'
-            placeholder=""
-            onChange={updatePreview_image}
-            value={preview_image}
-          ></input>
+          <label>Preview Image:
+            <input
+              type="file"
+              accept="image/*"
+              onChange={updateImage}
+              className='file-input'
+              id='file-input'
+            />
+            <button
+              onClick={handleSubmitImage}
+              className={`file-input-button ${image ? 'active' : ''}`}
+              disabled={image === null}
+            >Submit</button>
+            <button
+              onClick={() => {
+                setImage(null)
+                document.getElementById('file-input').value = null;
+              }}
+              className={`file-input-button ${image ? 'active' : ''}`}
+              disabled={image === null}
+            >Delete</button>
+
+            {(imageLoading) && <p>Loading...</p>}
+          </label>
         </div>
 
         {errors.length > 0 && (
@@ -228,14 +263,15 @@ const SignUpForm = () => {
             repeatPassword.length < 6 || repeatPassword.length === 0 || password !== repeatPassword ||
             username.length < 4 || username.length > 50 ||
             name.length < 4 || name.length > 64 ||
-            email.length < 1 || email.length > 255 || errors.length > 0
+            email.length < 1 || email.length > 255 || errors.length > 0 || preview_image.length > 1000 
 
           }
           className={`submit-btn ${password.length < 6 || password.length === 0 ||
               repeatPassword.length < 6 || repeatPassword.length === 0 || password !== repeatPassword ||
               username.length < 4 || username.length > 50 ||
               name.length < 4 || name.length > 64 ||
-              email.length < 1 || email.length > 255 || errors.length > 0
+              email.length < 1 || email.length > 255 || errors.length > 0 ||
+              preview_image.length > 1000 
               ? "disabled"
               : "enabled"
             }`}

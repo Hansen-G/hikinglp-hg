@@ -50,10 +50,11 @@
 
 }
 .loc-d-img-div {
-    margin-top: 30vh;
-    width: 90%;
+    margin-top: 25vh;
+    margin-bottom: 5vh;
+    width: 82%;
     overflow-x: auto;
-    margin-left: 5%;
+    margin-left: 9%;
 }
 .loc-d-main-yes {
     width: 80%;

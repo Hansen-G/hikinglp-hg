@@ -27,7 +27,7 @@
 
 
 .login{
-    min-width: 400px;
+    /* min-width: 400px; */
     max-width: 40vw;
     height: 80vh;
     overflow-y: scroll;
@@ -46,4 +46,10 @@
 .demo{
     background-color: #54b3d6;
     cursor: pointer;
+}
+
+.instructions {
+    font-size: 15px;
+    color: rgb(124, 124, 124);
+    margin-bottom: 10px;
 }

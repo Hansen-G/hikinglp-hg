@@ -4,7 +4,7 @@ import './EditPostModal.css';
 
 import { getAllLocationThunk, editPostThunk, deletePostThunk } from '../../store/location';
 import { getAllPostThunk } from '../../store/posts'
-import { isValidUrl, cut } from "../../util";
+import { cut } from "../../util";
 import { NavLink, useParams, Route, Switch, Link, useHistory } from 'react-router-dom';
 
 function PostEdit({ setModal, postToBeEdited }) {
@@ -15,23 +15,9 @@ function PostEdit({ setModal, postToBeEdited }) {
     const [post, setPost] = useState(postToBeEdited.post);
     const [preview_img, setPreview_img] = useState(postToBeEdited.preview_img);
     const [error, setError] = useState([]);
-    const [validURL, setValidURL] = useState(false); // Boolean that will show if the URL below is actually a valid image url
-   
-    const setURLAndCheckURL = async (urlInput) => {
-        const res = await isValidUrl(urlInput, setError, error);
-        setValidURL(res);
-        setPreview_img(urlInput);
-    };
 
-    useEffect(() => {
-        if (preview_img) {
-            setURLAndCheckURL(preview_img);
-        }
-    }, [preview_img]);
-
-    useEffect(() => {
-        setError([]);
-    }, [validURL]);
+    const [image, setImage] = useState(null);
+    const [imageLoading, setImageLoading] = useState(false);
 
     useEffect(() => {
         if (user === null) {
@@ -42,28 +28,18 @@ function PostEdit({ setModal, postToBeEdited }) {
     useEffect(() => {
         const newError = [];
       
-        if (post.length === 0) newError.push('Please write a post');
+        if (post.trim().length === 0) newError.push('Please write a post');
         if (post.length > 2000) newError.push('Post should be less than 2000 characters');
         if (preview_img.length > 1000) newError.push('Preview image should be less than 1000 characters');
-        if (preview_img.length === 0) newError.push('Please enter a preview image');
-        
-        if (!validURL) {
-            newError.push(
-                "Invalid URL: Please enter a valid URL ending in - jpg/jpeg/png/webp/avif/gif/svg. Also please make sure this image CORS policy compliant. Image can be blocked by CORS policy due to: No 'Access-Control-Allow-Origin' header being present on the requested resource."
-            );
-        }
+        if (preview_img.trim().length === 0) newError.push('Please enter a preview image');
         setError(newError);
-    }, [post, preview_img, validURL]);
+    }, [post, preview_img]);
 
     const handleSubmitEdit = (e) => {
         e.preventDefault();
 
         const submitErrors = [];
-        if (!validURL) {
-            submitErrors.push(
-                "Invalid URL: Please enter a valid URL ending in - jpg/jpeg/png/webp/avif/gif/svg. Also please make sure this image CORS policy compliant. Image can be blocked by CORS policy due to: No 'Access-Control-Allow-Origin' header being present on the requested resource."
-            );
-        }
+        if (!post) submitErrors.push('Please write a post');
 
         if (submitErrors.length > 0) {
             return setError(submitErrors);
@@ -117,6 +93,39 @@ function PostEdit({ setModal, postToBeEdited }) {
         });
     }
 
+    const handleSubmitImage = async (e) => {
+        e.preventDefault();
+        const formData = new FormData();
+        formData.append("image", image);
+
+        // aws uploads can be a bit slow—displaying
+        // some sort of loading message is a good idea
+        setImageLoading(true);
+
+        const res = await fetch('/api/locations/upload', {
+            method: "POST",
+            body: formData,
+        });
+
+        if (res.ok) {
+            const response = await res.json();
+            setPreview_img(response.url);
+            setImageLoading(false);
+        }
+        else {
+            setImageLoading(false);
+            // a real app would probably use more advanced
+            // error handling
+            alert("An error occurred while uploading the image.");
+
+        }
+    }
+
+    const updateImage = (e) => {
+        const file = e.target.files[0];
+        setImage(file);
+    }
+
     return (
        
         <div className="e-location-details">
@@ -126,6 +135,11 @@ function PostEdit({ setModal, postToBeEdited }) {
                 <h1>
                     Edit or delete this post
                 </h1>
+
+                <div className='instructions'>
+                    The items marked with an asterisk (*) are required.
+                </div>
+
                 <label>* Post:
                     <textarea type={'text'}
                         value={post}
@@ -135,15 +149,34 @@ function PostEdit({ setModal, postToBeEdited }) {
                     </textarea>
                 </label>
 
+
+            <label> Post Image:
+                <input
+                    type="file"
+                    accept="image/*"
+                    onChange={updateImage}
+                    className='file-input'
+                    id='file-input'
+                />
+                <button
+                    onClick={handleSubmitImage}
+                    className={`file-input-button ${image ? 'active' : ''}`}
+                    disabled={image === null}
+                >Submit</button>
+                <button
+                    onClick={() => {
+                        setImage(null)
+                        document.getElementById('file-input').value = null;
+                    }}
+                    className={`file-input-button ${image ? 'active' : ''}`}
+                    disabled={image === null}
+                >Delete</button>
+
+                {(imageLoading) && <p>Loading...</p>}
+            </label>
+
                
-                <label>* Preview image:
-                    <input type={'text'}
-                        value={preview_img}
-                        onChange={e => setPreview_img(e.target.value)}
-                        maxLength={1000}
-                        required>
-                    </input>
-                </label>
+                
 
               
 
@@ -170,13 +203,13 @@ function PostEdit({ setModal, postToBeEdited }) {
                     <button type="submit"
                         disabled={
                             post.length === 0 || post.length > 2000 ||
-                            preview_img.length > 1000 || !validURL || preview_img.length === 0
+                            preview_img.length > 1000 || preview_img.length === 0
                             || error.length > 0
 
                         }
                         className={`submit-btn ${
                             post.length === 0 || post.length > 2000 ||
-                            preview_img.length > 1000 || !validURL || preview_img.length === 0
+                            preview_img.length > 1000 || preview_img.length === 0
                             || error.length > 0
                             ? "disabled"
                             : "enabled"
