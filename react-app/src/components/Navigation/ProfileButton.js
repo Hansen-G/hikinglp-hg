@@ -58,7 +58,7 @@ function ProfileButton({ user }) {
                             Email: {user.email}
                         </div>
                         <div className="linkDiv" >
-                            <Link to='/' id="menuLink">Find a Location</Link>
+                            <Link to='/' id="menuLink">View all suggestions</Link>
                         </div>
                         <div className="linkDiv" id='linkDiv'>
                             <Link to='/locations/new' id="menuLink">Create a Location</Link>

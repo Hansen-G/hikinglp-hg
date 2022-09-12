@@ -231,7 +231,7 @@ function LocationDetails () {
                             className="e-loc-btm flex"
                             onClick={handleDelete}
                         >
-                            <i class="fa-regular fa-pen-to-square"></i>
+                        <i className="fa-solid fa-trash"></i>
                             Delete Location
                         </button>
                 )}
