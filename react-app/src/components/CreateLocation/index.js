@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { NavLink, useParams, Route, Switch, Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { addLocationThunk } from '../../store/location';
 import "./CreateLocation.css";
 import { cut } from "../../util";
@@ -107,13 +107,11 @@ function CreateLocation(){
         // some sort of loading message is a good idea
         setImageLoading(true);
 
-        console.log('formData', formData);
-
         const res = await fetch('/api/locations/upload', {
             method: "POST",
             body: formData,
         });
-        console.log('???????', res);
+  
         if (res.ok) {
             const response = await res.json();
             setPreview_img(response.url);

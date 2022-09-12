@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import { cut } from "./../../util";
 import './LocationCard.css'
 
 
-function LocationCard ({location, user}) {
+function LocationCard ({location}) {
 
     return(
         <Link to={`/locations/${location.id}`}>

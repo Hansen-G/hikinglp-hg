@@ -35,8 +35,8 @@ function ProfileButton({ user }) {
             }
         );
     };
-
-    console.log(user, user.lastName)
+   
+    
     return (
         <>
             <div className="profileButtonDiv">

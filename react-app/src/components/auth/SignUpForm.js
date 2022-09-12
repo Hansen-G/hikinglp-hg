@@ -94,9 +94,9 @@ const SignUpForm = () => {
     setRepeatPassword(e.target.value);
   };
 
-  const updatePreview_image = (e) => {
-    setPreview_image(e.target.value);
-  };
+  // const updatePreview_image = (e) => {
+  //   setPreview_image(e.target.value);
+  // };
 
   if (user) {
     return <Redirect to='/' />;
@@ -111,19 +111,15 @@ const SignUpForm = () => {
     // some sort of loading message is a good idea
     setImageLoading(true);
 
-    console.log('formData', formData);
-
     const res = await fetch('/api/locations/signupimg', {
       method: "POST",
       body: formData,
     });
-    console.log('???????', res);
+
     if (res.ok) {
       const response = await res.json();
       setPreview_image(response.url);
-
       setImageLoading(false);
-      // history.push("/images");
     }
     else {
       setImageLoading(false);

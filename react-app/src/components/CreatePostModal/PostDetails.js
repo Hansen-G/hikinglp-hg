@@ -3,8 +3,7 @@ import { useDispatch } from "react-redux";
 import './PostDetails.css';
 
 import { addPostThunk, getALocatuinThunk } from '../../store/location';
-import { cut } from "../../util";
-import { NavLink, useParams, Route, Switch, Link, useHistory } from 'react-router-dom';
+import {  useHistory } from 'react-router-dom';
 
 function PostDetails({ setModal, location, user }) {
     const dispatch = useDispatch()
