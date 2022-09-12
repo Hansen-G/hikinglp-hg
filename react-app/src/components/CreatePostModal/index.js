@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from "react";
 import { Modal } from "../../context/Modal";
 import PostDetails from './PostDetails';
-import { useSelector, useDispatch } from 'react-redux';
-import { NavLink, useParams, Route, Switch, Link, useHistory } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 
 function CreatePostModal({location, user}) {

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAllLocationThunk } from "../../store/location";
 import { getAllPostThunk } from "../../store/posts";
 import './Homepage.css'
-import { NavLink, useParams, Route, Switch, Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import LocationCard from "../LocationCard";
 import PostCard from "../PostCard";
 import { getRandomFromArray } from "../../util";

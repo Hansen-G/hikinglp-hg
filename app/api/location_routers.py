@@ -174,7 +174,6 @@ def create_location():
         db.session.add(new_location)
         db.session.commit()
         return jsonify(new_location.to_dict())
-    print ('!!!!!!!!!!!!!!!!!!!!!', {'errors': validation_errors_to_error_messages(form.errors)})
     return {'errors': validation_errors_to_error_messages(form.errors)}, 400
 
 # Get location by id

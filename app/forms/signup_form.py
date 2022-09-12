@@ -81,6 +81,7 @@ class SignUpForm(FlaskForm):
     email = StringField(
         'email', validators=[
             DataRequired(), 
+            Email(),
             Length(max=255, message="Email cannot exceed 255 characters!"), 
             user_exists
             ])

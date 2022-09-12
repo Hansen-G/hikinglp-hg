@@ -111,14 +111,11 @@ function EditLocationDetails({ setModal, location, user }) {
         // aws uploads can be a bit slow—displaying
         // some sort of loading message is a good idea
         setImageLoading(true);
-
-        console.log('formData', formData);
-
         const res = await fetch('/api/locations/upload', {
             method: "POST",
             body: formData,
         });
-        console.log('???????', res);
+
         if (res.ok) {
             const response = await res.json();
             setPreview_img(response.url);

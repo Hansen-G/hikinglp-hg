@@ -2,9 +2,8 @@
 import './LocationDetails.css';
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { NavLink, useParams, Route, Switch, Link, useHistory, useLocation } from 'react-router-dom';
+import { useParams, useHistory, useLocation } from 'react-router-dom';
 import { getALocatuinThunk, deleteLocationThunk } from '../../store/location';
-import { pastDate } from "./../../util";
 import EditLocationModal from '../EditLocationModal';
 import ImageCard from "./ImageCard";
 import  GoogleMapReact from 'google-map-react';
@@ -117,7 +116,6 @@ function LocationDetails () {
             const response = await fetch(`/google_map_api_key`);
             const data = await response.json();
 
-            console.log('!!!!!!!!1', data)
             setGoogleMapAPIKey(data)
         } 
         catch (e) {
@@ -184,9 +182,6 @@ function LocationDetails () {
         }
       
     }
-
-    console.log(location)
-    console.log('googleMapAPIKey', googleMapAPIKey)
 
 
     return (

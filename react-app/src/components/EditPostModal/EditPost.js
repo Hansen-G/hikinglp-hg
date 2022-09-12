@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import './EditPostModal.css';
-
 import { getAllLocationThunk, editPostThunk, deletePostThunk } from '../../store/location';
 import { getAllPostThunk } from '../../store/posts'
-import { cut } from "../../util";
-import { NavLink, useParams, Route, Switch, Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 function PostEdit({ setModal, postToBeEdited }) {
     const dispatch = useDispatch()

@@ -1,8 +1,8 @@
-import AllLocationCard from "./AllLocationCard";
+
 import React, { useEffect, useState, Component } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllLocationThunk } from "../../store/location";
-import axios from 'axios'
+
 
 import './AllLocation.css'
 import Records from './records'

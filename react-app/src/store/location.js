@@ -103,7 +103,7 @@ export const addLocationThunk = (location) => async dispatch => {
         body: JSON.stringify(location)
     });
 
-    console.log('Thunk', response)
+
     if (response.ok) {
         const newLocation = await response.json();
         dispatch(addLocation(newLocation));
@@ -123,10 +123,8 @@ export const addPostThunk = (post) => async dispatch => {
         body: JSON.stringify(post)
     });
 
-    console.log('Thunk', response)
     if (response.ok) {
         const newPost = await response.json();
-        console.log('???????', newPost.errors)
         dispatch(addPost(newPost));
         return newPost;
     } else {
