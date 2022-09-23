@@ -103,7 +103,7 @@ input[type=file] {
     box-sizing: border-box;
     font-size: 17px;
     max-width: 100%;
-cursor: pointer;
+    cursor: pointer;
     color: dodgerblue;
     border: thin solid grey;
     border-radius: 3px;

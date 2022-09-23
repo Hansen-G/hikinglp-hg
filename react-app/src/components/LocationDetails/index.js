@@ -92,6 +92,7 @@ function LocationDetails () {
         try {
             const response = await fetch(`https://developer.nps.gov/api/v1/parks?id=${location.nsf_id}&api_key=${REACT_APP_NPS_API_KEY}`);
             const data = await response.json();
+            console.log(data)
             let usedData = data.data[0]
             let location_extra_data = {
                 url: usedData.url,
@@ -243,7 +244,7 @@ function LocationDetails () {
                     <div className='loc-map Poppins main-div'>
                         <h2 className='loc-map-title title'>Location & Hours</h2>
                         <div className='loc-map-add loc-main'>{location.address}, {location.city}, {location.state}</div>
-                        {/* {googleMapAPIKey && googleMap(location.lat, location.lng, googleMapAPIKey) } */}
+                        {googleMapAPIKey && googleMap(location.lat, location.lng, googleMapAPIKey) }
 
             
                     </div>
@@ -313,6 +314,7 @@ function LocationDetails () {
                     </div>
                 </div>
             </div>
+            <AI />
             <ButtomBar />
         </div>
     )

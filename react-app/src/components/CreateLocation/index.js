@@ -426,6 +426,7 @@ function CreateLocation(){
                 </div>
                 
             </div>
+            <AI />
 
         </div>
     )

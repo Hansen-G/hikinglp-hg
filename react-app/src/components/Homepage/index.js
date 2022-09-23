@@ -131,6 +131,7 @@ function HomePage() {
 
 
             </div>
+            <AI />
             <ButtomBar />
         </div>    
     )
