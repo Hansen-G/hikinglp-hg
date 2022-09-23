@@ -57,6 +57,7 @@ function AllLocation() {
                 currentPage={currentPage}
                 setCurrentPage={setCurrentPage}
             />
+            <AI />
             <ButtomBar />
         </div>
 

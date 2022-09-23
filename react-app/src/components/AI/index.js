@@ -119,12 +119,20 @@ function AI() {
             <button className={show ? "ai-but" : "ai-but-hidden"} 
                 onClick={() => setShow(!show)}
             >
-                <div className="ai-but-div flex">
-                    <i class="fa-regular fa-comments"></i>
-                    <div className="ai-but-div-text">
-                        Chat with Hikinglp AI
+                {show ? (
+                    <div className="ai-but-div flex">
+                        <i class="fa-solid fa-xmark"></i>
                     </div>
-                </div>
+
+                ) : (
+                    <div className="ai-but-div flex">
+                        <i class="fa-regular fa-comments"></i>
+                        <div className="ai-but-div-text">
+                            Chat
+                        </div>
+                    </div>
+                )}
+               
             </button>
 
             {show ? (
